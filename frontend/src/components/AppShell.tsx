@@ -1,5 +1,6 @@
 import {
   ArrowRight,
+  BookOpen,
   Bot,
   CalendarDays,
   LayoutDashboard,
@@ -16,6 +17,7 @@ import { useAuth } from '../context/AuthContext';
 
 const navItems = [
   { to: '/dashboard', label: 'Tổng quan', icon: LayoutDashboard },
+  { to: '/courses', label: 'Khóa học', icon: BookOpen },
   { to: '/practice', label: 'Luyện tập AI', icon: Mic },
   { to: '/cv', label: 'Phân tích CV', icon: Bot },
   { to: '/profile', label: 'Hồ sơ cá nhân', icon: UserCircle2 }
@@ -26,6 +28,11 @@ const pageMeta = {
     label: 'Tổng quan',
     title: 'Tổng quan luyện tập',
     caption: 'Toàn bộ tiến độ trong một nơi'
+  },
+  '/courses': {
+    label: 'Khóa học',
+    title: 'Thư viện khóa học',
+    caption: 'Gửi yêu cầu học và xem nội dung sau khi được duyệt'
   },
   '/practice': {
     label: 'Luyện tập',
@@ -46,10 +53,17 @@ const pageMeta = {
     label: 'Quản trị',
     title: 'Quản trị hệ thống',
     caption: 'Điều hành và theo dõi toàn bộ'
+  },
+  '/admin/courses': {
+    label: 'Quản trị khóa học',
+    title: 'Quản trị khóa học',
+    caption: 'Tạo khóa học và duyệt yêu cầu học viên'
   }
 } as const;
 
 const getRouteKey = (pathname: string) => {
+  if (pathname.startsWith('/admin/courses')) return 'admin-courses';
+  if (pathname.startsWith('/courses')) return 'courses';
   if (pathname.startsWith('/practice')) return 'practice';
   if (pathname.startsWith('/cv')) return 'cv';
   if (pathname.startsWith('/profile')) return 'profile';
@@ -57,13 +71,23 @@ const getRouteKey = (pathname: string) => {
   return 'dashboard';
 };
 
+const getPageMeta = (pathname: string) => {
+  if (pathname.startsWith('/admin/courses')) return pageMeta['/admin/courses'];
+  if (pathname.startsWith('/courses')) return pageMeta['/courses'];
+  if (pathname.startsWith('/practice')) return pageMeta['/practice'];
+  if (pathname.startsWith('/cv')) return pageMeta['/cv'];
+  if (pathname.startsWith('/profile')) return pageMeta['/profile'];
+  if (pathname.startsWith('/admin')) return pageMeta['/admin'];
+  return pageMeta['/dashboard'];
+};
+
 export function AppShell() {
   const { user, logout } = useAuth();
   const location = useLocation();
   const isAdmin = user?.role === 'admin';
-  const meta = pageMeta[location.pathname as keyof typeof pageMeta] ?? pageMeta['/dashboard'];
+  const meta = getPageMeta(location.pathname);
   const routeKey = getRouteKey(location.pathname);
-  const roleLabel = isAdmin ? 'Quản trị' : 'Học viên';
+  const roleLabel = isAdmin ? 'Quản trị viên' : 'Học viên';
   const roleSubtitle = isAdmin
     ? user?.isRootAdmin
       ? 'Quản trị viên gốc'
@@ -75,7 +99,11 @@ export function AppShell() {
     month: '2-digit'
   }).format(new Date());
 
-  const quickSignals = [`Chuỗi ${user?.streak ?? 0} ngày`, `${user?.weeklyXp ?? 0} XP tuần`, `${user?.energy ?? 0}/5 năng lượng`];
+  const quickSignals = [
+    `Chuỗi ${user?.streak ?? 0} ngày`,
+    `${user?.weeklyXp ?? 0} XP tuần`,
+    `${user?.energy ?? 0}/5 năng lượng`
+  ];
 
   return (
     <div className={`app-shell workspace-overhaul app-shell-${routeKey}`}>
@@ -131,6 +159,13 @@ export function AppShell() {
                 <span>Quản trị hệ thống</span>
               </NavLink>
             ) : null}
+
+            {isAdmin ? (
+              <NavLink to="/admin/courses" className={({ isActive }) => `nav-pill${isActive ? ' active' : ''}`}>
+                <BookOpen size={18} />
+                <span>Quản trị khóa học</span>
+              </NavLink>
+            ) : null}
           </nav>
         </div>
 
@@ -151,9 +186,9 @@ export function AppShell() {
 
         <div className="workspace-rail-section workspace-rail-footer">
           <p className="eyebrow">SpeakAI</p>
-          <h3>Luyện nói, phân tích CV và theo dõi tiến độ trong một nền tảng.</h3>
-          <Link to="/practice" className="workspace-support-link">
-            Mở phiên mới
+          <h3>Luyện nói, phân tích CV, học khóa học và theo dõi tiến độ trong một nền tảng.</h3>
+          <Link to="/courses" className="workspace-support-link">
+            Mở thư viện học
             <ArrowRight size={15} />
           </Link>
         </div>

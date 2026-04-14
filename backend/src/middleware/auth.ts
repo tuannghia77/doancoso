@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 
 import { env } from '../config/env.js';
 import { User } from '../models/User.js';
-import { ensureDailyGoals, ensureWeeklyBucket, refillEnergy } from '../utils/progression.js';
+import { applyLoginProgression } from '../utils/progression.js';
 
 export const authRequired: RequestHandler = async (req, res, next) => {
   try {
@@ -32,9 +32,7 @@ export const authRequired: RequestHandler = async (req, res, next) => {
       });
     }
 
-    ensureWeeklyBucket(user);
-    refillEnergy(user);
-    ensureDailyGoals(user);
+    applyLoginProgression(user);
     if (user.isModified()) {
       await user.save();
     }

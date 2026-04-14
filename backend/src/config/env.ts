@@ -27,7 +27,7 @@ export const env = {
   smtpUser: process.env.SMTP_USER ?? '',
   smtpPass: (process.env.SMTP_PASS ?? '').replace(/\s+/g, ''),
   mailFrom: process.env.MAIL_FROM ?? 'SpeakAI <no-reply@speakai.local>',
-  appUrl: process.env.APP_URL ?? 'http://localhost:5173',
+  appUrl: process.env.APP_URL ?? process.env.RENDER_EXTERNAL_URL ?? 'http://localhost:5173',
   adminEmail: process.env.ADMIN_EMAIL ?? 'admin@speakai.local',
   adminPassword: process.env.ADMIN_PASSWORD ?? 'Admin@123'
 };

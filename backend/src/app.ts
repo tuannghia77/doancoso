@@ -6,8 +6,10 @@ import { fileURLToPath } from 'url';
 
 import { env } from './config/env.js';
 import adminRoutes from './routes/adminRoutes.js';
+import adminCourseRoutes from './routes/adminCourseRoutes.js';
 import aiRoutes from './routes/aiRoutes.js';
 import authRoutes from './routes/authRoutes.js';
+import courseRoutes from './routes/courseRoutes.js';
 import practiceRoutes from './routes/practiceRoutes.js';
 import userRoutes from './routes/userRoutes.js';
 
@@ -71,7 +73,9 @@ app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/practice', practiceRoutes);
 app.use('/api/ai', aiRoutes);
+app.use('/api/courses', courseRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/admin/courses', adminCourseRoutes);
 
 if (hasFrontendBuild) {
   app.use(express.static(frontendDistPath));

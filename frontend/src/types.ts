@@ -28,6 +28,10 @@ export interface User {
   longestStreak: number;
   totalXp: number;
   weeklyXp: number;
+  weeklyBucket?: string;
+  previousWeeklyXp?: number;
+  previousWeeklyBucket?: string;
+  previousWeeklyClosedAt?: string | null;
   level: number;
   energy: number;
   energyRefillInMinutes: number;
@@ -130,8 +134,91 @@ export interface CvAnalysisResult {
 }
 
 export interface InterviewQuestionResult {
+  reply?: string;
   question: string;
   reason: string;
   challenge: string;
   suggestedFocus: string[];
+}
+
+export type CourseAccessStatus = 'none' | 'pending' | 'approved' | 'rejected';
+export type CourseCategory = 'presentation' | 'interview' | 'cv';
+
+export interface CourseSummary {
+  id: string;
+  title: string;
+  category: CourseCategory;
+  summary: string;
+  description: string;
+  thumbnailUrl: string;
+  level: string;
+  estimatedDuration: string;
+  lessonsCount: number;
+  isPublished: boolean;
+  accessStatus: CourseAccessStatus;
+  canView: boolean;
+  canRequest: boolean;
+  requestedAt?: string | null;
+  reviewedAt?: string | null;
+  adminNote?: string;
+}
+
+export interface CourseLesson {
+  title: string;
+  description: string;
+  durationLabel: string;
+  order: number;
+  youtubeVideoId: string;
+  youtubeUrl: string;
+  embedUrl: string;
+}
+
+export interface CourseDetail extends CourseSummary {
+  lessons: CourseLesson[];
+}
+
+export interface AdminCourseSummary {
+  id: string;
+  title: string;
+  category: CourseCategory;
+  summary: string;
+  description: string;
+  thumbnailUrl: string;
+  level: string;
+  estimatedDuration: string;
+  isPublished: boolean;
+  lessonsCount: number;
+  lessons: Array<{
+    title: string;
+    description: string;
+    durationLabel: string;
+    youtubeUrl: string;
+    youtubeVideoId: string;
+    order: number;
+  }>;
+  createdAt: string;
+}
+
+export interface CourseRequestRecord {
+  id: string;
+  status: 'pending' | 'approved' | 'rejected';
+  requestedAt: string;
+  reviewedAt?: string | null;
+  adminNote: string;
+  course: {
+    id: string;
+    title: string;
+    category?: CourseCategory;
+  } | null;
+  user: {
+    id: string;
+    name: string;
+    email: string;
+    targetRole?: string;
+  } | null;
+  reviewer?: {
+    id: string;
+    name: string;
+    email: string;
+  } | null;
 }

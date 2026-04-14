@@ -32,6 +32,14 @@ const emptyCapture: RecorderPayload = {
   volumeSamples: []
 };
 
+type TranscriptMode = 'empty' | 'manual' | 'generated';
+
+type InterviewHistoryItem = {
+  question: string;
+  answer: string;
+  aiReply?: string;
+};
+
 type AnalysisOutcome = {
   passed: boolean;
   label: string;
@@ -167,12 +175,66 @@ const buildReadableFallbackAnalysis = (
   };
 };
 
+const sanitizeText = (value: string | undefined, fallback: string) => {
+  const normalized = String(value ?? '').trim();
+  if (!normalized || looksCorrupted(normalized)) {
+    return fallback;
+  }
+
+  return normalized;
+};
+
+const sanitizeTextList = (values: string[], fallback: string[], max: number) => {
+  const cleaned = values.map((item) => String(item ?? '').trim()).filter((item) => item && !looksCorrupted(item));
+  const source = cleaned.length ? cleaned : fallback;
+  return Array.from(new Set(source)).slice(0, max);
+};
+
+const sanitizeAnalysisForDisplay = (
+  analysis: PracticeAnalysis,
+  practiceType: 'presentation' | 'interview',
+  topic: string
+): PracticeAnalysis => {
+  const fallback = buildReadableFallbackAnalysis(analysis, practiceType, topic);
+
+  const primaryNarrative = [analysis.summary, ...analysis.strengths, ...analysis.improvements, ...analysis.coachNotes]
+    .map((item) => String(item ?? '').trim())
+    .filter((item) => item && !looksCorrupted(item));
+
+  if (!analysis.transcript.trim() && primaryNarrative.length === 0) {
+    return fallback;
+  }
+
+  if (primaryNarrative.length === 0) {
+    return fallback;
+  }
+
+  return {
+    ...analysis,
+    summary: sanitizeText(analysis.summary, fallback.summary),
+    strengths: sanitizeTextList(analysis.strengths, fallback.strengths, 5),
+    improvements: sanitizeTextList(analysis.improvements, fallback.improvements, 6),
+    coachNotes: sanitizeTextList(analysis.coachNotes, fallback.coachNotes, 6),
+    followUpQuestions: sanitizeTextList(analysis.followUpQuestions, fallback.followUpQuestions, 4),
+    speedTimeline: analysis.speedTimeline.map((item, index) => ({
+      ...item,
+      label: sanitizeText(item.label, `Đoạn ${index + 1}`)
+    })),
+    heatmap: analysis.heatmap.map((item, index) => ({
+      ...item,
+      label: sanitizeText(item.label, `Đoạn ${index + 1}`),
+      note: sanitizeText(item.note, normalizeHeatmapNote(item.score))
+    }))
+  };
+};
+
 export function PracticePage() {
   const { user, updateUser } = useAuth();
   const [practiceType, setPracticeType] = useState<'presentation' | 'interview'>('presentation');
   const [difficulty, setDifficulty] = useState<'easy' | 'medium' | 'hard'>('medium');
   const [topic, setTopic] = useState('Giới thiệu dự án nổi bật của bạn');
   const [transcript, setTranscript] = useState('');
+  const [transcriptMode, setTranscriptMode] = useState<TranscriptMode>('empty');
   const [capture, setCapture] = useState<RecorderPayload>(emptyCapture);
   const [analysis, setAnalysis] = useState<PracticeAnalysis | null>(null);
   const [analysisToken, setAnalysisToken] = useState('');
@@ -183,7 +245,7 @@ export function PracticePage() {
   const [error, setError] = useState('');
 
   const [interviewQuestion, setInterviewQuestion] = useState<InterviewQuestionResult | null>(null);
-  const [interviewHistory, setInterviewHistory] = useState<Array<{ question: string; answer: string }>>([]);
+  const [interviewHistory, setInterviewHistory] = useState<InterviewHistoryItem[]>([]);
   const [answer, setAnswer] = useState('');
   const [questionLoading, setQuestionLoading] = useState(false);
 
@@ -202,35 +264,7 @@ export function PracticePage() {
     if (!analysis) {
       return null;
     }
-
-    const textSamples = [
-      analysis.summary,
-      ...analysis.strengths,
-      ...analysis.improvements,
-      ...analysis.coachNotes,
-      ...analysis.followUpQuestions,
-      ...analysis.speedTimeline.map((item) => item.label),
-      ...analysis.heatmap.flatMap((item) => [item.label, item.note])
-    ];
-
-    const shouldSanitize = !analysis.transcript.trim() || textSamples.some((item) => looksCorrupted(item));
-
-    if (shouldSanitize) {
-      return buildReadableFallbackAnalysis(analysis, practiceType, topic);
-    }
-
-    return {
-      ...analysis,
-      speedTimeline: analysis.speedTimeline.map((item, index) => ({
-        ...item,
-        label: item.label?.trim() || `Đoạn ${index + 1}`
-      })),
-      heatmap: analysis.heatmap.map((item, index) => ({
-        ...item,
-        label: item.label?.trim() || `Đoạn ${index + 1}`,
-        note: item.note?.trim() || normalizeHeatmapNote(item.score)
-      }))
-    };
+    return sanitizeAnalysisForDisplay(analysis, practiceType, topic);
   }, [analysis, practiceType, topic]);
 
   const invalidateAnalysis = () => {
@@ -260,11 +294,16 @@ export function PracticePage() {
 
   const handleTranscriptChange = (value: string) => {
     setTranscript(value);
+    setTranscriptMode(value.trim() ? 'manual' : 'empty');
     invalidateAnalysis();
   };
 
   const handleCaptureChange = (nextCapture: RecorderPayload) => {
     setCapture(nextCapture);
+    if (transcriptMode === 'generated') {
+      setTranscript('');
+      setTranscriptMode('empty');
+    }
     invalidateAnalysis();
   };
 
@@ -313,8 +352,10 @@ export function PracticePage() {
         : 'Đã tạo bản phân tích cơ bản. Bạn có thể xem kết quả ngay bên dưới.';
       setMessage(notice ? `${baseMessage} ${notice}` : baseMessage);
 
-      if (!transcript.trim() && response.data.analysis.transcript) {
-        setTranscript(response.data.analysis.transcript);
+      const analyzedTranscript = String(response.data.analysis?.transcript ?? '').trim();
+      if (analyzedTranscript && transcriptMode !== 'manual') {
+        setTranscript(analyzedTranscript);
+        setTranscriptMode('generated');
       }
     } catch (analyzeError: any) {
       setError(analyzeError.response?.data?.message ?? 'Không thể phân tích bài nói.');
@@ -348,13 +389,18 @@ export function PracticePage() {
   };
 
   const handleNextQuestion = async () => {
+    if (interviewQuestion && !answer.trim()) {
+      setError('Hãy nhập câu trả lời trước khi yêu cầu AI hỏi tiếp.');
+      return;
+    }
+
     setQuestionLoading(true);
     setError('');
 
     try {
       const nextHistory =
         interviewQuestion && answer.trim()
-          ? [...interviewHistory, { question: interviewQuestion.question, answer }]
+          ? [...interviewHistory, { question: interviewQuestion.question, answer: answer.trim() }]
           : interviewHistory;
 
       const response = await api.post('/ai/interview/next-question', {
@@ -364,8 +410,23 @@ export function PracticePage() {
         cvSummary: user?.bio
       });
 
-      setInterviewHistory(nextHistory);
-      setInterviewQuestion(response.data.nextQuestion);
+      const nextQuestion = response.data.nextQuestion as InterviewQuestionResult;
+
+      if (interviewQuestion && answer.trim()) {
+        const aiReply = String(nextQuestion.reply ?? '').trim();
+        setInterviewHistory([
+          ...interviewHistory,
+          {
+            question: interviewQuestion.question,
+            answer: answer.trim(),
+            aiReply
+          }
+        ]);
+      } else {
+        setInterviewHistory(nextHistory);
+      }
+
+      setInterviewQuestion(nextQuestion);
       setAnswer('');
     } catch (questionError: any) {
       setError(questionError.response?.data?.message ?? 'Không thể tạo câu hỏi tiếp theo.');
@@ -600,12 +661,13 @@ export function PracticePage() {
 
             <button type="button" className="primary-button" onClick={handleNextQuestion} disabled={questionLoading}>
               <WandSparkles size={16} />
-              {questionLoading ? 'Đang tạo...' : interviewQuestion ? 'Câu hỏi tiếp' : 'Tạo câu hỏi'}
+              {questionLoading ? 'Đang tạo...' : interviewQuestion ? 'Gửi câu trả lời & hỏi tiếp' : 'Tạo câu hỏi'}
             </button>
 
             {interviewQuestion ? (
               <div className="analysis-stack">
                 <article className="sub-card accent-border">
+                  {interviewQuestion.reply ? <p className="muted-text">{interviewQuestion.reply}</p> : null}
                   <strong>{interviewQuestion.question}</strong>
                   <p>{interviewQuestion.reason}</p>
                   <span className="muted-text">Thử thách: {interviewQuestion.challenge}</span>
@@ -643,6 +705,7 @@ export function PracticePage() {
                     <strong>Câu {index + 1}</strong>
                     <p>{item.question}</p>
                     <span className="muted-text">{item.answer}</span>
+                    {item.aiReply ? <p>{item.aiReply}</p> : null}
                   </article>
                 ))}
               </div>

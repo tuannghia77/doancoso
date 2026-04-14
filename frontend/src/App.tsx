@@ -3,7 +3,9 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { AppShell } from './components/AppShell';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import { useAuth } from './context/AuthContext';
+import { AdminCoursesPage } from './pages/AdminCoursesPage';
 import { AdminPage } from './pages/AdminPage';
+import { CoursesPage } from './pages/CoursesPage';
 import { CvAnalyzerPage } from './pages/CvAnalyzerPage';
 import { DashboardPage } from './pages/DashboardPage';
 import { ForgotPasswordPage } from './pages/ForgotPasswordPage';
@@ -35,6 +37,7 @@ export default function App() {
         <Route element={<ProtectedRoute />}>
           <Route element={<AppShell />}>
             <Route path="/dashboard" element={<DashboardPage />} />
+            <Route path="/courses" element={<CoursesPage />} />
             <Route path="/practice" element={<PracticePage />} />
             <Route path="/cv" element={<CvAnalyzerPage />} />
             <Route path="/profile" element={<ProfilePage />} />
@@ -44,6 +47,7 @@ export default function App() {
         <Route element={<ProtectedRoute adminOnly />}>
           <Route element={<AppShell />}>
             <Route path="/admin" element={<AdminPage />} />
+            <Route path="/admin/courses" element={<AdminCoursesPage />} />
           </Route>
         </Route>
       </Routes>

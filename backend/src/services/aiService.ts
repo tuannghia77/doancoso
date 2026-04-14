@@ -32,6 +32,7 @@ const practiceFeedbackSchema = z.object({
 });
 
 const nextQuestionSchema = z.object({
+  reply: z.string(),
   question: z.string(),
   reason: z.string(),
   challenge: z.string(),
@@ -92,18 +93,331 @@ const isUsableText = (value: unknown) => {
   return Boolean(text) && !corruptedPattern.test(text);
 };
 
-const uniqueWords = (text: string) =>
-  Array.from(
-    new Set(
-      text
-        .toLowerCase()
-        .replace(/[^\p{L}\p{N}\s]/gu, ' ')
-        .split(/\s+/)
-        .filter((word) => word.length >= 3)
-    )
+const vietnameseStopWords = new Set([
+  'anh',
+  'chị',
+  'em',
+  'tôi',
+  'mình',
+  'bạn',
+  'chúng',
+  'ta',
+  'là',
+  'và',
+  'với',
+  'của',
+  'cho',
+  'trong',
+  'trên',
+  'dưới',
+  'đến',
+  'tại',
+  'khi',
+  'sau',
+  'trước',
+  'rằng',
+  'thì',
+  'đã',
+  'đang',
+  'sẽ',
+  'vẫn',
+  'rất',
+  'khá',
+  'cũng',
+  'được',
+  'này',
+  'kia',
+  'đó',
+  'một',
+  'những',
+  'các',
+  'về',
+  'theo',
+  'hay',
+  'hoặc',
+  'nên',
+  'nếu',
+  'để',
+  'do',
+  'từ',
+  'ra',
+  'vào',
+  'qua',
+  'việc',
+  'điều',
+  'phần',
+  'câu',
+  'ý',
+  'nội',
+  'dung',
+  'bài',
+  'nói',
+  'phỏng',
+  'vấn',
+  'thuyết',
+  'trình',
+  'giới',
+  'thiệu',
+  'bản',
+  'thân',
+  'thực',
+  'sự',
+  'kiểu',
+  'như',
+  'nói',
+  'chung',
+  'actually',
+  'basically',
+  'about',
+  'with',
+  'from',
+  'that',
+  'this',
+  'have',
+  'has',
+  'were',
+  'was'
+]);
+
+const tokenizeContentWords = (text: string) =>
+  normalizeText(text)
+    .toLowerCase()
+    .replace(/[^\p{L}\p{N}\s]/gu, ' ')
+    .split(/\s+/)
+    .filter(
+      (word) =>
+        word.length >= 3 &&
+        !vietnameseStopWords.has(word) &&
+        !/^\d+$/.test(word) &&
+        !personalFieldPattern.test(word)
+    );
+
+const uniqueWords = (text: string) => Array.from(new Set(tokenizeContentWords(text)));
+
+const extractKeywords = (text: string, limit = 6) => {
+  const tokens = tokenizeContentWords(text);
+  const scored = new Map<string, { count: number; firstIndex: number }>();
+
+  tokens.forEach((token, index) => {
+    const existing = scored.get(token);
+    if (existing) {
+      existing.count += 1;
+      return;
+    }
+
+    scored.set(token, { count: 1, firstIndex: index });
+  });
+
+  return Array.from(scored.entries())
+    .sort((left, right) => right[1].count - left[1].count || left[1].firstIndex - right[1].firstIndex)
+    .map(([token]) => token)
+    .slice(0, limit);
+};
+
+const splitIntoSentences = (text: string) =>
+  String(text ?? '')
+    .replace(/\r/g, '\n')
+    .split(/[\n.!?;]+/g)
+    .map((sentence) => sentence.replace(/\s+/g, ' ').trim())
+    .filter((sentence) => sentence.split(/\s+/).length >= 5);
+
+const compactQuote = (value: string, maxLength = 90) => {
+  const normalized = normalizeText(value);
+  if (normalized.length <= maxLength) {
+    return normalized;
+  }
+
+  return `${normalized.slice(0, maxLength - 1).trim()}…`;
+};
+
+const buildPracticeContentSignals = (
+  transcript: string,
+  topic: string,
+  practiceType: 'presentation' | 'interview',
+  targetRole = ''
+) => {
+  const cleanedTranscript = normalizeText(transcript);
+  const sentences = splitIntoSentences(cleanedTranscript);
+  const transcriptKeywords = extractKeywords(cleanedTranscript, 8);
+  const topicKeywords = extractKeywords(topic, 5);
+  const roleKeywords = extractKeywords(targetRole, 4);
+  const topicCoverage =
+    topicKeywords.length === 0
+      ? 1
+      : topicKeywords.filter((keyword) => cleanedTranscript.toLowerCase().includes(keyword)).length / topicKeywords.length;
+  const roleCoverage =
+    roleKeywords.length === 0
+      ? 1
+      : roleKeywords.filter((keyword) => cleanedTranscript.toLowerCase().includes(keyword)).length / roleKeywords.length;
+
+  const evidenceSentence =
+    sentences.find((sentence) => /\d|%|kết quả|doanh số|khách hàng|tăng|giảm|triển khai|phụ trách|đạt|cải thiện/i.test(sentence)) ||
+    sentences[1] ||
+    sentences[0] ||
+    cleanedTranscript;
+  const anchorSentence =
+    sentences.find((sentence) => topicKeywords.some((keyword) => sentence.toLowerCase().includes(keyword))) ||
+    sentences[0] ||
+    cleanedTranscript;
+  const supportingSentence =
+    sentences.find((sentence) => sentence !== anchorSentence && sentence !== evidenceSentence) || sentences[2] || sentences[0] || cleanedTranscript;
+  const hasOwnershipCue = /(tôi|em|mình|i)\s+(phụ trách|chịu trách nhiệm|đảm nhiệm|trực tiếp|dẫn dắt|lead|quản lý|managed|owned|handled|implemented|delivered)|\b(led|managed|owned|handled|implemented|delivered|responsible for)\b/i.test(cleanedTranscript);
+  const hasOutcomeCue = /\b(\d+(?:[.,]\d+)?\s*(%|phần trăm|triệu|tỷ|khách|người|tháng|năm)|kết quả|doanh số|tăng|giảm|cải thiện|chốt|đạt|result|results|revenue|growth|conversion|improved|reduced|achieved|increase|decrease)\b/i.test(
+    cleanedTranscript
+  );
+  const hasStructureCue =
+    practiceType === 'presentation'
+      ? /(đầu tiên|thứ nhất|thứ hai|tiếp theo|cuối cùng|tóm lại|kết luận|hôm nay|first|second|next|finally|in summary|to sum up)/i.test(cleanedTranscript)
+      : /(bối cảnh|tình huống|nhiệm vụ|hành động|kết quả|bài học|lúc đó|sau đó|situation|task|action|result|lesson)/i.test(cleanedTranscript);
+  const hasReflectionCue = /(bài học|rút ra|nhận ra|sẽ cải thiện|kinh nghiệm rút ra|lesson learned|learned that|takeaway|would do differently)/i.test(cleanedTranscript);
+  const hasProblemCue = /(khó khăn|thử thách|áp lực|vấn đề|xung đột|mâu thuẫn|trở ngại|challenge|pressure|issue|obstacle|conflict)/i.test(cleanedTranscript);
+  const evidenceCueCount =
+    cleanedTranscript.match(/\b(\d+(?:[.,]\d+)?\s*(%|phần trăm|triệu|tỷ|khách|người|tháng|năm)|kết quả|doanh số|tăng|giảm|cải thiện|chốt|đạt|result|results|revenue|growth|conversion|improved|reduced|achieved|increase|decrease)\b/gi)?.length ??
+    0;
+  const genericCueCount =
+    cleanedTranscript.match(/\b(khá ổn|nhiều việc|mọi thứ|cố gắng|học thêm|kinh nghiệm|tham gia|hỗ trợ|một số việc|nhiều thứ|good|many things|helped|supported|worked on various things)\b/gi)?.length ??
+    0;
+
+  const shortTopicLabel =
+    normalizeText(topic) || (practiceType === 'presentation' ? 'bài thuyết trình hiện tại' : 'câu trả lời hiện tại');
+
+  return {
+    cleanedTranscript,
+    sentences,
+    transcriptKeywords,
+    topicKeywords,
+    roleKeywords,
+    topicCoverage,
+    roleCoverage,
+    anchorSentence,
+    evidenceSentence,
+    supportingSentence,
+    shortTopicLabel,
+    hasOwnershipCue,
+    hasOutcomeCue,
+    hasStructureCue,
+    hasReflectionCue,
+    hasProblemCue,
+    evidenceCueCount,
+    genericCueCount
+  };
+};
+
+const buildPracticeContentSignalsV2 = (
+  transcript: string,
+  topic: string,
+  practiceType: 'presentation' | 'interview',
+  targetRole = ''
+) => {
+  const base = buildPracticeContentSignals(transcript, topic, practiceType, targetRole);
+  const cleanedTranscript = normalizeText(transcript);
+  const sentences = splitIntoSentences(cleanedTranscript);
+  const loweredTranscript = cleanedTranscript.toLowerCase();
+  const topicKeywords = extractKeywords(topic, 5);
+  const roleKeywords = extractKeywords(targetRole, 4);
+  const topicAnchorHits = topicKeywords.filter((keyword) => loweredTranscript.includes(keyword)).length;
+  const roleAnchorHits = roleKeywords.filter((keyword) => loweredTranscript.includes(keyword)).length;
+  const topicCoverage = topicKeywords.length === 0 ? 1 : topicAnchorHits / topicKeywords.length;
+  const roleCoverage = roleKeywords.length === 0 ? 1 : roleAnchorHits / roleKeywords.length;
+
+  const ownershipCueCount =
+    cleanedTranscript.match(
+      /\b(tôi|em|mình|i)\s+(phụ trách|chịu trách nhiệm|đảm nhiệm|trực tiếp|dẫn dắt|lead|quản lý|managed|owned|handled|implemented|delivered)|\b(led|managed|owned|handled|implemented|delivered|responsible for)\b/giu
+    )?.length ?? 0;
+  const outcomeCueCount =
+    cleanedTranscript.match(
+      /\b(\d+(?:[.,]\d+)?\s*(%|phần trăm|triệu|tỷ|k|khách|người|tháng|năm|days?|weeks?|months?|years?)|kết quả|doanh số|doanh thu|tăng|giảm|cải thiện|vượt|rút ngắn|tiết kiệm|chốt|đạt|result|results|revenue|growth|conversion|improved|reduced|achieved|increase|decrease)\b/giu
+    )?.length ?? 0;
+  const structureCueCount =
+    cleanedTranscript.match(
+      practiceType === 'presentation'
+        ? /\b(đầu tiên|thứ nhất|thứ hai|tiếp theo|cuối cùng|tóm lại|kết luận|hôm nay|mở đầu|sau đó|first|second|next|finally|in summary|to sum up)\b/giu
+        : /\b(bối cảnh|tình huống|nhiệm vụ|hành động|kết quả|bài học|lúc đó|sau đó|situation|task|action|result|lesson)\b/giu
+    )?.length ?? 0;
+  const reflectionCueCount =
+    cleanedTranscript.match(/\b(bài học|rút ra|nhận ra|sẽ cải thiện|kinh nghiệm rút ra|lesson learned|learned that|takeaway|would do differently)\b/giu)?.length ??
+    0;
+  const problemCueCount =
+    cleanedTranscript.match(/\b(khó khăn|thử thách|áp lực|vấn đề|xung đột|mâu thuẫn|trở ngại|challenge|pressure|issue|obstacle|conflict)\b/giu)?.length ??
+    0;
+  const exampleCueCount =
+    cleanedTranscript.match(/\b(ví dụ|chẳng hạn|cụ thể|đơn cử|for example|for instance)\b/giu)?.length ?? 0;
+  const reasoningCueCount =
+    cleanedTranscript.match(/\b(vì|do đó|nhờ đó|nên|từ đó|bởi vậy|because|therefore|so that|as a result)\b/giu)?.length ?? 0;
+  const actionCueCount =
+    cleanedTranscript.match(
+      /\b(phụ trách|triển khai|xây dựng|tối ưu|đàm phán|đề xuất|phối hợp|dẫn dắt|thuyết phục|cải thiện|tăng|giảm|chốt|quản lý|đo lường|phân tích|managed|owned|led|optimized|built|delivered|negotiated|coordinated|analyzed|launched)\b/giu
+    )?.length ?? 0;
+  const genericCueCount =
+    cleanedTranscript.match(
+      /\b(khá ổn|nhiều việc|mọi thứ|cố gắng|học thêm|kinh nghiệm|tham gia|hỗ trợ|một số việc|nhiều thứ|good|many things|helped|supported|worked on various things)\b/giu
+    )?.length ?? 0;
+
+  const evidenceSentence =
+    sentences.find((sentence) => /\d|%|kết quả|doanh số|khách hàng|tăng|giảm|triển khai|phụ trách|đạt|cải thiện/i.test(sentence)) ||
+    base.evidenceSentence ||
+    sentences[0] ||
+    cleanedTranscript;
+  const anchorSentence =
+    sentences.find((sentence) => topicKeywords.some((keyword) => sentence.toLowerCase().includes(keyword))) ||
+    base.anchorSentence ||
+    sentences[0] ||
+    cleanedTranscript;
+  const supportingSentence =
+    sentences.find((sentence) => sentence !== anchorSentence && sentence !== evidenceSentence) ||
+    base.supportingSentence ||
+    sentences[1] ||
+    cleanedTranscript;
+
+  const specificityDensity = clamp(
+    22 +
+      topicCoverage * 18 +
+      roleCoverage * (practiceType === 'interview' ? 14 : 8) +
+      outcomeCueCount * 6 +
+      ownershipCueCount * 5 +
+      structureCueCount * 4 +
+      reflectionCueCount * 4 +
+      problemCueCount * 4 +
+      exampleCueCount * 3 +
+      reasoningCueCount * 3 +
+      actionCueCount * 2 -
+      genericCueCount * 7,
+    18,
+    98
   );
 
-const extractKeywords = (text: string, limit = 6) => uniqueWords(text).slice(0, limit);
+  return {
+    ...base,
+    cleanedTranscript,
+    sentences,
+    topicKeywords,
+    roleKeywords,
+    topicAnchorHits,
+    roleAnchorHits,
+    topicCoverage,
+    roleCoverage,
+    anchorSentence,
+    evidenceSentence,
+    supportingSentence,
+    shortTopicLabel: normalizeText(topic) || (practiceType === 'presentation' ? 'bài thuyết trình hiện tại' : 'câu trả lời hiện tại'),
+    hasOwnershipCue: ownershipCueCount > 0,
+    hasOutcomeCue: outcomeCueCount > 0,
+    hasStructureCue: structureCueCount > 0,
+    hasReflectionCue: reflectionCueCount > 0,
+    hasProblemCue: problemCueCount > 0,
+    evidenceCueCount: outcomeCueCount,
+    genericCueCount,
+    ownershipCueCount,
+    outcomeCueCount,
+    structureCueCount,
+    reflectionCueCount,
+    problemCueCount,
+    exampleCueCount,
+    reasoningCueCount,
+    actionCueCount,
+    specificityDensity
+  };
+};
 
 const resumeSectionPatterns = {
   experience: /(kinh nghiệm|experience|work experience|employment)/i,
@@ -124,6 +438,52 @@ const normalizeResumeLines = (resumeText: string) =>
     .split(/\r?\n/)
     .map((line) => line.replace(/\s+/g, ' ').trim())
     .filter(Boolean);
+
+type ResumeSectionKey = 'experience' | 'education' | 'skills' | 'projects' | 'achievements' | 'other';
+
+const detectResumeSection = (line: string): ResumeSectionKey | null => {
+  const normalized = normalizeText(line);
+  if (!normalized || normalized.length > 48) {
+    return null;
+  }
+
+  if (resumeSectionPatterns.experience.test(normalized)) return 'experience';
+  if (resumeSectionPatterns.education.test(normalized)) return 'education';
+  if (resumeSectionPatterns.skills.test(normalized)) return 'skills';
+  if (resumeSectionPatterns.projects.test(normalized)) return 'projects';
+  if (resumeSectionPatterns.achievements.test(normalized)) return 'achievements';
+
+  return null;
+};
+
+const extractResumeSectionBuckets = (lines: string[]) => {
+  const buckets: Record<ResumeSectionKey, string[]> = {
+    experience: [],
+    education: [],
+    skills: [],
+    projects: [],
+    achievements: [],
+    other: []
+  };
+
+  let currentSection: ResumeSectionKey = 'other';
+
+  for (const line of lines) {
+    const nextSection = detectResumeSection(line);
+    if (nextSection) {
+      currentSection = nextSection;
+      continue;
+    }
+
+    if (isPersonalInfoLine(line)) {
+      continue;
+    }
+
+    buckets[currentSection].push(line);
+  }
+
+  return buckets;
+};
 
 const isPersonalInfoLine = (line: string) => {
   const normalized = normalizeText(line);
@@ -172,6 +532,7 @@ const extractResumeSignals = (resumeText: string) => {
   const lines = normalizeResumeLines(resumeText);
   const contentLines = lines.filter((line) => !isPersonalInfoLine(line));
   const contentText = contentLines.join('\n');
+  const sectionBuckets = extractResumeSectionBuckets(lines);
   const keywords = extractKeywords(contentText, 8).filter((word) => !/^(tên|name|nam|nữ|male|female)$/i.test(word));
 
   const sections = {
@@ -188,12 +549,56 @@ const extractResumeSignals = (resumeText: string) => {
 
   const projectLine =
     contentLines.find((line) => /(dự án|project|campaign|portfolio|case study|achievement|thành tích)/i.test(line)) || '';
+  const roleLine =
+    contentLines.find((line) => roleKeywordPattern.test(line) && line.length <= 90) ||
+    contentLines.find((line) => /(business|sales|marketing|product|data|account|developer|engineer|analyst)/i.test(line)) ||
+    '';
+  const evidenceLines = contentLines
+    .filter(
+      (line) =>
+        line.length >= 18 &&
+        (/\d/.test(line) ||
+          /\b(tăng|giảm|cải thiện|đạt|vượt|mở rộng|triển khai|phụ trách|doanh số|conversion|revenue|khách hàng|growth|improved|reduced|achieved|result|results)\b/i.test(line))
+    )
+    .slice(0, 3);
+  const skillLines = contentLines
+    .filter((line) => /(crm|excel|sql|power bi|google ads|facebook ads|seo|salesforce|marketing|b2b|b2c|negotiation|communication)/i.test(line))
+    .slice(0, 3);
+  const strongestEvidence = evidenceLines[0] || projectLine || roleLine || contentLines[0] || '';
+  const ownershipLines = contentLines
+    .filter((line) => /\b(phụ trách|chịu trách nhiệm|trực tiếp|dẫn dắt|quản lý|triển khai|xây dựng|tối ưu|managed|owned|led|handled|responsible|implemented)\b/i.test(line))
+    .slice(0, 3);
+  const experienceHighlights = [...sectionBuckets.experience, ...sectionBuckets.projects]
+    .filter((line) => line.length >= 18 && !isPersonalInfoLine(line))
+    .slice(0, 5);
+  const strongestAchievement =
+    evidenceLines[0] ||
+    ownershipLines[0] ||
+    experienceHighlights[0] ||
+    roleLine ||
+    contentLines[0] ||
+    '';
+  const missingSections = [
+    sections.experience ? '' : 'kinh nghiệm',
+    sections.projects ? '' : 'dự án',
+    sections.skills ? '' : 'kỹ năng',
+    quantifiedBulletCount > 0 ? '' : 'kết quả đo được'
+  ].filter(Boolean);
 
   return {
     keywords,
     sections,
     quantifiedBulletCount,
-    projectLine: projectLine || 'một dự án gần đây'
+    projectLine: projectLine || 'một dự án gần đây',
+    roleLine,
+    evidenceLines,
+    skillLines,
+    strongestEvidence,
+    ownershipLines,
+    experienceHighlights,
+    strongestAchievement,
+    sectionBuckets,
+    missingSections
   };
 };
 
@@ -379,71 +784,295 @@ const mergeQuestionObjects = (
   return result;
 };
 
-const buildFallbackCvAnalysis = (resumeText: string, targetRole: string): CvAnalysisResult => {
-  const mainRole = inferTargetRoleFromResume(resumeText, targetRole);
-  const signals = extractResumeSignals(resumeText);
-  const skillAnchor = signals.keywords.slice(0, 3).join(', ') || 'kỹ năng và kinh nghiệm hiện có';
-  const projectAnchor = signals.projectLine;
+const buildResumeSignalsV2 = (resumeText: string, targetRole: string) => {
+  const lines = resumeText
+    .split(/\r?\n/)
+    .map((line) => normalizeText(line))
+    .filter(Boolean);
+  const personalInfoPattern =
+    /^(họ và tên|họ tên|full name|name|ngày sinh|date of birth|dob|giới tính|gender|số điện thoại|phone|mobile|email|địa chỉ|address|linkedin|github|facebook|website|quốc tịch|nationality)\b/i;
+  const rolePattern =
+    /\b(intern|executive|developer|engineer|analyst|manager|specialist|designer|marketer|marketing|sales|business|product|account|consultant|coordinator|assistant|lead|head|officer|tester|qa|support|recruiter|content|seo|hr|operations?)\b/i;
+  const sectionPatterns = {
+    experience: /(kinh nghiệm|experience|work experience|employment)/i,
+    education: /(học vấn|education|academic)/i,
+    skills: /(kỹ năng|skills|technical skills|core skills)/i,
+    projects: /(dự án|project|projects|portfolio|case study)/i,
+    achievements: /(thành tích|achievement|awards?)/i
+  };
 
-  const strengths = [
-    `CV đã định hình khá rõ hướng đi cho vai trò ${mainRole}.`,
-    signals.sections.projects
-      ? 'Hồ sơ đã có dấu hiệu đề cập đến dự án hoặc công việc thực tế để khai thác khi phỏng vấn.'
-      : 'Nội dung hiện tại đủ để SpeakAI xây dựng bộ câu hỏi luyện tập nền tảng.',
-    signals.sections.skills
-      ? `CV đã xuất hiện một số cụm năng lực đáng chú ý như ${skillAnchor}.`
-      : 'CV đã có khung thông tin cơ bản để tiếp tục tinh chỉnh theo vai trò mục tiêu.'
-  ];
+  const isPersonalLine = (line: string) => {
+    if (!line) return true;
+    if (personalInfoPattern.test(line)) return true;
+    if (/^\+?\d[\d\s().-]{6,}$/.test(line)) return true;
+    if (line.includes('@') || /(linkedin|github|facebook|http|www\.)/i.test(line)) return true;
+    return false;
+  };
 
-  if (signals.quantifiedBulletCount > 0) {
-    strengths.push('Hồ sơ đã có ít nhất một vài tín hiệu về kết quả hoặc tác động có thể khai thác sâu hơn.');
+  let currentSection: keyof typeof sectionPatterns | 'other' = 'other';
+  const sectionBuckets: Record<keyof typeof sectionPatterns | 'other', string[]> = {
+    experience: [],
+    education: [],
+    skills: [],
+    projects: [],
+    achievements: [],
+    other: []
+  };
+
+  for (const line of lines) {
+    const nextSection = (Object.keys(sectionPatterns) as Array<keyof typeof sectionPatterns>).find((key) =>
+      sectionPatterns[key].test(line)
+    );
+    if (nextSection && line.length <= 50) {
+      currentSection = nextSection;
+      continue;
+    }
+
+    if (isPersonalLine(line)) {
+      continue;
+    }
+
+    sectionBuckets[currentSection].push(line);
   }
 
+  const contentLines = lines.filter((line) => !isPersonalLine(line));
+  const contentText = contentLines.join('\n');
+  const inferredRole =
+    normalizeText(targetRole) ||
+    contentLines.find((line) => rolePattern.test(line) && line.length <= 90) ||
+    'vị trí ứng tuyển hiện tại';
+  const measurableLines = contentLines.filter((line) =>
+    /\d|%|khách|người|doanh thu|doanh số|tăng|giảm|cải thiện|đạt|vượt|rút ngắn|result|results|growth|revenue|conversion|improved|reduced|achieved/i.test(
+      line
+    )
+  );
+  const ownershipLines = contentLines.filter((line) =>
+    /\b(phụ trách|chịu trách nhiệm|trực tiếp|dẫn dắt|quản lý|triển khai|xây dựng|tối ưu|managed|owned|led|implemented|delivered|responsible)\b/i.test(
+      line
+    )
+  );
+  const projectLines = [...sectionBuckets.projects, ...sectionBuckets.experience].filter((line) => line.length >= 18);
+  const skillAnchor =
+    extractKeywords(sectionBuckets.skills.join(' ') || contentText, 6)
+      .filter((word) => !/^(tên|name|nam|nữ|male|female)$/i.test(word))
+      .join(', ') || 'kỹ năng nền tảng hiện có';
+  const missingSections = [
+    sectionBuckets.experience.length ? '' : 'kinh nghiệm',
+    sectionBuckets.projects.length ? '' : 'dự án',
+    sectionBuckets.skills.length ? '' : 'kỹ năng',
+    measurableLines.length ? '' : 'kết quả đo được'
+  ].filter(Boolean);
+
+  return {
+    inferredRole,
+    contentText,
+    contentLines,
+    sectionBuckets,
+    measurableLines,
+    ownershipLines,
+    projectLines,
+    skillAnchor,
+    missingSections,
+    strongestEvidence: measurableLines[0] || ownershipLines[0] || projectLines[0] || inferredRole,
+    strongestStory: projectLines[0] || ownershipLines[0] || measurableLines[0] || inferredRole,
+    strongestOwnership: ownershipLines[0] || projectLines[0] || inferredRole
+  };
+};
+
+const buildFallbackCvAnalysisV2 = (resumeText: string, targetRole: string): CvAnalysisResult => {
+  const signals = buildResumeSignalsV2(resumeText, targetRole);
+  const mainRole = signals.inferredRole;
+  const storyAnchor = compactQuote(signals.strongestStory, 100);
+  const evidenceAnchor = compactQuote(signals.strongestEvidence, 110);
+  const ownershipAnchor = compactQuote(signals.strongestOwnership, 110);
+  const hasMeasuredImpact = signals.measurableLines.length > 0;
+  const hasOwnershipStory = signals.ownershipLines.length > 0;
+  const hasProjects = signals.projectLines.length > 0;
+
+  const strengths = [
+    `CV đã thể hiện định hướng tương đối rõ cho vai trò ${mainRole}.`,
+    hasOwnershipStory
+      ? `Hồ sơ đã có dấu hiệu nêu rõ phần việc bạn trực tiếp đảm nhiệm, nổi bật ở đoạn "${ownershipAnchor}".`
+      : 'Nội dung hiện tại đủ để SpeakAI xây dựng bộ câu hỏi luyện tập nền tảng theo vai trò mục tiêu.',
+    hasMeasuredImpact
+      ? `CV đã có ít nhất một tín hiệu về kết quả hoặc tác động đo được quanh "${evidenceAnchor}".`
+      : `CV đã có chất liệu kinh nghiệm để phát triển tiếp thành câu chuyện ứng tuyển cho ${mainRole}.`,
+    hasProjects
+      ? `Bạn đã có phần trải nghiệm có thể dùng để kể chuyện khi phỏng vấn, đặc biệt quanh "${storyAnchor}".`
+      : `Bộ kỹ năng hiện có đang gợi mở đúng nhóm năng lực cho ${mainRole}, ví dụ như ${signals.skillAnchor}.`
+  ].slice(0, 4);
+
   const improvements = [
-    signals.quantifiedBulletCount > 0
-      ? 'Cần đẩy mạnh hơn phần kết quả đo được ở từng kinh nghiệm, thay vì chỉ xuất hiện rải rác.'
-      : 'Hồ sơ đang thiếu các kết quả định lượng rõ ràng như doanh thu, tăng trưởng, hiệu suất hoặc quy mô công việc.',
-    signals.sections.projects
-      ? 'Nên viết rõ hơn vai trò cá nhân, bối cảnh, hành động và kết quả của từng dự án nổi bật.'
-      : 'Nên bổ sung thêm 1-2 dự án hoặc trải nghiệm thực tế để nhà tuyển dụng dễ đánh giá năng lực hơn.',
-    `Hãy chỉnh CV bám chặt vào vai trò ${mainRole} thay vì để nội dung dàn trải hoặc thiên về thông tin cá nhân.`,
-    'Ưu tiên các gạch đầu dòng ngắn, mạnh và đi thẳng vào đóng góp cụ thể.'
-  ];
+    hasMeasuredImpact
+      ? 'Nên gom các kết quả đo được vào đúng từng trải nghiệm chính để nhà tuyển dụng nhìn thấy tác động nhanh hơn.'
+      : 'Cần bổ sung kết quả đo được cho từng trải nghiệm, ví dụ tỷ lệ tăng trưởng, doanh thu, số khách hàng hoặc hiệu suất cải thiện.',
+    hasOwnershipStory
+      ? 'Hãy viết rõ hơn bối cảnh, hành động và kết quả cho từng dòng thành tựu mạnh nhất thay vì mô tả ngắn gọn.'
+      : 'CV chưa làm rõ đủ phần việc bạn trực tiếp chịu trách nhiệm, nên nhà tuyển dụng dễ cảm nhận nội dung còn chung chung.',
+    hasProjects
+      ? `Nên chọn 1-2 trải nghiệm mạnh nhất như "${storyAnchor}" để đẩy sâu hơn theo hướng vai trò - hành động - kết quả.`
+      : 'Nên bổ sung thêm 1-2 dự án hoặc trải nghiệm thực tế để tạo điểm tựa cho phần hỏi sâu khi phỏng vấn.',
+    signals.missingSections.length
+      ? `Các phần còn đang thiếu hoặc mỏng: ${signals.missingSections.join(', ')}.`
+      : `Hãy chỉnh lại các bullet bám chặt hơn vào vai trò ${mainRole}, tránh liệt kê dàn trải.`
+  ].slice(0, 4);
 
   return {
     summary:
-      signals.quantifiedBulletCount > 0
-        ? `CV cho thấy bạn đang hướng tới ${mainRole} và đã có nền thông tin tương đối rõ về kỹ năng hoặc trải nghiệm liên quan. Điểm cần làm tốt hơn là biến các kinh nghiệm đó thành câu chuyện có vai trò, hành động và kết quả đo được để tăng sức nặng khi ứng tuyển.`
-        : `CV hiện tại đã cho thấy định hướng về ${mainRole}, nhưng phần kinh nghiệm vẫn còn thiên về mô tả chung. Hồ sơ sẽ thuyết phục hơn nhiều nếu bạn bổ sung dự án, trách nhiệm cá nhân và kết quả cụ thể cho từng trải nghiệm.`,
+      hasMeasuredImpact && hasOwnershipStory
+        ? `CV đang bám khá đúng vai trò ${mainRole} và đã có nền nội dung đủ tốt để đi sâu hơn. Điểm mạnh nằm ở việc bạn đã thể hiện cả phần việc trực tiếp lẫn tín hiệu kết quả đo được quanh "${evidenceAnchor}". Để nổi bật hơn trong vòng sàng lọc, hãy làm đậm từng bullet theo hướng vai trò - hành động - tác động.`
+        : `CV hiện đã cho thấy định hướng ứng tuyển vào ${mainRole}, nhưng mức độ thuyết phục vẫn chưa đồng đều. Bạn cần làm rõ hơn phần việc trực tiếp đảm nhiệm, kết quả đo được và trải nghiệm mạnh nhất như "${storyAnchor}" để hồ sơ bám sát thực tế hơn.`,
     strengths,
     improvements,
     interviewQuestions: [
       {
-        question: `Hãy giới thiệu ngắn gọn về bản thân trong vai trò ${mainRole}.`,
-        purpose: 'Kiểm tra cách bạn mở đầu và định vị bản thân trước nhà tuyển dụng.'
+        question: `Hãy giới thiệu ngắn gọn về bản thân trong vai trò ${mainRole}, nhấn vào giá trị bạn mang lại rõ nhất.`,
+        purpose: 'Kiểm tra cách bạn định vị bản thân và mở đầu cuộc phỏng vấn.'
       },
       {
-        question: `Trong phần "${projectAnchor}", bạn đã trực tiếp chịu trách nhiệm phần nào và tạo ra kết quả gì?`,
-        purpose: 'Đánh giá khả năng kể dự án bằng ngữ cảnh, hành động và kết quả.'
+        question: `Ở trải nghiệm "${storyAnchor}", bạn trực tiếp làm phần nào và kết quả cuối cùng được đo như thế nào?`,
+        purpose: 'Đào sâu trách nhiệm cá nhân và mức độ tác động thực tế của bạn.'
       },
       {
-        question: 'Một khó khăn thực tế bạn từng gặp là gì và bạn đã xử lý ra sao?',
-        purpose: 'Kiểm tra tư duy giải quyết vấn đề và khả năng phản xạ khi bị truy vấn sâu hơn.'
+        question: 'Một khó khăn thực tế bạn từng gặp là gì và bạn đã xử lý nó ra sao?',
+        purpose: 'Kiểm tra khả năng giải quyết vấn đề và kể lại trải nghiệm thật có chiều sâu.'
       },
       {
-        question: 'Kỹ năng nào trong CV hiện tại bạn muốn cải thiện nhất trong 3 tháng tới?',
-        purpose: 'Đo mức tự nhận thức và tinh thần học hỏi liên tục.'
+        question: `Nếu vào vai trò ${mainRole} ngay lúc này, bạn sẽ dùng trải nghiệm nào để chứng minh năng lực đầu tiên?`,
+        purpose: 'Xem bạn có biết chọn đúng bằng chứng mạnh nhất cho vai trò mục tiêu hay không.'
       },
       {
-        question: `Nếu vào vai trò ${mainRole}, 90 ngày đầu bạn sẽ ưu tiên điều gì trước?`,
-        purpose: 'Đánh giá khả năng lập kế hoạch và hiểu công việc mục tiêu.'
+        question: `Trong 90 ngày đầu ở vai trò ${mainRole}, bạn sẽ ưu tiên điều gì và đo kết quả bằng chỉ số nào?`,
+        purpose: 'Đánh giá tư duy vào việc, mức chủ động và cách bạn gắn mục tiêu với kết quả.'
       }
     ],
     practicePlan: [
-      'Luyện phần giới thiệu bản thân trong 60-90 giây và thu âm lại để kiểm tra độ rõ, nhịp nói và độ tự tin.',
-      `Chọn nội dung gần với "${projectAnchor}" rồi trả lời theo cấu trúc bối cảnh - hành động - kết quả.`,
-      'Chuẩn bị trước 3 thành tích có số liệu cụ thể để dùng khi bị hỏi sâu về đóng góp cá nhân.',
-      `Tập một phiên phản biện cho vai trò ${mainRole}: vì sao nhà tuyển dụng nên chọn bạn thay vì ứng viên khác.`
+      `Luyện phần giới thiệu bản thân cho vai trò ${mainRole} trong 60-90 giây và chốt bằng một giá trị nổi bật nhất bạn mang lại.`,
+      `Chọn trải nghiệm gần với "${storyAnchor}" rồi luyện trả lời theo cấu trúc bối cảnh - nhiệm vụ - hành động - kết quả.`,
+      hasMeasuredImpact
+        ? 'Chuẩn bị sẵn 3 số liệu hoặc kết quả mạnh nhất để dùng khi bị hỏi sâu về tác động cá nhân.'
+        : 'Viết lại 3 bullet kinh nghiệm chính theo hướng có con số, kết quả hoặc tác động đo được trước khi luyện phỏng vấn.',
+      `Tập một lượt phản biện cho câu hỏi “Vì sao nên chọn bạn cho vai trò ${mainRole}?” dựa trên ${signals.skillAnchor}.`
+    ]
+  };
+};
+
+const buildCvPromptContextV2 = (resumeText: string, targetRole: string) => {
+  const signals = buildResumeSignalsV2(resumeText, targetRole);
+
+  return [
+    `Vai trò đang phân tích: ${signals.inferredRole}`,
+    `Kỹ năng nổi bật: ${signals.skillAnchor}`,
+    `Trải nghiệm nổi bật: ${signals.projectLines.map((line) => compactQuote(line, 110)).join(' | ') || 'Chưa thấy rõ'}`,
+    `Dòng thể hiện trách nhiệm cá nhân: ${signals.ownershipLines.map((line) => compactQuote(line, 110)).join(' | ') || 'Chưa thấy rõ'}`,
+    `Dòng có kết quả đo được: ${signals.measurableLines.map((line) => compactQuote(line, 110)).join(' | ') || 'Chưa thấy rõ'}`,
+    `Các phần đang thiếu hoặc mỏng: ${signals.missingSections.join(', ') || 'không có phần thiếu rõ rệt'}`,
+    'Yêu cầu bắt buộc:',
+    '- Không dùng họ tên, ngày sinh, giới tính, số điện thoại, email hoặc địa chỉ làm keyword phân tích.',
+    '- Summary phải bám vào kinh nghiệm, trách nhiệm, dự án và kết quả thật có trong CV.',
+    '- Strengths và improvements phải nêu cụ thể phần nào trong CV đang mạnh hoặc đang yếu.',
+    '- Interview questions phải truy sâu vào đúng trải nghiệm, hành động và tác động đã xuất hiện trong CV.',
+    '- Practice plan phải bám vào vai trò mục tiêu và phần còn thiếu thực sự của CV này.'
+  ].join('\n');
+};
+
+const buildFallbackCvAnalysis = (resumeText: string, targetRole: string): CvAnalysisResult => {
+  const mainRole = inferTargetRoleFromResume(resumeText, targetRole);
+  const signals = extractResumeSignals(resumeText);
+  const skillAnchor = signals.keywords.slice(0, 4).join(', ') || 'kỹ năng nền tảng hiện có';
+  const roleAnchor = compactQuote(signals.roleLine || mainRole, 90);
+  const projectAnchor = compactQuote(signals.projectLine || signals.experienceHighlights[0] || mainRole, 100);
+  const evidenceAnchor = compactQuote(signals.strongestEvidence || signals.projectLine || mainRole, 110);
+  const ownershipAnchor = compactQuote(signals.ownershipLines[0] || signals.experienceHighlights[0] || roleAnchor, 110);
+  const achievementAnchor = compactQuote(signals.strongestAchievement || signals.strongestEvidence || roleAnchor, 110);
+  const missingAnchor = signals.missingSections.length ? signals.missingSections.join(', ') : '';
+  const hasMeasuredImpact = signals.quantifiedBulletCount >= 2 || /\d/.test(signals.strongestAchievement || '');
+  const hasOwnershipStory = signals.ownershipLines.length > 0;
+  const hasExperienceStory = signals.experienceHighlights.length > 0;
+  const sectionCoverage = Object.values(signals.sections).filter(Boolean).length;
+
+  const strengths: string[] = [`CV đang định hình khá rõ hướng ứng tuyển cho vai trò ${mainRole}.`];
+
+  if (hasOwnershipStory) {
+    strengths.push(`CV đã có dấu hiệu nêu rõ phần việc bạn trực tiếp đảm nhiệm, nổi bật quanh "${ownershipAnchor}".`);
+  }
+
+  if (hasMeasuredImpact) {
+    strengths.push(`Hồ sơ đã xuất hiện tín hiệu về kết quả hoặc tác động đo được, đặc biệt ở đoạn "${achievementAnchor}".`);
+  }
+
+  if (hasExperienceStory) {
+    strengths.push(`CV có chất liệu kinh nghiệm để khai thác khi phỏng vấn, nhất là ở phần "${projectAnchor}".`);
+  }
+
+  if (signals.sections.skills) {
+    strengths.push(`Bộ kỹ năng đang có liên hệ tương đối tốt với vai trò mục tiêu, ví dụ như ${skillAnchor}.`);
+  }
+
+  const improvements: string[] = [];
+
+  if (missingAnchor) {
+    improvements.push(`CV hiện còn thiếu hoặc còn mỏng ở các phần: ${missingAnchor}. Đây là nhóm nội dung nên bổ sung trước.`);
+  }
+
+  if (!hasMeasuredImpact) {
+    improvements.push('Hồ sơ còn thiếu kết quả định lượng rõ ràng như doanh số, tăng trưởng, hiệu suất hoặc quy mô công việc.');
+  } else {
+    improvements.push('Nên gom các kết quả đo được vào đúng từng kinh nghiệm chính thay vì để rải rác, để nhà tuyển dụng thấy tác động nhanh hơn.');
+  }
+
+  if (!hasOwnershipStory) {
+    improvements.push('CV chưa chỉ ra đủ rõ phần việc bạn trực tiếp chịu trách nhiệm, nên dễ bị cảm giác mô tả chung chung.');
+  } else {
+    improvements.push('Hãy viết sắc hơn theo cấu trúc bối cảnh - hành động - kết quả cho từng dòng thành tựu mạnh nhất.');
+  }
+
+  if (!signals.sections.projects && signals.sectionBuckets.experience.length < 2) {
+    improvements.push('Nên bổ sung 1-2 dự án hoặc tình huống làm việc thực tế để tạo điểm tựa cho phần hỏi sâu khi phỏng vấn.');
+  }
+
+  if (sectionCoverage <= 2) {
+    improvements.push('Bố cục CV hiện vẫn hơi mỏng, nên tách section rõ hơn để người đọc quét nhanh được kinh nghiệm, kỹ năng và thành tựu.');
+  }
+
+  return {
+    summary:
+      hasOwnershipStory && hasMeasuredImpact
+        ? `CV đang bám khá đúng vai trò ${mainRole} và đã có nền nội dung đủ tốt để đi sâu hơn. Điểm mạnh nằm ở việc bạn đã cho thấy cả trách nhiệm cá nhân lẫn kết quả cụ thể quanh "${achievementAnchor}". Để hồ sơ thuyết phục hơn ở vòng sàng lọc, hãy làm đậm hơn từng bullet theo hướng vai trò - hành động - tác động.`
+        : hasOwnershipStory
+          ? `CV đã cho thấy bạn có trải nghiệm thực tế phù hợp với ${mainRole}, đặc biệt quanh "${ownershipAnchor}". Tuy nhiên, hồ sơ vẫn chưa đủ sắc ở phần kết quả đo được, nên cảm giác giá trị mang lại còn chưa thật nổi bật.`
+          : `CV đang cho thấy định hướng ứng tuyển vào ${mainRole}, nhưng nội dung hiện vẫn thiên về liệt kê hơn là chứng minh năng lực. Hồ sơ sẽ mạnh hơn nhiều nếu bạn bổ sung rõ trách nhiệm cá nhân, dự án gần "${projectAnchor}" và kết quả cụ thể quanh "${evidenceAnchor}".`,
+    strengths,
+    improvements,
+    interviewQuestions: [
+      {
+        question: `Hãy giới thiệu ngắn gọn về bản thân trong vai trò ${mainRole}, nhấn vào điều khiến bạn phù hợp nhất.`,
+        purpose: 'Kiểm tra cách bạn định vị bản thân và mở đầu cuộc phỏng vấn.'
+      },
+      {
+        question: `Ở nội dung "${achievementAnchor}", bạn trực tiếp làm gì và kết quả cuối cùng được đo như thế nào?`,
+        purpose: 'Đào sâu trách nhiệm cá nhân và mức tác động thực tế của bạn.'
+      },
+      {
+        question: `Trong phần "${projectAnchor}", khó khăn lớn nhất là gì và bạn đã xử lý nó ra sao?`,
+        purpose: 'Kiểm tra năng lực giải quyết vấn đề và khả năng kể lại trải nghiệm theo ngữ cảnh thật.'
+      },
+      {
+        question: `Nếu ứng tuyển vào ${mainRole} ngay lúc này, bạn muốn dùng dự án hoặc kinh nghiệm nào để chứng minh năng lực đầu tiên?`,
+        purpose: 'Xem bạn có biết chọn đúng bằng chứng mạnh nhất cho đúng vai trò mục tiêu hay không.'
+      },
+      {
+        question: `Trong 90 ngày đầu ở vai trò ${mainRole}, bạn sẽ ưu tiên học gì, làm gì và đo kết quả bằng chỉ số nào?`,
+        purpose: 'Đánh giá tư duy vào việc, mức chủ động và cách bạn gắn mục tiêu với kết quả.'
+      }
+    ],
+    practicePlan: [
+      `Luyện phần giới thiệu bản thân cho vai trò ${mainRole} trong 60-90 giây và chốt bằng một giá trị nổi bật nhất bạn mang lại.`,
+      `Chọn trải nghiệm gần với "${achievementAnchor}" rồi luyện trả lời theo cấu trúc bối cảnh - nhiệm vụ - hành động - kết quả.`,
+      hasMeasuredImpact
+        ? 'Chuẩn bị sẵn 3 số liệu hoặc kết quả mạnh nhất để dùng khi bị hỏi sâu về tác động cá nhân.'
+        : 'Viết lại 3 bullet kinh nghiệm chính theo hướng có con số, kết quả hoặc tác động đo được trước khi luyện phỏng vấn.',
+      `Tập một lượt phản biện cho câu hỏi “Vì sao nên chọn bạn cho vai trò ${mainRole}?” dựa trên ${skillAnchor}.`
     ]
   };
 };
@@ -481,6 +1110,40 @@ const normalizeCvAnalysisOutput = (raw: unknown, fallback: CvAnalysisResult): Cv
   };
 };
 
+const buildCvPromptContext = (resumeText: string, targetRole: string) => {
+  const mainRole = inferTargetRoleFromResume(resumeText, targetRole);
+  const signals = extractResumeSignals(resumeText);
+
+  return [
+    `Vai trò đang phân tích: ${mainRole}`,
+    `Từ khóa nội dung: ${signals.keywords.join(', ') || 'Chưa rõ'}`,
+    `Dòng vai trò nổi bật: ${signals.roleLine || 'Chưa thấy rõ'}`,
+    `Dòng có số liệu/kết quả: ${signals.evidenceLines.map((line) => compactQuote(line, 120)).join(' | ') || 'Chưa thấy rõ'}`,
+    `Dòng dự án nổi bật: ${signals.projectLine || 'Chưa thấy rõ'}`,
+    `Dòng thể hiện trách nhiệm cá nhân: ${signals.ownershipLines.map((line) => compactQuote(line, 120)).join(' | ') || 'Chưa thấy rõ'}`,
+    `Dòng thành tích mạnh nhất: ${signals.strongestAchievement || 'Chưa thấy rõ'}`,
+    `Các trải nghiệm nổi bật: ${signals.experienceHighlights.map((line) => compactQuote(line, 120)).join(' | ') || 'Chưa thấy rõ'}`,
+    `Các nhóm nội dung đang có: ${
+      [
+        signals.sections.experience ? 'kinh nghiệm' : '',
+        signals.sections.projects ? 'dự án' : '',
+        signals.sections.skills ? 'kỹ năng' : '',
+        signals.sections.education ? 'học vấn' : '',
+        signals.sections.achievements ? 'thành tích' : ''
+      ]
+        .filter(Boolean)
+        .join(', ') || 'không rõ'
+    }`,
+    `Các phần còn thiếu hoặc mỏng: ${signals.missingSections.join(', ') || 'không có phần thiếu rõ rệt'}`,
+    'Yêu cầu bắt buộc:',
+    '- Không dùng họ tên, ngày sinh, giới tính, số điện thoại hoặc email làm keyword phân tích.',
+    '- Summary phải nêu đúng hồ sơ đang mạnh ở đâu, yếu ở đâu, bám vào kinh nghiệm, trách nhiệm và kết quả thật có trong CV.',
+    '- Strengths và improvements phải chỉ ra nội dung cụ thể trong CV, không viết chung chung.',
+    '- Interview questions phải truy vào dự án, vai trò, hành động và kết quả thật sự có dấu hiệu xuất hiện trong CV.',
+    '- Practice plan phải bám vào vai trò mục tiêu và điểm còn thiếu của CV này.'
+  ].join('\n');
+};
+
 export const extractResumeText = async (file: UploadFile) => {
   if (file.mimetype.includes('pdf') || file.originalname.toLowerCase().endsWith('.pdf')) {
     const parsed = await pdfParse(file.buffer);
@@ -491,7 +1154,7 @@ export const extractResumeText = async (file: UploadFile) => {
 };
 
 export const analyzeCv = async (input: { resumeText: string; targetRole: string }) => {
-  const fallback = buildFallbackCvAnalysis(input.resumeText, input.targetRole);
+  const fallback = buildFallbackCvAnalysisV2(input.resumeText, input.targetRole);
 
   if (!openai) {
     return {
@@ -512,6 +1175,10 @@ export const analyzeCv = async (input: { resumeText: string; targetRole: string 
         {
           role: 'user',
           content: `Vị trí mục tiêu: ${normalizeText(input.targetRole) || 'Chưa cung cấp'}\n\nNội dung CV:\n${input.resumeText.slice(0, 12000)}`
+        },
+        {
+          role: 'user',
+          content: buildCvPromptContextV2(input.resumeText, input.targetRole)
         }
       ],
       text: {
@@ -540,6 +1207,7 @@ const transcribeAudio = async (audio: UploadFile) => {
   const transcript = await openai.audio.transcriptions.create({
     file,
     model: env.openaiTranscribeModel,
+    language: 'vi',
     response_format: 'text',
     prompt:
       'Đây là một bài thuyết trình hoặc câu trả lời phỏng vấn bằng tiếng Việt. Hãy chép lại sát nội dung, giữ dấu câu và tiếng Việt có dấu khi có thể.'
@@ -587,7 +1255,16 @@ const transcribeAudioSafely = async (audio?: UploadFile) => {
   };
 };
 
-const buildMetricScores = (transcript: string, durationSeconds: number, volumeSamples: VolumePoint[]) => {
+const buildMetricScores = (
+  transcript: string,
+  durationSeconds: number,
+  volumeSamples: VolumePoint[],
+  context?: {
+    practiceType?: 'presentation' | 'interview';
+    topic?: string;
+    targetRole?: string;
+  }
+) => {
   const words = transcript
     .toLowerCase()
     .replace(/[^\p{L}\p{N}\s]/gu, ' ')
@@ -599,6 +1276,72 @@ const buildMetricScores = (transcript: string, durationSeconds: number, volumeSa
   const speechRateWpm = clamp(wordCount / durationMinutes, 0, 220);
   const fillerWordCount = fillerTerms.reduce((sum, term) => sum + countOccurrences(transcript, term), 0);
   const repeatCount = estimateRepeatCount(words);
+  const contentSignals =
+    wordCount > 0
+      ? buildPracticeContentSignalsV2(
+          transcript,
+          context?.topic ?? '',
+          context?.practiceType ?? 'presentation',
+          context?.targetRole ?? ''
+        )
+      : null;
+  const uniqueRatio = wordCount ? uniqueWords(transcript).length / wordCount : 0;
+  const sentenceCount = contentSignals?.sentences.length ?? 0;
+  const averageWordsPerSentence = sentenceCount ? wordCount / sentenceCount : wordCount;
+  const topicCoverage = contentSignals?.topicCoverage ?? 0.55;
+  const roleCoverage = contentSignals?.roleCoverage ?? (context?.practiceType === 'interview' ? 0.45 : 0.7);
+  const hasConcreteEvidence =
+    Boolean(contentSignals?.evidenceSentence) &&
+    normalizeText(contentSignals?.evidenceSentence) !== normalizeText(contentSignals?.anchorSentence);
+  const quantifiedEvidenceCount = transcript.match(/\b\d+(?:[.,]\d+)?\b/gu)?.length ?? 0;
+  const actionVerbCount =
+    transcript.match(/\b(phụ trách|triển khai|xây dựng|tối ưu|đàm phán|đề xuất|phối hợp|dẫn dắt|thuyết phục|cải thiện|tăng|giảm|chốt|quản lý|đo lường)\b/giu)
+      ?.length ?? 0;
+  const genericPhraseCount =
+    transcript.match(/\b(nhiều việc|mọi thứ|khá ổn|cố gắng|học thêm|kinh nghiệm|tham gia|hỗ trợ nhóm|một số|nhiều thứ|các việc khác nhau)\b/giu)
+      ?.length ?? 0;
+  const longWordVariety = new Set(words.filter((word) => word.length >= 6)).size;
+  const enhancedActionVerbCount = contentSignals?.actionCueCount ?? actionVerbCount;
+  const enhancedGenericPhraseCount = contentSignals?.genericCueCount ?? genericPhraseCount;
+  const exampleCueCount = contentSignals?.exampleCueCount ?? 0;
+  const reasoningCueCount = contentSignals?.reasoningCueCount ?? 0;
+  const repeatedSentenceStarts = new Set(
+    (contentSignals?.sentences ?? []).map((sentence) =>
+      sentence
+        .toLowerCase()
+        .replace(/[^\p{L}\p{N}\s]/gu, ' ')
+        .split(/\s+/)
+        .filter(Boolean)
+        .slice(0, 2)
+        .join(' ')
+    )
+  ).size;
+  const structureCueBoost =
+    contentSignals?.hasStructureCue ? (context?.practiceType === 'presentation' ? 8 : 5) : context?.practiceType === 'presentation' ? -5 : -2;
+  const ownershipCueBoost = contentSignals?.hasOwnershipCue ? 7 : context?.practiceType === 'interview' ? -5 : 0;
+  const outcomeCueBoost = contentSignals?.hasOutcomeCue ? Math.min(12, (contentSignals?.evidenceCueCount ?? 0) * 3 + 4) : -6;
+  const reflectionCueBoost = contentSignals?.hasReflectionCue ? 5 : 0;
+  const problemCueBoost = contentSignals?.hasProblemCue && context?.practiceType === 'interview' ? 5 : 0;
+  const genericCuePenalty = (contentSignals?.genericCueCount ?? 0) * 3;
+  const specificityScore = clamp(
+    24 +
+      quantifiedEvidenceCount * 14 +
+      enhancedActionVerbCount * 3 +
+      exampleCueCount * 4 +
+      reasoningCueCount * 4 +
+      longWordVariety * 1.6 +
+      (hasConcreteEvidence ? 10 : 0) +
+      structureCueBoost +
+      ownershipCueBoost +
+      outcomeCueBoost +
+      reflectionCueBoost +
+      problemCueBoost -
+      enhancedGenericPhraseCount * 10 -
+      genericCuePenalty -
+      Math.max(0, sentenceCount - repeatedSentenceStarts) * 4,
+    18,
+    98
+  );
 
   const volumeAverage = volumeSamples.length
     ? volumeSamples.reduce((sum, point) => sum + point.value, 0) / volumeSamples.length
@@ -626,10 +1369,54 @@ const buildMetricScores = (transcript: string, durationSeconds: number, volumeSa
 
   const targetSpeed = 132;
   const pacePenalty = Math.abs(speechRateWpm - targetSpeed) * 0.9;
-  const clarityScore = clamp(92 - fillerWordCount * 6 - repeatCount * 3 + Math.min(10, wordCount / 18));
-  const pauseScore = clamp(88 - Math.abs(pauseCount - 6) * 6 - pauseSeconds * 3);
-  const confidenceScore = clamp((volumeStability + clarityScore + pauseScore + (100 - pacePenalty)) / 4);
-  const totalScore = clamp((volumeStability + clarityScore + pauseScore + confidenceScore + (100 - pacePenalty)) / 5);
+  const structureScore = clamp(
+    52 +
+      Math.min(18, sentenceCount * 4) +
+      Math.min(12, uniqueRatio * 28) +
+      topicCoverage * 18 +
+      roleCoverage * (context?.practiceType === 'interview' ? 10 : 4) +
+      structureCueBoost +
+      ownershipCueBoost * 0.7 +
+      outcomeCueBoost * 0.6 +
+      exampleCueCount * 2 +
+      reasoningCueCount * 1.6 +
+      specificityScore * 0.14 -
+      Math.max(0, Math.abs(averageWordsPerSentence - 18) * 1.3),
+    35,
+    96
+  );
+  const clarityScore = clamp(
+    18 +
+      structureScore * 0.42 +
+      specificityScore * 0.38 +
+      Math.min(8, wordCount / 24) -
+      fillerWordCount * 6 -
+      repeatCount * 3 -
+      enhancedGenericPhraseCount * 2 -
+      genericCuePenalty * 0.7,
+    22,
+    98
+  );
+  const targetPauseCount = Math.max(2, Math.round(Math.max(sentenceCount, 4) * 0.75));
+  const pauseScore = clamp(84 - Math.abs(pauseCount - targetPauseCount) * 4 - pauseSeconds * 3 + sentenceCount * 1.5, 18, 96);
+  const paceScore = clamp(100 - pacePenalty + (speechRateWpm >= 108 && speechRateWpm <= 155 ? 6 : 0), 24, 100);
+  const confidenceScore = clamp(
+    volumeStability * 0.24 +
+      clarityScore * 0.22 +
+      pauseScore * 0.16 +
+      paceScore * 0.14 +
+      structureScore * 0.1 +
+      specificityScore * 0.14
+  );
+  const totalScore = clamp(
+    volumeStability * 0.16 +
+      clarityScore * 0.22 +
+      pauseScore * 0.14 +
+      confidenceScore * 0.16 +
+      paceScore * 0.1 +
+      structureScore * 0.08 +
+      specificityScore * 0.14
+  );
 
   const chunks = 6;
   const wordChunks = splitWordsIntoChunks(words, chunks);
@@ -880,6 +1667,549 @@ const buildFallbackPracticeFeedback = (input: {
   };
 };
 
+const buildSmartContextualFollowUpQuestions = (input: {
+  practiceType: 'presentation' | 'interview';
+  topic: string;
+  transcript: string;
+  speechRateWpm: number;
+  clarityScore: number;
+  pauseScore: number;
+  targetRole?: string;
+}) => {
+  const signals = buildPracticeContentSignalsV2(input.transcript, input.topic, input.practiceType, input.targetRole ?? '');
+  const topicLabel = signals.shortTopicLabel;
+  const anchorQuote = compactQuote(signals.anchorSentence || topicLabel);
+  const evidenceQuote = compactQuote(
+    signals.evidenceSentence ||
+      signals.supportingSentence ||
+      (input.practiceType === 'presentation' ? 'ví dụ minh họa' : 'kết quả cụ thể')
+  );
+  const roleLabel = normalizeText(input.targetRole) || 'vai trò mục tiêu hiện tại';
+
+  const questions =
+    input.practiceType === 'presentation'
+      ? [
+          !signals.hasStructureCue
+            ? `Nếu trình bày lại chủ đề "${topicLabel}", bạn sẽ chia bài thành 3 phần nào để người nghe theo kịp hơn?`
+            : signals.anchorSentence
+              ? `Trong ý "${anchorQuote}", bạn sẽ nhấn lại câu nào để người nghe hiểu ngay thông điệp chính?`
+              : `Nếu trình bày lại chủ đề "${topicLabel}", bạn sẽ mở đầu bằng câu nào để vào ý nhanh hơn?`,
+          signals.topicCoverage < 0.35
+            ? `Bài nói đang chạm chưa nhiều vào chủ đề "${topicLabel}". Bạn sẽ bổ sung luận điểm nào để bám sát trọng tâm hơn?`
+            : !signals.hasOutcomeCue
+              ? `Bạn sẽ thêm ví dụ, số liệu hay kết quả nào quanh "${evidenceQuote}" để bài nói có sức nặng hơn?`
+              : `Bạn sẽ bổ sung chi tiết nào quanh "${evidenceQuote}" để bài nói thuyết phục hơn?`,
+          input.speechRateWpm > 155
+            ? 'Bạn sẽ chủ động dừng ở đâu để giảm cảm giác nói nhanh và tách rõ từng ý chính?'
+            : input.pauseScore < 60
+              ? 'Bạn sẽ đặt điểm dừng ngắn ở đâu để bài nói có nhịp chắc hơn?'
+              : signals.genericCueCount >= 3
+                ? 'Câu nào trong bài đang còn chung chung và bạn sẽ thay nó bằng ví dụ cụ thể nào?'
+                : 'Người nghe cần nhớ điều gì nhất sau bài trình bày này, và bạn sẽ chốt lại bằng câu nào?'
+        ]
+      : [
+          !signals.hasOwnershipCue
+            ? `Trong câu trả lời vừa rồi, phần việc nào là do chính bạn trực tiếp chịu trách nhiệm trong bối cảnh ${roleLabel}?`
+            : signals.anchorSentence
+              ? `Nếu nhà tuyển dụng hỏi sâu hơn về câu "${anchorQuote}", bạn sẽ dùng ví dụ nào để trả lời chắc hơn?`
+              : `Nếu nhà tuyển dụng hỏi sâu hơn về "${topicLabel}", bạn sẽ trả lời bằng ví dụ nào cụ thể nhất?`,
+          signals.topicCoverage < 0.35 || signals.roleCoverage < 0.3
+            ? `Câu trả lời hiện tại chưa bám sát vai trò ${roleLabel}. Bạn sẽ nối kinh nghiệm của mình với vai trò này bằng ý nào?`
+            : !signals.hasOutcomeCue
+              ? `Kết quả đo được nào bạn có thể bổ sung quanh "${evidenceQuote}" để câu trả lời có sức nặng hơn?`
+              : `Bạn sẽ thêm kết quả đo được nào quanh "${evidenceQuote}" để câu trả lời có sức nặng hơn?`,
+          !signals.hasProblemCue
+            ? 'Khó khăn thực tế lớn nhất trong tình huống đó là gì, và bạn đã xử lý ra sao?'
+            : !signals.hasReflectionCue
+              ? 'Sau trải nghiệm đó, bài học lớn nhất bạn rút ra là gì và bạn đã thay đổi cách làm ra sao?'
+              : input.clarityScore < 65
+                ? 'Bạn sẽ rút gọn câu nào để người nghe hiểu ngay giá trị của bạn chỉ sau một lần nghe?'
+                : 'Nếu phải chốt trong một câu, bạn muốn nhà tuyển dụng nhớ nhất điều gì về năng lực của mình?'
+        ];
+
+  return Array.from(new Set(questions.map((item) => normalizeText(item)))).slice(0, 3);
+};
+
+const buildSmartFallbackPracticeFeedbackV2 = (input: {
+  practiceType: 'presentation' | 'interview';
+  topic: string;
+  transcript: string;
+  speechRateWpm: number;
+  volumeStability: number;
+  clarityScore: number;
+  pauseScore: number;
+  confidenceScore: number;
+  fillerWordCount: number;
+  repeatCount: number;
+  transcriptAvailable: boolean;
+  warningMessage?: string;
+  targetRole?: string;
+}): PracticeAnalysisResult => {
+  const signals = buildPracticeContentSignalsV2(input.transcript, input.topic, input.practiceType, input.targetRole ?? '');
+  const topicLabel = signals.shortTopicLabel;
+  const roleLabel = normalizeText(input.targetRole) || 'vai trò mục tiêu';
+  const anchorQuote = compactQuote(signals.anchorSentence || topicLabel);
+  const evidenceQuote = compactQuote(signals.evidenceSentence || signals.supportingSentence || topicLabel);
+  const strengths: string[] = [];
+  const improvements: string[] = [];
+  const coachNotes: string[] = [];
+
+  if (!input.transcriptAvailable) {
+    strengths.push('SpeakAI vẫn phân tích được nhịp nói, âm lượng và khoảng dừng trực tiếp từ file ghi âm.');
+    improvements.push('Chưa chép được transcript nên nhận xét hiện tại chưa đi sâu vào cách dùng từ và độ mạch lạc của nội dung.');
+    coachNotes.push('Hãy dán transcript hoặc thử phân tích lại khi mạng ổn định hơn để nhận góp ý đầy đủ hơn.');
+  } else {
+    if (signals.topicCoverage >= 0.5) {
+      strengths.push(`Nội dung đang bám khá đúng vào chủ đề "${topicLabel}".`);
+    } else {
+      improvements.push(`Bài nói còn bám chưa sát chủ đề "${topicLabel}", nên cần chốt rõ trọng tâm hơn.`);
+    }
+
+    if (signals.hasOwnershipCue) {
+      strengths.push('Bạn đã cho thấy phần việc bản thân trực tiếp đảm nhiệm, giúp nội dung đáng tin hơn.');
+    } else if (input.practiceType === 'interview') {
+      improvements.push('Câu trả lời chưa làm rõ phần việc bạn trực tiếp chịu trách nhiệm, nên giá trị cá nhân còn mờ.');
+    }
+
+    if (signals.hasOutcomeCue) {
+      strengths.push(`Bài nói đã có tín hiệu về kết quả hoặc tác động cụ thể quanh "${evidenceQuote}".`);
+    } else {
+      improvements.push('Bài nói còn thiếu số liệu, kết quả hoặc tác động cụ thể để tăng sức nặng.');
+    }
+
+    if (signals.hasStructureCue) {
+      strengths.push(
+        input.practiceType === 'presentation'
+          ? 'Bài trình bày đã có nhịp chia ý tương đối rõ, giúp người nghe theo dõi tốt hơn.'
+          : 'Câu trả lời đã có khung tình huống - hành động - kết quả tương đối rõ.'
+      );
+    } else {
+      improvements.push(
+        input.practiceType === 'presentation'
+          ? 'Bài trình bày chưa thể hiện rõ bố cục mở đầu - ý chính - chốt lại.'
+          : 'Câu trả lời nên đi rõ hơn theo bối cảnh - hành động - kết quả để dễ theo dõi.'
+      );
+    }
+
+    if (signals.exampleCueCount > 0) {
+      strengths.push('Bạn đã đưa ra ví dụ hoặc chi tiết cụ thể thay vì chỉ nói khái quát.');
+    } else {
+      improvements.push('Nên thêm một ví dụ thật hoặc tình huống cụ thể để người nghe hình dung rõ hơn.');
+    }
+
+    if (input.practiceType === 'interview') {
+      if (signals.hasProblemCue) {
+        strengths.push('Câu trả lời đã chạm vào khó khăn hoặc áp lực thực tế, khá đúng tinh thần phỏng vấn.');
+      } else {
+        improvements.push('Nên nhắc tới khó khăn, áp lực hoặc mâu thuẫn thực tế để câu trả lời có chiều sâu hơn.');
+      }
+
+      if (signals.hasReflectionCue) {
+        strengths.push('Bạn đã cho thấy bài học rút ra hoặc hướng cải thiện sau trải nghiệm.');
+      } else {
+        improvements.push('Câu trả lời nên có thêm bài học rút ra hoặc điều bạn sẽ làm tốt hơn ở lần sau.');
+      }
+    }
+
+    if (signals.genericCueCount >= 3) {
+      improvements.push('Một số câu còn khá chung chung, nên thay bằng hành động, ví dụ hoặc kết quả cụ thể hơn.');
+    }
+  }
+
+  if (input.speechRateWpm >= 110 && input.speechRateWpm <= 155) {
+    strengths.push('Tốc độ nói đang ở mức dễ nghe và khá vừa nhịp.');
+  } else if (input.speechRateWpm > 155) {
+    improvements.push('Tốc độ nói đang khá nhanh, nên chèn thêm điểm dừng sau mỗi ý chính.');
+    coachNotes.push(`Với chủ đề "${topicLabel}", hãy chia ý "${anchorQuote}" thành 2-3 câu ngắn để giữ nhịp tốt hơn.`);
+  } else {
+    improvements.push('Tốc độ nói đang hơi chậm, nên vào thẳng ý chính sớm hơn.');
+    coachNotes.push('Thử mở đầu bằng một câu chốt rõ ý rồi đi ngay vào phần minh họa để giữ nhịp tốt hơn.');
+  }
+
+  if (input.volumeStability >= 68) {
+    strengths.push('Âm lượng tương đối ổn định trong suốt lượt nói.');
+  } else {
+    improvements.push('Âm lượng chưa đều, nên giữ khoảng cách micro ổn định hơn.');
+    coachNotes.push('Thử luyện lại với cùng khoảng cách micro và tránh xoay đầu quá nhiều khi nói.');
+  }
+
+  if (input.clarityScore >= 70) {
+    strengths.push('Độ rõ phát âm khá tốt, người nghe có thể nắm ý chính nhanh.');
+  } else {
+    improvements.push('Cần nói dứt ý hơn và cắt bớt các cụm rườm rà để nội dung rõ hơn.');
+  }
+
+  if (input.pauseScore >= 65) {
+    strengths.push('Khoảng dừng khá hợp lý, giúp bài nói có nhịp thở tốt hơn.');
+  } else {
+    improvements.push('Khoảng dừng chưa tối ưu, nên dừng ngắn trước ý quan trọng thay vì ngắt giữa câu.');
+  }
+
+  if (input.fillerWordCount > 4) {
+    improvements.push('Từ đệm xuất hiện hơi nhiều, nên thay bằng khoảng dừng ngắn để giữ sự chắc chắn.');
+  }
+
+  if (input.repeatCount > 3) {
+    improvements.push('Nội dung có dấu hiệu lặp ý, nên chốt trước 3 ý chính rồi mới bắt đầu nói.');
+  }
+
+  if (!signals.hasOwnershipCue && input.transcriptAvailable) {
+    coachNotes.push('Hãy thử công thức: “Tôi trực tiếp phụ trách..., tôi đã làm..., kết quả là...” để vai trò cá nhân rõ hơn.');
+  }
+  if (!signals.hasOutcomeCue && input.transcriptAvailable) {
+    coachNotes.push('Chuẩn bị sẵn ít nhất một con số, một kết quả hoặc một tác động cụ thể để chèn vào lần nói tiếp theo.');
+  }
+  if (!signals.hasStructureCue && input.practiceType === 'presentation' && input.transcriptAvailable) {
+    coachNotes.push('Trước khi nói, hãy chốt 3 nhịp rõ: mở vấn đề, triển khai ý chính, kết luận.');
+  }
+  if (!signals.hasProblemCue && input.practiceType === 'interview' && input.transcriptAvailable) {
+    coachNotes.push(`Hãy gắn câu trả lời với một khó khăn thật bạn từng gặp trong vai trò ${roleLabel} để tăng độ thuyết phục.`);
+  }
+  if (!signals.hasReflectionCue && input.practiceType === 'interview' && input.transcriptAvailable) {
+    coachNotes.push('Chốt thêm một bài học rút ra hoặc một thay đổi bạn sẽ làm ở lần sau để câu trả lời trưởng thành hơn.');
+  }
+
+  const followUpQuestions = Array.from(
+    new Set(
+      [
+        !signals.hasOwnershipCue
+          ? `Trong phần "${anchorQuote}", bạn trực tiếp chịu trách nhiệm điều gì?`
+          : `Nếu hỏi sâu hơn về "${anchorQuote}", bạn sẽ dùng ví dụ nào để trả lời chắc hơn?`,
+        !signals.hasOutcomeCue
+          ? `Kết quả cụ thể nào bạn có thể bổ sung quanh "${evidenceQuote}" để tăng sức nặng?`
+          : `Bạn sẽ nhấn lại chỉ số hoặc tác động nào quanh "${evidenceQuote}" để người nghe nhớ rõ nhất?`,
+        input.practiceType === 'interview'
+          ? !signals.hasProblemCue
+            ? 'Khó khăn lớn nhất trong tình huống đó là gì và bạn đã xử lý ra sao?'
+            : !signals.hasReflectionCue
+              ? 'Sau trải nghiệm đó, bài học lớn nhất bạn rút ra là gì?'
+              : 'Nếu nhà tuyển dụng hỏi vặn sâu hơn, bạn sẽ bảo vệ quyết định của mình thế nào?'
+          : !signals.hasStructureCue
+            ? 'Nếu trình bày lại, bạn sẽ chia bài nói thành 3 ý nào để người nghe theo kịp hơn?'
+            : 'Câu chốt nào sẽ giúp người nghe nhớ đúng trọng tâm của bài trình bày này?'
+      ].map((item) => normalizeText(item))
+    )
+  ).slice(0, 3);
+
+  const summary = !input.transcriptAvailable
+    ? 'SpeakAI chưa chép được transcript từ file ghi âm, nên kết quả hiện tại tập trung vào nhịp nói, âm lượng, khoảng dừng và độ ổn định tổng thể.'
+    : input.practiceType === 'presentation'
+      ? `Bài thuyết trình về "${topicLabel}" đã có nền nội dung rõ hơn khi bạn bám được vào "${anchorQuote}", nhưng vẫn cần tăng độ cụ thể và bố cục để thuyết phục hơn.`
+      : `Câu trả lời phỏng vấn cho "${topicLabel}" đã có khung nội dung cơ bản, nhưng cần làm rõ hơn vai trò cá nhân, kết quả và chiều sâu phản xạ để công bằng với năng lực thật.`;
+
+  return {
+    transcript: input.transcript,
+    speechRateWpm: input.speechRateWpm,
+    volumeStability: input.volumeStability,
+    clarityScore: input.clarityScore,
+    pauseScore: input.pauseScore,
+    confidenceScore: input.confidenceScore,
+    totalScore: 0,
+    fillerWordCount: input.fillerWordCount,
+    repeatCount: input.repeatCount,
+    speedTimeline: [],
+    heatmap: [],
+    summary,
+    strengths: Array.from(new Set(strengths)).slice(0, 5),
+    improvements: Array.from(new Set(improvements)).slice(0, 6),
+    coachNotes: Array.from(new Set(coachNotes)).slice(0, 6),
+    followUpQuestions
+  };
+};
+
+const buildSmartFallbackPracticeFeedback = (input: {
+  practiceType: 'presentation' | 'interview';
+  topic: string;
+  transcript: string;
+  speechRateWpm: number;
+  volumeStability: number;
+  clarityScore: number;
+  pauseScore: number;
+  confidenceScore: number;
+  fillerWordCount: number;
+  repeatCount: number;
+  transcriptAvailable: boolean;
+  warningMessage?: string;
+  targetRole?: string;
+}): PracticeAnalysisResult => {
+  const signals = buildPracticeContentSignalsV2(input.transcript, input.topic, input.practiceType, input.targetRole ?? '');
+  const topicLabel = signals.shortTopicLabel;
+  const roleLabel = normalizeText(input.targetRole) || 'vai trò mục tiêu';
+  const anchorQuote = compactQuote(signals.anchorSentence || topicLabel);
+  const evidenceQuote = compactQuote(signals.evidenceSentence || signals.supportingSentence || topicLabel);
+  const strengths: string[] = [];
+  const improvements: string[] = [];
+  const coachNotes: string[] = [];
+
+  if (input.transcriptAvailable && signals.hasOwnershipCue) {
+    strengths.push('Bạn đã cho thấy khá rõ phần việc mình trực tiếp chịu trách nhiệm, nên người nghe dễ tin hơn.');
+  } else if (input.practiceType === 'interview' && input.transcriptAvailable) {
+    improvements.push('Câu trả lời chưa nói rõ phần việc bạn trực tiếp chịu trách nhiệm, nên giá trị cá nhân còn mờ.');
+  }
+
+  if (input.transcriptAvailable && signals.hasOutcomeCue) {
+    strengths.push(`Bài nói đã có tín hiệu về kết quả hoặc tác động cụ thể quanh "${evidenceQuote}".`);
+  } else if (input.transcriptAvailable) {
+    improvements.push('Bài nói còn thiếu số liệu, kết quả hoặc tác động rõ ràng để tăng sức nặng.');
+  }
+
+  if (input.practiceType === 'presentation' && input.transcriptAvailable) {
+    if (signals.hasStructureCue) {
+      strengths.push('Bài trình bày đã có dấu hiệu chia ý khá rõ, giúp người nghe theo kịp hơn.');
+    } else {
+      improvements.push('Bài trình bày chưa thể hiện rõ bố cục mở đầu - ý chính - chốt lại, nên còn hơi rời.');
+    }
+  }
+
+  if (input.practiceType === 'interview' && input.transcriptAvailable) {
+    if (signals.hasProblemCue) {
+      strengths.push('Câu trả lời đã chạm vào bối cảnh khó khăn hoặc vấn đề thực tế, khá hợp ngữ cảnh phỏng vấn.');
+    } else {
+      improvements.push('Nên thêm bối cảnh khó khăn hoặc áp lực thực tế để câu trả lời bớt chung chung.');
+    }
+
+    if (signals.hasReflectionCue) {
+      strengths.push('Bạn đã cho thấy bài học rút ra hoặc hướng cải thiện, giúp câu trả lời trưởng thành hơn.');
+    } else {
+      improvements.push('Câu trả lời nên có thêm bài học rút ra hoặc điều bạn sẽ làm khác đi ở lần sau.');
+    }
+  }
+
+  if (input.transcriptAvailable && signals.genericCueCount >= 3) {
+    improvements.push('Một số câu còn chung chung, nên thay bằng ví dụ, quyết định hoặc con số cụ thể hơn.');
+  }
+
+  if (signals.topicCoverage >= 0.45 && input.transcriptAvailable) {
+    strengths.push(`Nội dung đã bám khá đúng vào chủ đề "${topicLabel}".`);
+  } else if (input.transcriptAvailable) {
+    improvements.push(`Nội dung hiện vẫn bám chưa sát chủ đề "${topicLabel}", nên cần chốt lại đúng trọng tâm hơn.`);
+  }
+
+  if (signals.evidenceSentence) {
+    strengths.push(`Bài nói đã có một điểm tựa nội dung rõ ở ý "${evidenceQuote}".`);
+  } else if (input.transcriptAvailable) {
+    improvements.push('Bài nói còn thiếu ví dụ, kết quả hoặc tình huống cụ thể để tăng độ thuyết phục.');
+  }
+
+  if (input.speechRateWpm >= 110 && input.speechRateWpm <= 155) {
+    strengths.push('Tốc độ nói đang ở mức dễ nghe và đủ nhịp để người nghe theo kịp.');
+  } else if (input.speechRateWpm > 155) {
+    improvements.push('Tốc độ nói đang khá nhanh, nên chèn thêm điểm dừng sau mỗi ý chính.');
+  } else {
+    improvements.push('Tốc độ nói đang hơi chậm, nên vào thẳng ý chính sớm hơn để giữ nhịp.');
+  }
+
+  if (input.volumeStability >= 68) {
+    strengths.push('Âm lượng khá ổn định trong suốt phần trình bày.');
+  } else {
+    improvements.push('Âm lượng chưa đều, nên giữ khoảng cách micro ổn định hơn.');
+  }
+
+  if (input.clarityScore >= 70) {
+    strengths.push('Độ rõ phát âm khá tốt và ý nói tương đối sáng.');
+  } else {
+    improvements.push('Cần nói dứt ý hơn và giảm các cụm rườm rà để nội dung rõ hơn.');
+  }
+
+  if (input.pauseScore >= 65) {
+    strengths.push('Khoảng dừng khá hợp lý, giúp chia nhịp bài nói tốt hơn.');
+  } else {
+    improvements.push('Khoảng dừng chưa tối ưu, nên dừng ngắn trước ý quan trọng thay vì ngắt giữa câu.');
+  }
+
+  if (input.fillerWordCount > 4) {
+    improvements.push('Số từ đệm còn hơi nhiều, nên thay bằng khoảng dừng ngắn và câu ngắn hơn.');
+  }
+
+  if (input.repeatCount > 3) {
+    improvements.push('Nội dung có dấu hiệu lặp ý, nên chốt trước 3 ý chính rồi mới bắt đầu nói.');
+  }
+
+  if (input.confidenceScore < 60) {
+    coachNotes.push('Hãy chuẩn bị sẵn một câu mở đầu và một câu chốt để giữ phong thái tự tin hơn.');
+  }
+
+  if (input.speechRateWpm > 155 && signals.anchorSentence) {
+    coachNotes.push(`Ở lượt nói tiếp theo, hãy chia ý "${anchorQuote}" thành 2-3 câu ngắn để tốc độ ổn định hơn.`);
+  } else {
+    coachNotes.push(`Hãy nhấn mạnh thêm một ví dụ hoặc chi tiết cụ thể quanh "${evidenceQuote}" để bài nói có điểm tựa rõ hơn.`);
+  }
+
+  if (input.transcriptAvailable && !signals.hasOwnershipCue) {
+    coachNotes.push('Hãy thử nói lại bằng mẫu: “Tôi trực tiếp phụ trách..., tôi đã làm..., kết quả là...” để vai trò cá nhân rõ hơn.');
+  }
+
+  if (input.transcriptAvailable && !signals.hasOutcomeCue) {
+    coachNotes.push('Chuẩn bị sẵn ít nhất một con số, một kết quả hoặc một tác động cụ thể để chèn vào lần nói tiếp theo.');
+  }
+
+  if (input.practiceType === 'presentation' && input.transcriptAvailable && !signals.hasStructureCue) {
+    coachNotes.push('Trước khi nói, hãy chốt sẵn 3 nhịp rõ: mở vấn đề, triển khai ý chính, kết luận.');
+  }
+
+  if (input.practiceType === 'interview' && input.transcriptAvailable && !signals.hasProblemCue) {
+    coachNotes.push('Với câu trả lời phỏng vấn, hãy thêm một đoạn nói rõ khó khăn hoặc áp lực thực tế để câu chuyện đáng tin hơn.');
+  }
+
+  if (input.fillerWordCount > 0 || input.repeatCount > 0) {
+    coachNotes.push('Nghe lại bản ghi và đánh dấu đúng câu bị lặp hoặc bị vướng từ đệm để sửa nhanh hơn ở lần sau.');
+  }
+
+  if (input.practiceType === 'interview' && (signals.topicCoverage < 0.35 || signals.roleCoverage < 0.3)) {
+    coachNotes.push(`Hãy nối câu trả lời về "${topicLabel}" trực tiếp hơn với vai trò ${roleLabel} để ngữ cảnh phỏng vấn rõ hơn.`);
+  }
+
+  if (signals.sentences.length <= 2 && input.transcriptAvailable) {
+    improvements.push('Nội dung đang hơi ngắn, nên thêm một ý giải thích hoặc một ví dụ để bài nói đầy đặn hơn.');
+  }
+
+  if (!input.transcriptAvailable) {
+    strengths.unshift('SpeakAI vẫn đo được nhịp nói, âm lượng và khoảng dừng trực tiếp từ file ghi âm.');
+    improvements.unshift('Chưa chép được transcript nên kết quả hiện tại chưa đi sâu vào cách dùng từ và độ mạch lạc nội dung.');
+    coachNotes.unshift('Hãy dán transcript hoặc thử phân tích lại khi mạng ổn định hơn để nhận góp ý đầy đủ hơn.');
+  }
+
+  if (input.warningMessage) {
+    coachNotes.unshift(input.warningMessage);
+  }
+
+  const summary = !input.transcriptAvailable
+    ? 'SpeakAI đang dùng bản phân tích dự phòng từ tín hiệu âm thanh, nên kết quả hiện tại tập trung vào nhịp nói, âm lượng, khoảng dừng và độ ổn định tổng thể.'
+    : input.practiceType === 'presentation'
+      ? signals.topicCoverage < 0.35
+        ? `Bài thuyết trình đang nói quanh chủ đề "${topicLabel}", nhưng phần nội dung chính vẫn chưa bám đủ sát trọng tâm. Bạn cần chốt lại thông điệp, ví dụ minh họa và nhịp nhấn để người nghe hiểu nhanh hơn.`
+        : !signals.hasStructureCue
+          ? `Bài thuyết trình về "${topicLabel}" đã có nội dung nền, nhưng bố cục vẫn chưa thật rõ. Nếu chia lại mạch mở đầu - ý chính - chốt lại và giữ nhịp nhấn tốt hơn, bài nói sẽ chuyên nghiệp hơn nhiều.`
+          : !signals.hasOutcomeCue
+            ? `Bài thuyết trình về "${topicLabel}" đã có khung ý tương đối rõ ở phần "${anchorQuote}", nhưng vẫn thiếu ví dụ hoặc kết quả cụ thể để tăng sức thuyết phục.`
+            : `Bài thuyết trình về "${topicLabel}" đã có khung ý rõ hơn ở phần "${anchorQuote}" và bắt đầu có điểm tựa nội dung quanh "${evidenceQuote}". Lần luyện tiếp theo nên tập trung tăng độ sắc của ví dụ và câu chốt.`
+      : signals.topicCoverage < 0.35 || signals.roleCoverage < 0.3
+        ? `Câu trả lời phỏng vấn hiện chưa bám đủ sát vai trò và chủ đề "${topicLabel}". Bạn nên nối kinh nghiệm của mình trực tiếp hơn với giá trị nhà tuyển dụng cần nghe.`
+        : !signals.hasOwnershipCue && !signals.hasOutcomeCue
+          ? `Câu trả lời phỏng vấn về "${topicLabel}" đã có ý nền, nhưng vẫn còn thiên về mô tả chung. Bạn cần nói rõ mình trực tiếp làm gì và kết quả cụ thể ra sao để tạo cảm giác đáng tin hơn.`
+          : !signals.hasProblemCue || !signals.hasReflectionCue
+            ? `Câu trả lời phỏng vấn về "${topicLabel}" đã đi đúng hướng, nhưng vẫn thiếu phần khó khăn thực tế hoặc bài học rút ra nên chiều sâu chưa đủ.`
+            : `Câu trả lời phỏng vấn về "${topicLabel}" đã có một số ý chính rõ hơn ở phần "${anchorQuote}", và ngữ cảnh bắt đầu bám sát hơn vào vai trò ${roleLabel}. Lần tiếp theo chỉ cần tăng thêm độ sắc ở kết quả đo được và câu chốt.`;
+
+  return {
+    transcript: normalizeText(input.transcript),
+    speechRateWpm: input.speechRateWpm,
+    volumeStability: input.volumeStability,
+    clarityScore: input.clarityScore,
+    pauseScore: input.pauseScore,
+    confidenceScore: input.confidenceScore,
+    totalScore: clamp((input.volumeStability + input.clarityScore + input.pauseScore + input.confidenceScore) / 4),
+    fillerWordCount: input.fillerWordCount,
+    repeatCount: input.repeatCount,
+    speedTimeline: [],
+    heatmap: [],
+    summary,
+    strengths: mergeUniqueTexts(strengths, ['Bài nói đã có đủ dữ liệu nền để tiếp tục luyện sâu hơn.'], 4),
+    improvements: mergeUniqueTexts(improvements, ['Hãy luyện thêm một lượt ngắn và nghe lại để chốt đúng điểm cần sửa.'], 5),
+    coachNotes: mergeUniqueTexts(
+      coachNotes,
+      ['Luyện với đồng hồ 60-90 giây để giữ câu trả lời ngắn gọn và có trọng tâm.'],
+      5
+    ),
+    followUpQuestions: buildSmartContextualFollowUpQuestions({
+      practiceType: input.practiceType,
+      topic: input.topic,
+      transcript: input.transcript,
+      speechRateWpm: input.speechRateWpm,
+      clarityScore: input.clarityScore,
+      pauseScore: input.pauseScore,
+      targetRole: input.targetRole
+    })
+  };
+};
+
+const buildPracticePromptContextV2 = (input: {
+  practiceType: 'presentation' | 'interview';
+  difficulty?: 'easy' | 'medium' | 'hard';
+  topic: string;
+  transcript: string;
+  speechRateWpm: number;
+  volumeStability: number;
+  clarityScore: number;
+  pauseScore: number;
+  confidenceScore: number;
+  fillerWordCount: number;
+  repeatCount: number;
+  targetRole?: string;
+  profileSummary?: string;
+}) => {
+  const signals = buildPracticeContentSignalsV2(input.transcript, input.topic, input.practiceType, input.targetRole ?? '');
+
+  return [
+    `Loại luyện tập: ${input.practiceType === 'presentation' ? 'Thuyết trình' : 'Phỏng vấn'}`,
+    `Độ khó: ${input.difficulty ?? 'medium'}`,
+    `Chủ đề: ${signals.shortTopicLabel}`,
+    `Vai trò mục tiêu: ${normalizeText(input.targetRole) || 'Chưa cập nhật'}`,
+    `Bối cảnh hồ sơ: ${normalizeText(input.profileSummary) || 'Chưa cập nhật'}`,
+    `Transcript đầy đủ:\n${signals.cleanedTranscript}`,
+    `Các ý nổi bật trong transcript: ${signals.transcriptKeywords.join(', ') || 'Chưa rõ'}`,
+    `Mức bám chủ đề: ${Math.round(signals.topicCoverage * 100)}%`,
+    `Mức bám vai trò: ${Math.round(signals.roleCoverage * 100)}%`,
+    `Câu neo nội dung: ${signals.anchorSentence || 'Chưa rõ'}`,
+    `Câu có ví dụ hoặc kết quả: ${signals.evidenceSentence || 'Chưa có ví dụ cụ thể'}`,
+    `Tốc độ nói (WPM): ${input.speechRateWpm}`,
+    `Độ ổn định âm lượng: ${input.volumeStability}`,
+    `Độ rõ phát âm: ${input.clarityScore}`,
+    `Điểm khoảng dừng: ${input.pauseScore}`,
+    `Điểm tự tin: ${input.confidenceScore}`,
+    `Số từ đệm: ${input.fillerWordCount}`,
+    `Số lần lặp ý: ${input.repeatCount}`,
+    'Yêu cầu bắt buộc:',
+    '- Summary phải nêu đúng người nói đang làm tốt hay chưa tốt ở ý nào trong transcript.',
+    '- Strengths và improvements phải bám vào nội dung thực sự đã nói, không được viết nhận xét chung chung.',
+    '- Coach notes phải chỉ ra bước sửa cụ thể cho lượt nói tiếp theo.',
+    '- Follow-up questions phải nối tiếp đúng chủ đề, đúng transcript và không lạc sang ý không có trong bài nói.'
+  ].join('\n');
+};
+
+const buildPracticePromptContext = (input: {
+  practiceType: 'presentation' | 'interview';
+  difficulty?: 'easy' | 'medium' | 'hard';
+  topic: string;
+  transcript: string;
+  speechRateWpm: number;
+  volumeStability: number;
+  clarityScore: number;
+  pauseScore: number;
+  confidenceScore: number;
+  fillerWordCount: number;
+  repeatCount: number;
+  targetRole?: string;
+  profileSummary?: string;
+}) => {
+  const signals = buildPracticeContentSignalsV2(input.transcript, input.topic, input.practiceType, input.targetRole ?? '');
+
+  return [
+    `Loại luyện tập: ${input.practiceType === 'presentation' ? 'Thuyết trình' : 'Phỏng vấn'}`,
+    `Độ khó: ${input.difficulty ?? 'medium'}`,
+    `Chủ đề: ${signals.shortTopicLabel}`,
+    `Vai trò mục tiêu: ${normalizeText(input.targetRole) || 'Chưa cập nhật'}`,
+    `Bối cảnh hồ sơ: ${normalizeText(input.profileSummary) || 'Chưa cập nhật'}`,
+    `Transcript đầy đủ:\n${signals.cleanedTranscript}`,
+    `Các ý nổi bật trong transcript: ${signals.transcriptKeywords.join(', ') || 'Chưa rõ'}`,
+    `Mức bám chủ đề: ${Math.round(signals.topicCoverage * 100)}%`,
+    `Câu neo nội dung: ${signals.anchorSentence || 'Chưa rõ'}`,
+    `Câu có ví dụ hoặc kết quả: ${signals.evidenceSentence || 'Chưa có ví dụ cụ thể'}`,
+    `Tốc độ nói (WPM): ${input.speechRateWpm}`,
+    `Độ ổn định âm lượng: ${input.volumeStability}`,
+    `Độ rõ phát âm: ${input.clarityScore}`,
+    `Điểm khoảng dừng: ${input.pauseScore}`,
+    `Điểm tự tin: ${input.confidenceScore}`,
+    `Số từ đệm: ${input.fillerWordCount}`,
+    `Số lần lặp ý: ${input.repeatCount}`,
+    'Yêu cầu bắt buộc:',
+    '- Summary phải nêu đúng người nói đang làm tốt hay chưa tốt ở ý nào trong transcript.',
+    '- Strengths và improvements phải bám vào nội dung thực sự đã nói, không viết nhận xét chung chung.',
+    '- Coach notes phải chỉ ra bước sửa cụ thể cho lượt nói tiếp theo.',
+    '- Follow-up questions phải nối tiếp đúng chủ đề, đúng transcript và không được lạc sang ý không có trong bài nói.'
+  ].join('\n');
+};
+
 const normalizePracticeFeedbackOutput = (
   raw: unknown,
   fallback: PracticeAnalysisResult,
@@ -890,6 +2220,7 @@ const normalizePracticeFeedbackOutput = (
     speechRateWpm: number;
     clarityScore: number;
     pauseScore: number;
+    targetRole?: string;
   }
 ) => {
   const parsed = (raw ?? {}) as Partial<z.infer<typeof practiceFeedbackSchema>>;
@@ -911,17 +2242,24 @@ const normalizePracticeFeedbackOutput = (
       fallback.coachNotes,
       6
     ),
-    followUpQuestions: buildContextualFollowUpQuestions(context)
+    followUpQuestions: mergeUniqueTexts(
+      Array.isArray(parsed.followUpQuestions) ? parsed.followUpQuestions.map((item) => normalizeText(item)) : [],
+      buildSmartContextualFollowUpQuestions(context),
+      4
+    )
   };
 };
 
 export const analyzePractice = async (input: {
   practiceType: 'presentation' | 'interview';
+  difficulty?: 'easy' | 'medium' | 'hard';
   transcript?: string;
   durationSeconds: number;
   volumeSamples: VolumePoint[];
   topic: string;
   audioFile?: UploadFile;
+  targetRole?: string;
+  profileSummary?: string;
 }) => {
   const manualTranscript = normalizeText(input.transcript);
   const transcription = manualTranscript
@@ -931,10 +2269,14 @@ export const analyzePractice = async (input: {
   const hasTranscript = Boolean(transcript);
 
   const metrics = hasTranscript
-    ? buildMetricScores(transcript, input.durationSeconds, input.volumeSamples)
+    ? buildMetricScores(transcript, input.durationSeconds, input.volumeSamples, {
+        practiceType: input.practiceType,
+        topic: input.topic,
+        targetRole: input.targetRole
+      })
     : buildAudioFallbackMetrics(input.durationSeconds, input.volumeSamples);
 
-  const fallback = buildFallbackPracticeFeedback({
+  const fallback = buildSmartFallbackPracticeFeedbackV2({
     practiceType: input.practiceType,
     topic: input.topic,
     transcript: metrics.transcript,
@@ -946,7 +2288,8 @@ export const analyzePractice = async (input: {
     fillerWordCount: metrics.fillerWordCount,
     repeatCount: metrics.repeatCount,
     transcriptAvailable: hasTranscript,
-    warningMessage: transcription.warningMessage
+    warningMessage: transcription.warningMessage,
+    targetRole: input.targetRole
   });
 
   if (!openai || !hasTranscript) {
@@ -983,6 +2326,24 @@ export const analyzePractice = async (input: {
             `Số từ đệm: ${metrics.fillerWordCount}\n` +
             `Số lần lặp ý: ${metrics.repeatCount}\n` +
             'Yêu cầu đặc biệt: phần follow-up phải bám sát đúng chủ đề, đúng nội dung transcript và gợi ý câu hỏi vòng sau thật liên quan.'
+        },
+        {
+          role: 'user',
+          content: buildPracticePromptContextV2({
+            practiceType: input.practiceType,
+            difficulty: input.difficulty,
+            topic: input.topic,
+            transcript: metrics.transcript,
+            speechRateWpm: metrics.speechRateWpm,
+            volumeStability: metrics.volumeStability,
+            clarityScore: metrics.clarityScore,
+            pauseScore: metrics.pauseScore,
+            confidenceScore: metrics.confidenceScore,
+            fillerWordCount: metrics.fillerWordCount,
+            repeatCount: metrics.repeatCount,
+            targetRole: input.targetRole,
+            profileSummary: input.profileSummary
+          })
         }
       ],
       text: {
@@ -996,7 +2357,8 @@ export const analyzePractice = async (input: {
       transcript: metrics.transcript,
       speechRateWpm: metrics.speechRateWpm,
       clarityScore: metrics.clarityScore,
-      pauseScore: metrics.pauseScore
+      pauseScore: metrics.pauseScore,
+      targetRole: input.targetRole
     });
 
     return {
@@ -1185,6 +2547,148 @@ const fallbackQuestionBank = {
   ]
 };
 
+const formatInterviewHistoryForPrompt = (history: Array<{ question: string; answer: string }>) => {
+  if (!history.length) {
+    return 'Chưa có lượt hỏi đáp nào trước đó.';
+  }
+
+  return history
+    .slice(-5)
+    .map(
+      (item, index) =>
+        `Lượt ${index + 1}\n- Câu hỏi: ${compactQuote(item.question, 220)}\n- Câu trả lời: ${compactQuote(item.answer, 320)}`
+    )
+    .join('\n');
+};
+
+const buildInterviewAnswerReplyV2 = (input: {
+  targetRole: string;
+  question: string;
+  answer: string;
+  difficulty: 'easy' | 'medium' | 'hard';
+}) => {
+  const answerText = normalizeText(input.answer);
+  const roleLabel = normalizeText(input.targetRole) || 'vai trò mục tiêu';
+
+  if (!answerText) {
+    return 'Mình sẽ bắt đầu bằng một câu nền để bạn vào nhịp trước, sau đó mới hỏi sâu dần theo đúng vai trò mục tiêu.';
+  }
+
+  const keywords = extractKeywords(`${input.question} ${answerText}`, 4);
+  const mainAnchor = keywords[0] || 'ý chính bạn vừa nêu';
+  const answerSignals = buildPracticeContentSignalsV2(answerText, input.question, 'interview', input.targetRole);
+  const hasMetrics = /\d|%|triệu|tỷ|khách|người|doanh thu|tăng|giảm|kết quả/i.test(answerText);
+  const answerLength = answerText.split(/\s+/).length;
+
+  if (answerLength < 18) {
+    return `Bạn đã chạm đúng vào "${mainAnchor}", nhưng câu trả lời còn khá ngắn so với ngữ cảnh ${roleLabel}. Ở lượt tiếp theo, hãy thêm bối cảnh, hành động và kết quả rõ hơn.`;
+  }
+
+  if (!answerSignals.hasOwnershipCue) {
+    return `Câu trả lời đang đi đúng hướng ở "${mainAnchor}", nhưng vẫn chưa cho thấy rõ bạn trực tiếp làm gì trong bối cảnh ${roleLabel}. Mình sẽ hỏi sâu hơn để làm rõ trách nhiệm cá nhân.`;
+  }
+
+  if (!hasMetrics && input.difficulty !== 'easy') {
+    return `Câu trả lời đã có khung cho "${mainAnchor}", nhưng vẫn thiếu số liệu hoặc kết quả đủ mạnh cho vai trò ${roleLabel}. Mình sẽ truy tiếp vào phần tác động thực tế.`;
+  }
+
+  if (input.difficulty !== 'easy' && !answerSignals.hasProblemCue) {
+    return `Bạn đã trả lời khá đúng trọng tâm ở "${mainAnchor}", nhưng câu chuyện vẫn thiếu phần khó khăn hoặc áp lực thực tế. Mình sẽ hỏi tiếp để kiểm tra chiều sâu xử lý vấn đề.`;
+  }
+
+  if (input.difficulty === 'hard' && !answerSignals.hasReflectionCue) {
+    return `Phần trả lời về "${mainAnchor}" đã có chất liệu tốt, nhưng vẫn thiếu bài học rút ra hoặc thay đổi sau trải nghiệm đó. Mình sẽ hỏi tiếp để xem chiều sâu phản tư của bạn.`;
+  }
+
+  return `Bạn đang trả lời khá đúng trọng tâm ở ý "${mainAnchor}". Mình sẽ nối tiếp bằng một câu hỏi sâu hơn để kiểm tra cách bạn giải thích hành động và tác động thực tế.`;
+};
+
+const buildFallbackInterviewQuestionV2 = (input: {
+  difficulty: 'easy' | 'medium' | 'hard';
+  targetRole: string;
+  history: Array<{ question: string; answer: string }>;
+}) => {
+  const bank = fallbackQuestionBank[input.difficulty];
+  const lastAnswer = normalizeText(input.history[input.history.length - 1]?.answer);
+  const lastQuestion = normalizeText(input.history[input.history.length - 1]?.question);
+  const keywords = extractKeywords(lastAnswer, 3);
+  const roleLabel = normalizeText(input.targetRole) || 'vai trò mục tiêu';
+  const answerSignals = lastAnswer ? buildPracticeContentSignalsV2(lastAnswer, lastQuestion || input.targetRole, 'interview', input.targetRole) : null;
+
+  const question =
+    !lastAnswer
+      ? bank[input.history.length % bank.length]
+      : answerSignals && !answerSignals.hasOwnershipCue
+        ? 'Trong tình huống bạn vừa nêu, bạn trực tiếp chịu trách nhiệm phần nào và đã tự mình quyết định điều gì?'
+        : answerSignals && !answerSignals.hasOutcomeCue
+          ? 'Kết quả cụ thể của hành động đó là gì, và bạn đo nó bằng chỉ số hay phản hồi nào?'
+          : answerSignals && input.difficulty !== 'easy' && !answerSignals.hasProblemCue
+            ? 'Khó khăn hoặc áp lực lớn nhất trong tình huống đó là gì, và bạn xử lý nó ra sao?'
+            : answerSignals && input.difficulty === 'hard' && !answerSignals.hasReflectionCue
+              ? 'Sau trải nghiệm đó, bài học lớn nhất bạn rút ra là gì và lần sau bạn sẽ làm khác điều gì?'
+              : keywords[0]
+                ? `Bạn có thể nói sâu hơn về "${keywords[0]}" và tác động cụ thể của bạn trong bối cảnh ${roleLabel} không?`
+                : bank[input.history.length % bank.length];
+
+  return {
+    reply: buildInterviewAnswerReplyV2({
+      targetRole: input.targetRole,
+      question: input.history[input.history.length - 1]?.question ?? '',
+      answer: lastAnswer,
+      difficulty: input.difficulty
+    }),
+    question,
+    reason: `Câu hỏi này giúp bạn luyện cách trả lời chắc hơn cho ${roleLabel} và tránh nói quá chung chung.`,
+    challenge:
+      input.history.length > 0
+        ? 'Nếu câu trả lời chưa đủ thuyết phục, hãy thêm 1 ví dụ thực tế và 1 kết quả đo được.'
+        : 'Trả lời trong 60-90 giây với bố cục: mở đầu, hành động chính, kết quả.',
+    suggestedFocus: ['Ví dụ cụ thể', 'Kết quả đo được', 'Giọng nói tự tin']
+  };
+};
+
+const buildInterviewAnswerReply = (input: {
+  targetRole: string;
+  question: string;
+  answer: string;
+  difficulty: 'easy' | 'medium' | 'hard';
+}) => {
+  const answerText = normalizeText(input.answer);
+  const roleLabel = normalizeText(input.targetRole) || 'vai trò mục tiêu';
+
+  if (!answerText) {
+    return 'Mình sẽ mở đầu bằng một câu nền để bạn vào nhịp trước, sau đó sẽ hỏi sâu dần theo vai trò mục tiêu.';
+  }
+
+  const keywords = extractKeywords(`${input.question} ${answerText}`, 4);
+  const mainAnchor = keywords[0] || 'ý chính bạn vừa nêu';
+  const answerSignals = buildPracticeContentSignalsV2(answerText, input.question, 'interview', input.targetRole);
+  const hasMetrics = /\d|%|triệu|tỷ|khách|người|doanh thu|tăng|giảm|kết quả/i.test(answerText);
+  const answerLength = answerText.split(/\s+/).length;
+
+  if (answerLength < 18) {
+    return `Bạn đã chạm đúng vào "${mainAnchor}", nhưng câu trả lời còn khá ngắn cho bối cảnh ${roleLabel}. Ở lượt tiếp theo, hãy thêm hành động cụ thể và kết quả rõ hơn.`;
+  }
+
+  if (!answerSignals.hasOwnershipCue) {
+    return `Câu trả lời đang có hướng đúng ở "${mainAnchor}", nhưng vẫn chưa cho thấy rõ bạn trực tiếp làm gì trong bối cảnh ${roleLabel}. Mình sẽ hỏi sâu hơn để làm rõ phần trách nhiệm cá nhân.`;
+  }
+
+  if (!hasMetrics && input.difficulty !== 'easy') {
+    return `Câu trả lời đã có hướng đi cho "${mainAnchor}", nhưng vẫn thiếu số liệu hoặc kết quả để đủ sức nặng cho ${roleLabel}. Mình sẽ hỏi sâu hơn để bạn làm rõ phần này.`;
+  }
+
+  if (input.difficulty !== 'easy' && !answerSignals.hasProblemCue) {
+    return `Bạn đã trả lời khá đúng trọng tâm ở "${mainAnchor}", nhưng câu chuyện vẫn thiếu bối cảnh khó khăn hoặc áp lực thực tế. Mình sẽ truy tiếp vào phần này để câu trả lời có chiều sâu hơn.`;
+  }
+
+  if (input.difficulty === 'hard' && !answerSignals.hasReflectionCue) {
+    return `Phần trả lời về "${mainAnchor}" đã có chất liệu tốt, nhưng vẫn thiếu bài học rút ra hoặc thay đổi sau trải nghiệm đó. Mình sẽ hỏi tiếp để kiểm tra chiều sâu phản tư của bạn.`;
+  }
+
+  return `Bạn đang trả lời khá đúng trọng tâm ở ý "${mainAnchor}". Mình sẽ nối tiếp bằng một câu hỏi sâu hơn để kiểm tra cách bạn giải thích hành động và tác động thực tế.`;
+};
+
 const buildFallbackInterviewQuestion = (input: {
   difficulty: 'easy' | 'medium' | 'hard';
   targetRole: string;
@@ -1192,15 +2696,33 @@ const buildFallbackInterviewQuestion = (input: {
 }) => {
   const bank = fallbackQuestionBank[input.difficulty];
   const lastAnswer = normalizeText(input.history[input.history.length - 1]?.answer);
-  const keywords = extractKeywords(`${input.targetRole} ${lastAnswer}`, 3);
+  const lastQuestion = normalizeText(input.history[input.history.length - 1]?.question);
+  const keywords = extractKeywords(lastAnswer, 3);
   const roleLabel = normalizeText(input.targetRole) || 'vai trò mục tiêu';
+  const answerSignals = lastAnswer ? buildPracticeContentSignalsV2(lastAnswer, lastQuestion || input.targetRole, 'interview', input.targetRole) : null;
 
   const question =
-    lastAnswer && keywords[0]
-      ? `Bạn có thể nói sâu hơn về "${keywords[0]}" và tác động cụ thể của bạn trong bối cảnh ${roleLabel} không?`
-      : bank[input.history.length % bank.length];
+    !lastAnswer
+      ? bank[input.history.length % bank.length]
+      : answerSignals && !answerSignals.hasOwnershipCue
+        ? `Trong tình huống bạn vừa nêu, bạn trực tiếp chịu trách nhiệm phần nào và đã tự mình quyết định điều gì?`
+        : answerSignals && !answerSignals.hasOutcomeCue
+          ? `Kết quả cụ thể của hành động đó là gì, và bạn đo nó bằng chỉ số hay phản hồi nào?`
+          : answerSignals && input.difficulty !== 'easy' && !answerSignals.hasProblemCue
+            ? `Khó khăn hoặc áp lực lớn nhất trong tình huống đó là gì, và bạn xử lý nó ra sao?`
+            : answerSignals && input.difficulty === 'hard' && !answerSignals.hasReflectionCue
+              ? `Sau trải nghiệm đó, bài học lớn nhất bạn rút ra là gì và lần sau bạn sẽ làm khác điều gì?`
+              : keywords[0]
+                ? `Bạn có thể nói sâu hơn về "${keywords[0]}" và tác động cụ thể của bạn trong bối cảnh ${roleLabel} không?`
+                : bank[input.history.length % bank.length];
 
   return {
+    reply: buildInterviewAnswerReply({
+      targetRole: input.targetRole,
+      question: input.history[input.history.length - 1]?.question ?? '',
+      answer: lastAnswer,
+      difficulty: input.difficulty
+    }),
     question,
     reason: `Câu hỏi này giúp bạn luyện cách trả lời chắc hơn cho ${roleLabel} và tránh trả lời quá chung chung.`,
     challenge:
@@ -1217,7 +2739,7 @@ export const generateInterviewQuestion = async (input: {
   history: Array<{ question: string; answer: string }>;
   cvSummary?: string;
 }) => {
-  const fallback = buildFallbackInterviewQuestion(input);
+  const fallback = buildFallbackInterviewQuestionV2(input);
 
   if (!openai) {
     return fallback;
@@ -1238,7 +2760,12 @@ export const generateInterviewQuestion = async (input: {
             `Vị trí mục tiêu: ${normalizeText(input.targetRole) || 'Chưa cung cấp'}\n` +
             `Mức độ: ${input.difficulty}\n` +
             `Tóm tắt CV: ${normalizeText(input.cvSummary) || 'Chưa cung cấp'}\n` +
-            `Lịch sử hỏi đáp: ${JSON.stringify(input.history).slice(0, 7000)}`
+            'Yêu cầu bắt buộc:\n' +
+            '- Trường reply phải phản hồi trực tiếp cho câu trả lời gần nhất của ứng viên trong 1-2 câu, bằng tiếng Việt tự nhiên.\n' +
+            '- Trường question phải là câu hỏi kế tiếp thật sự nối tiếp nội dung vừa trả lời, không được hỏi sang chủ đề lạ.\n' +
+            '- Nếu ứng viên trả lời còn chung chung, hãy truy vấn sâu vào hành động, quyết định và kết quả đo được.\n' +
+            '- Nếu chưa có lịch sử, reply có thể là câu dẫn ngắn để bắt đầu buổi luyện.\n' +
+            `Lịch sử hỏi đáp gần đây:\n${formatInterviewHistoryForPrompt(input.history)}`
         }
       ],
       text: {
@@ -1249,6 +2776,7 @@ export const generateInterviewQuestion = async (input: {
     const parsed = (response.output_parsed ?? {}) as Partial<z.infer<typeof nextQuestionSchema>>;
 
     return {
+      reply: isUsableText(parsed.reply) ? normalizeText(parsed.reply) : fallback.reply,
       question: isUsableText(parsed.question) ? normalizeText(parsed.question) : fallback.question,
       reason: isUsableText(parsed.reason) ? normalizeText(parsed.reason) : fallback.reason,
       challenge: isUsableText(parsed.challenge) ? normalizeText(parsed.challenge) : fallback.challenge,

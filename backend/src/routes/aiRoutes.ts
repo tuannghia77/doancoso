@@ -83,10 +83,13 @@ router.post('/practice-analysis', authRequired, upload.single('audio'), async (r
 
   const analysis = await analyzePractice({
     practiceType,
+    difficulty,
     transcript,
     durationSeconds,
     volumeSamples,
     topic,
+    targetRole: user.targetRole ?? '',
+    profileSummary: user.bio ?? '',
     audioFile: req.file
       ? {
           originalname: req.file.originalname,
@@ -96,10 +99,16 @@ router.post('/practice-analysis', authRequired, upload.single('audio'), async (r
       : undefined
   });
 
-  const canSave = Boolean(String(analysis.transcript ?? '').trim());
+  const hasTranscript = Boolean(String(analysis.transcript ?? '').trim());
+  const hasRecordedAudioEvidence = Boolean(req.file) && (durationSeconds >= 12 || volumeSamples.length >= 8);
+  const canSave = hasTranscript || hasRecordedAudioEvidence;
   const notice =
     String((analysis as { warningMessage?: string }).warningMessage ?? '').trim() ||
-    (canSave ? '' : 'Đã tạo bản phân tích cơ bản từ file ghi âm. Hãy dán transcript hoặc thử lại để có thể lưu phiên.');
+    (canSave && !hasTranscript
+      ? 'Đã tạo bản phân tích từ tín hiệu âm thanh. Bạn vẫn có thể lưu phiên, nhưng nên dán transcript để nhận nhận xét nội dung sâu hơn.'
+      : canSave
+        ? ''
+        : 'Đã tạo bản phân tích cơ bản từ file ghi âm. Hãy dán transcript hoặc thử lại để có thể lưu phiên.');
 
   const draft = canSave
     ? buildPracticeDraft({

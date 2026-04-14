@@ -7,6 +7,7 @@ import { PracticeSession } from '../models/PracticeSession.js';
 import { User } from '../models/User.js';
 import { canDisableUser } from '../services/bootstrapService.js';
 import { isRootAdmin } from '../utils/auth.js';
+import { getWeekKey } from '../utils/progression.js';
 
 dayjs.extend(isoWeek);
 
@@ -14,6 +15,7 @@ const router = Router();
 
 router.get('/overview', authRequired, adminOnly, async (_req, res) => {
   const startOfWeek = dayjs().startOf('isoWeek').toDate();
+  const currentWeek = getWeekKey();
 
   const [usersCount, adminsCount, disabledUsersCount, sessionsThisWeek, topUsers, recentUsers, recentSessions] =
     await Promise.all([
@@ -21,7 +23,7 @@ router.get('/overview', authRequired, adminOnly, async (_req, res) => {
       User.countDocuments({ role: 'admin' }),
       User.countDocuments({ isDisabled: true }),
       PracticeSession.countDocuments({ createdAt: { $gte: startOfWeek } }),
-      User.find({ role: 'user' }).sort({ weeklyXp: -1, totalXp: -1 }).limit(5),
+      User.find({ role: 'user', weeklyBucket: currentWeek }).sort({ weeklyXp: -1, totalXp: -1 }).limit(5),
       User.find().sort({ createdAt: -1 }).limit(5),
       PracticeSession.find().populate('userId', 'name email').sort({ createdAt: -1 }).limit(8)
     ]);
@@ -66,6 +68,7 @@ router.get('/overview', authRequired, adminOnly, async (_req, res) => {
 });
 
 router.get('/users', authRequired, adminOnly, async (_req, res) => {
+  const currentWeek = getWeekKey();
   const users = await User.find().sort({ createdAt: -1 }).limit(200);
   return res.json({
     users: users.map((user) => ({
@@ -75,7 +78,9 @@ router.get('/users', authRequired, adminOnly, async (_req, res) => {
       role: user.role,
       streak: user.streak,
       totalXp: user.totalXp,
-      weeklyXp: user.weeklyXp,
+      weeklyXp: user.weeklyBucket === currentWeek ? user.weeklyXp : 0,
+      previousWeeklyXp: user.previousWeeklyXp ?? 0,
+      previousWeeklyBucket: user.previousWeeklyBucket ?? '',
       energy: user.energy,
       targetRole: user.targetRole,
       createdAt: user.createdAt,

@@ -36,7 +36,7 @@ export type PracticeDraft = {
   analysis: PracticeDraftAnalysis;
 };
 
-const PRACTICE_PASS_SCORE = 70;
+const PRACTICE_PASS_SCORE = 50;
 const PRACTICE_DRAFT_TOKEN_TYPE = 'practice_draft';
 
 const roundMetric = (value: number, min = 0, max = 100) => Math.min(max, Math.max(min, Math.round(value)));

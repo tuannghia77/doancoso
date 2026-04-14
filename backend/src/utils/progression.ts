@@ -45,6 +45,8 @@ export const getDayKey = (date = dayjs()) => date.format('YYYY-MM-DD');
 
 export const getWeekKey = (date = dayjs()) => `${date.isoWeekYear()}-W${String(date.isoWeek()).padStart(2, '0')}`;
 
+export const getPreviousWeekKey = (date = dayjs()) => getWeekKey(date.subtract(1, 'week'));
+
 export const getLevelFromXp = (totalXp: number) => Math.max(1, Math.floor(totalXp / XP_PER_LEVEL) + 1);
 
 export const getEnergyRefillMinutes = (energy: number, energyUpdatedAt: Date) => {
@@ -106,16 +108,27 @@ const upsertGoal = (user: UserDocument, key: string, updater: (goal: DailyGoal) 
 
 export const ensureWeeklyBucket = (user: UserDocument) => {
   const currentWeek = getWeekKey();
-  if (user.weeklyBucket !== currentWeek) {
+  if (user.weeklyBucket === currentWeek) {
+    return;
+  }
+
+  if (!user.weeklyBucket) {
     user.weeklyBucket = currentWeek;
     user.weeklyXp = 0;
+    return;
   }
+
+  const previousWeekKey = getPreviousWeekKey();
+  user.previousWeeklyBucket = previousWeekKey;
+  user.previousWeeklyXp = user.weeklyBucket === previousWeekKey ? user.weeklyXp : 0;
+  user.previousWeeklyClosedAt = new Date();
+  user.weeklyBucket = currentWeek;
+  user.weeklyXp = 0;
 };
 
 export const refillEnergy = (user: UserDocument) => {
   if (user.energy >= ENERGY_MAX) {
     user.energy = ENERGY_MAX;
-    user.energyUpdatedAt = new Date();
     return;
   }
 
@@ -271,4 +284,3 @@ export const calculateWeekComparison = (thisWeekMinutes: number, lastWeekMinutes
     trend: differencePercent > 0 ? 'up' : differencePercent < 0 ? 'down' : 'flat'
   } as const;
 };
-
