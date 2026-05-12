@@ -29,8 +29,9 @@ type VoiceMessage = {
 
 type RealtimeTokenResponse = {
   session: {
-    value: string;
-    expiresAt: number;
+    clientSecret: string;
+    sessionId: string;
+    expiresAt?: number;
     model: string;
     voice: string;
   };
@@ -224,7 +225,10 @@ export function RealtimePracticeRoom({ practiceType, difficulty, topic }: Realti
         topic
       });
       const nextSession = tokenResponse.data.session;
-      setSessionInfo(nextSession);
+      setSessionInfo({
+        ...nextSession,
+        expiresAt: nextSession.expiresAt ?? Math.floor(Date.now() / 1000) + 600
+      });
 
       const localStream = await navigator.mediaDevices.getUserMedia({ audio: true });
       localStreamRef.current = localStream;
@@ -351,7 +355,7 @@ export function RealtimePracticeRoom({ practiceType, difficulty, topic }: Realti
       const sdpResponse = await fetch('https://api.openai.com/v1/realtime/calls', {
         method: 'POST',
         headers: {
-          Authorization: `Bearer ${nextSession.value}`,
+          Authorization: `Bearer ${nextSession.clientSecret}`,
           'Content-Type': 'application/sdp'
         },
         body: offer.sdp ?? ''
@@ -414,6 +418,22 @@ export function RealtimePracticeRoom({ practiceType, difficulty, topic }: Realti
         minute: '2-digit'
       })
     : '--:--';
+  const voicePanelTitle = assistantSpeaking
+    ? 'SpeakAI đang phản hồi'
+    : userSpeaking
+      ? 'Đang nghe bạn nói'
+      : status === 'ready'
+        ? 'Phiên đang mở'
+        : status === 'connecting'
+          ? 'Đang kết nối'
+          : 'Sẵn sàng luyện nói';
+  const voicePanelSubtitle =
+    status === 'ready'
+      ? isMuted
+        ? 'Micro đang tắt. Bật lại khi bạn muốn nói tiếp.'
+        : 'Micro đang mở, transcript cập nhật theo từng lượt.'
+      : 'Mở phòng để bắt đầu hội thoại realtime.';
+  const micStatusLabel = isMuted ? 'Micro tắt' : status === 'ready' ? 'Micro mở' : 'Chưa mở';
 
   return (
     <section className="panel-card realtime-room-card">
@@ -430,9 +450,33 @@ export function RealtimePracticeRoom({ practiceType, difficulty, topic }: Realti
 
       <div className="realtime-room-stage">
         <div className="realtime-room-core">
-          <div className={`realtime-orb ${assistantSpeaking ? 'assistant-active' : ''} ${userSpeaking ? 'user-active' : ''} ${status === 'ready' ? 'connected' : ''}`}>
-            <span className="realtime-orb-ring" />
-            <span className="realtime-orb-center">SA</span>
+          <div className="realtime-core-topline">
+            <span className={`realtime-core-dot ${status}`} />
+            <span>Voice studio</span>
+          </div>
+
+          <div className="realtime-voice-card">
+            <div className={`realtime-orb ${assistantSpeaking ? 'assistant-active' : ''} ${userSpeaking ? 'user-active' : ''} ${status === 'ready' ? 'connected' : ''}`}>
+              <span className="realtime-orb-ring" />
+              <span className="realtime-orb-center">SA</span>
+            </div>
+
+            <div className="realtime-voice-copy">
+              <span>{sessionInfo?.voice ?? 'Marin'} realtime</span>
+              <strong>{voicePanelTitle}</strong>
+              <p>{voicePanelSubtitle}</p>
+            </div>
+          </div>
+
+          <div className="realtime-core-metrics">
+            <span>
+              <Radio size={14} />
+              {statusLabel}
+            </span>
+            <span>
+              {isMuted ? <MicOff size={14} /> : <Mic size={14} />}
+              {micStatusLabel}
+            </span>
           </div>
 
           <div className={`realtime-signal-bars ${status === 'ready' ? 'active' : ''} ${assistantSpeaking ? 'assistant' : userSpeaking ? 'user' : ''}`}>

@@ -1,7 +1,8 @@
-import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Navigate, Route, Routes, useLocation } from 'react-router-dom';
 
 import { AppShell } from './components/AppShell';
 import { ProtectedRoute } from './components/ProtectedRoute';
+import { ThemeToggle } from './components/ThemeToggle';
 import { useAuth } from './context/AuthContext';
 import { AdminCoursesPage } from './pages/AdminCoursesPage';
 import { AdminPage } from './pages/AdminPage';
@@ -25,9 +26,17 @@ function HomeRoute() {
   return user ? <Navigate to="/dashboard" replace /> : <LandingPage />;
 }
 
+function AuthThemeToggle() {
+  const location = useLocation();
+  const shouldShow = ['/login', '/register', '/forgot-password'].includes(location.pathname);
+
+  return shouldShow ? <ThemeToggle variant="floating" /> : null;
+}
+
 export default function App() {
   return (
     <BrowserRouter>
+      <AuthThemeToggle />
       <Routes>
         <Route path="/" element={<HomeRoute />} />
         <Route path="/login" element={<LoginPage />} />

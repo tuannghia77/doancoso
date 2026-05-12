@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import { Link, NavLink, Outlet, useLocation } from 'react-router-dom';
 
+import { ThemeToggle } from './ThemeToggle';
 import { useAuth } from '../context/AuthContext';
 
 const navItems = [
@@ -203,6 +204,8 @@ export function AppShell() {
           </div>
 
           <div className="workspace-stage-tools">
+            <ThemeToggle />
+
             <Link to="/practice" className="topbar-command-pill">
               <Sparkles size={16} />
               <span>Mở phiên luyện</span>

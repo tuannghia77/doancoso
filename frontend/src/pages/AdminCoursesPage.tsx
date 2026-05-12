@@ -268,10 +268,9 @@ export function AdminCoursesPage() {
       <section className="panel-card admin-course-hero">
         <div className="admin-course-hero-copy">
           <p className="eyebrow">Quản trị khóa học</p>
-          <h3>Tạo, chỉnh sửa, xóa khóa học và duyệt học viên trong cùng một nơi</h3>
+          <h3>Quản lý khóa học</h3>
           <p>
-            Admin có thể quản lý toàn bộ thư viện khóa học theo danh mục, cập nhật bài học YouTube bất cứ lúc nào
-            và duyệt quyền xem cho học viên ngay trên cùng một giao diện.
+            Tạo nội dung, cập nhật bài học YouTube và duyệt quyền xem cho học viên trên cùng một giao diện.
           </p>
         </div>
 

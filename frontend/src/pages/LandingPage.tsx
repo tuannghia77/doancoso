@@ -15,6 +15,8 @@ import {
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
+import { ThemeToggle } from '../components/ThemeToggle';
+
 const heroNotes = [
   { label: 'Chế độ', value: 'Phòng thoại AI và ghi âm chấm điểm' },
   { label: 'Ngôn ngữ', value: 'Phản hồi tiếng Việt có dấu' },
@@ -110,6 +112,8 @@ export function LandingPage() {
           </nav>
 
           <div className="landing-home-actions">
+            <ThemeToggle />
+
             <Link to="/login" className="ghost-button large-button">
               Đăng nhập
             </Link>
@@ -191,7 +195,7 @@ export function LandingPage() {
       <section id="chuc-nang" className="landing-home-feature-section">
         <div className="landing-home-section-head">
           <p className="eyebrow">Các chức năng hiện có</p>
-          <h2>Tất cả tính năng chính được gom lại rõ ràng ngay dưới phần giới thiệu.</h2>
+          <h2>Bộ công cụ luyện tập chính.</h2>
         </div>
 
         <div className="landing-home-feature-grid">
@@ -213,7 +217,7 @@ export function LandingPage() {
       <section id="doi-tuong" className="landing-home-audience-section">
         <div className="landing-home-section-head centered">
           <p className="eyebrow">Phù hợp với ai</p>
-          <h2>Ba nhóm người dùng phù hợp nhất với SpeakAI.</h2>
+          <h2>Dành cho học tập, ứng tuyển và giao tiếp công việc.</h2>
         </div>
 
         <div className="landing-home-audience-grid">
@@ -232,7 +236,7 @@ export function LandingPage() {
       <section id="bat-dau" className="landing-home-cta">
         <div>
           <p className="eyebrow">Sẵn sàng bắt đầu</p>
-          <h2>Tạo tài khoản để mở phiên luyện đầu tiên và bắt đầu xây nhịp luyện của riêng bạn.</h2>
+          <h2>Tạo tài khoản và mở phiên luyện đầu tiên.</h2>
         </div>
 
         <div className="landing-home-cta-actions">

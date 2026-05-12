@@ -16023,3 +16023,5731 @@ button.course-category-card {
   }
 }
 /* === courses-upgrade:end === */
+
+/* === professional-ui-refresh:start === */
+:root {
+  --ink: #172033;
+  --muted: #667085;
+  --line: #d9e2ec;
+  --line-strong: #c5d0dc;
+  --page: #f5f7fb;
+  --surface: #ffffff;
+  --surface-soft: #f8fafc;
+  --brand: #2454d6;
+  --brand-strong: #183ea4;
+  --accent: #0f9f8f;
+  --accent-soft: #e7f7f4;
+  --warning: #b7791f;
+  --coral: #d95f3f;
+  --danger: #b42318;
+  --success: #047857;
+  --shadow: 0 14px 34px rgba(16, 24, 40, 0.08);
+  --shadow-soft: 0 8px 22px rgba(16, 24, 40, 0.06);
+}
+
+* {
+  letter-spacing: 0 !important;
+}
+
+html,
+body {
+  background: var(--page);
+}
+
+body {
+  color: var(--ink);
+}
+
+h1,
+h2,
+h3,
+h4 {
+  color: inherit;
+  letter-spacing: 0 !important;
+}
+
+p,
+li,
+span,
+strong,
+label,
+input,
+textarea,
+select,
+button {
+  letter-spacing: 0 !important;
+}
+
+::selection {
+  color: #ffffff;
+  background: rgba(36, 84, 214, 0.88);
+}
+
+.eyebrow {
+  gap: 0.4rem;
+  margin-bottom: 0.35rem;
+  color: #2454d6;
+  font-size: 0.76rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.muted-text,
+.profile-chip p,
+.leaderboard-row span,
+.goal-card p,
+.session-card p,
+.table-row p,
+.sub-card p {
+  color: var(--muted);
+}
+
+.panel-card,
+.stat-card,
+.sidebar-card,
+.topbar-card,
+.auth-card,
+.floating-card,
+.sub-card,
+.goal-card,
+.session-card,
+.leaderboard-row,
+.table-row,
+.table-head,
+.heatmap-row,
+.admin-user-card,
+.course-admin-lesson-card,
+.course-request-card,
+.course-admin-published-card,
+.course-player-card,
+.course-lesson-list,
+.recorder-status-card,
+.realtime-status-card,
+.dashboard-rebuild-stat,
+.dashboard-rebuild-snapshot-card,
+.profile-command-metric,
+.cv-command-metric,
+.admin-health-card,
+.scoreboard-card,
+.course-hero-stat,
+.admin-course-stat {
+  border-radius: 8px !important;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  box-shadow: var(--shadow-soft);
+  backdrop-filter: none;
+}
+
+.panel-card,
+.topbar-card,
+.auth-card,
+.sidebar-card,
+.stat-card {
+  padding: clamp(1rem, 1.7vw, 1.45rem);
+}
+
+.panel-card,
+.auth-card,
+.topbar-card,
+.stat-card {
+  color: var(--ink);
+}
+
+.primary-button,
+.ghost-button,
+.danger-button,
+.topbar-command-pill,
+.sidebar-primary-action,
+.sidebar-secondary-action,
+.small-button-inline,
+.topic-chip-button,
+.segment-button,
+.course-category-card,
+.course-list-item,
+.course-lesson-item {
+  border-radius: 8px !important;
+  box-shadow: none;
+}
+
+.primary-button {
+  color: #ffffff;
+  background: #2454d6;
+  border: 1px solid #2454d6;
+}
+
+.primary-button:hover {
+  background: #1d47bd;
+  box-shadow: 0 10px 22px rgba(36, 84, 214, 0.22);
+}
+
+.ghost-button {
+  color: #253047;
+  background: #ffffff;
+  border: 1px solid var(--line);
+}
+
+.ghost-button:hover {
+  border-color: var(--line-strong);
+  background: #f8fafc;
+  box-shadow: 0 8px 18px rgba(16, 24, 40, 0.06);
+}
+
+.danger-button {
+  color: #ffffff;
+  background: var(--danger);
+  border: 1px solid var(--danger);
+}
+
+.danger-button:hover {
+  background: #9f1f16;
+  box-shadow: 0 10px 22px rgba(180, 35, 24, 0.2);
+}
+
+input,
+textarea,
+select {
+  min-height: 46px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: #ffffff;
+  color: var(--ink);
+  box-shadow: inset 0 1px 0 rgba(16, 24, 40, 0.02);
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: rgba(36, 84, 214, 0.78);
+  box-shadow: 0 0 0 4px rgba(36, 84, 214, 0.12);
+}
+
+.input-group span,
+.input-group label {
+  color: #344054;
+  font-size: 0.92rem;
+  font-weight: 700;
+}
+
+.badge-soft,
+.status-pill,
+.tag-chip,
+.mini-stat,
+.status-badge,
+.studio-rule-pill,
+.course-category-badge,
+.workspace-rail-signal,
+.workspace-summary-level,
+.profile-role-badge {
+  border-radius: 6px !important;
+  border: 1px solid var(--line);
+  background: #f8fafc;
+  color: #344054;
+}
+
+.status-badge.success {
+  color: var(--success);
+  background: #ecfdf3;
+  border-color: #abefc6;
+}
+
+.status-badge.danger {
+  color: var(--danger);
+  background: #fef3f2;
+  border-color: #fecdca;
+}
+
+.status-badge.dark,
+.status-badge.pending {
+  color: #344054;
+  background: #f2f4f7;
+  border-color: #d0d5dd;
+}
+
+.success-text {
+  color: var(--success);
+}
+
+.error-text {
+  color: var(--danger);
+}
+
+.info-banner {
+  border-radius: 8px;
+  background: #eff8ff;
+  border-color: #b2ddff;
+  color: #175cd3;
+}
+
+.clean-list {
+  padding-left: 1.1rem;
+}
+
+.clean-list li::marker {
+  color: var(--brand);
+}
+
+.app-shell.workspace-overhaul {
+  grid-template-columns: 286px minmax(0, 1fr);
+  gap: 18px;
+  padding: 18px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.78), rgba(245, 247, 251, 0.95)),
+    var(--page);
+}
+
+.workspace-rail.sidebar-card {
+  height: calc(100vh - 36px);
+  max-height: calc(100vh - 36px);
+  color: #e7edf7;
+  background: #162033;
+  border-color: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 18px 42px rgba(15, 23, 42, 0.18);
+}
+
+.workspace-rail-section {
+  border-radius: 8px;
+}
+
+.workspace-rail-brand {
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.workspace-rail-mark,
+.brand-mark,
+.icon-badge {
+  width: 44px;
+  height: 44px;
+  border-radius: 8px;
+  color: #162033;
+  background: #ffffff;
+  box-shadow: none;
+}
+
+.workspace-rail-brand h1,
+.workspace-rail-account h2,
+.workspace-rail-footer h3,
+.sidebar-card h1,
+.sidebar-card h2,
+.sidebar-card h3 {
+  color: #ffffff;
+}
+
+.workspace-rail .eyebrow,
+.sidebar-card .eyebrow {
+  color: #9ec5ff;
+}
+
+.workspace-rail-account,
+.workspace-rail-footer {
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.055);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.workspace-rail-subtitle,
+.workspace-rail-footer p,
+.workspace-rail-footer h3 {
+  color: rgba(231, 237, 247, 0.78);
+}
+
+.workspace-rail-signal-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.workspace-rail-signal,
+.workspace-summary-level {
+  border-color: rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.08);
+  color: #f8fbff;
+}
+
+.side-label {
+  color: #9aa9bd;
+  font-size: 0.78rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.side-nav {
+  gap: 0.42rem;
+}
+
+.nav-pill {
+  border-radius: 8px;
+  color: #cbd5e1;
+  border: 1px solid transparent;
+}
+
+.nav-pill:hover {
+  transform: none;
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.nav-pill.active,
+.app-shell-courses .nav-pill.active,
+.app-shell-admin-courses .nav-pill.active {
+  color: #ffffff;
+  background: rgba(36, 84, 214, 0.28);
+  border-color: rgba(158, 197, 255, 0.24);
+}
+
+.workspace-rail-actions {
+  gap: 0.65rem;
+}
+
+.workspace-rail .primary-button,
+.workspace-rail .ghost-button,
+.sidebar-card .ghost-button,
+.sidebar-card .badge-soft {
+  border-color: rgba(255, 255, 255, 0.13);
+}
+
+.workspace-rail .primary-button {
+  color: #ffffff;
+  background: #2f6df6;
+}
+
+.workspace-rail .ghost-button {
+  color: #e7edf7;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.workspace-support-link {
+  color: #9ec5ff;
+  font-weight: 700;
+}
+
+.workspace-stage {
+  gap: 18px;
+}
+
+.workspace-stage-header.topbar-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  min-height: 96px;
+  background: #ffffff;
+  border-color: var(--line);
+}
+
+.workspace-stage-title h2 {
+  color: #172033;
+  font-size: clamp(1.35rem, 2vw, 1.85rem);
+  line-height: 1.15;
+}
+
+.workspace-stage-title p:not(.eyebrow) {
+  color: var(--muted);
+}
+
+.workspace-stage-tools {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.75rem;
+}
+
+.topbar-command-pill,
+.app-shell-courses .topbar-command-pill,
+.app-shell-admin-courses .topbar-command-pill {
+  min-height: 42px;
+  padding: 0.65rem 0.85rem;
+  color: #ffffff;
+  background: #2454d6;
+  border: 1px solid #2454d6;
+  box-shadow: none;
+}
+
+.workspace-stage-chip {
+  min-height: 42px;
+  padding: 0.55rem 0.8rem;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: #f8fafc;
+}
+
+.workspace-stage-chip span {
+  color: #667085;
+  font-size: 0.78rem;
+}
+
+.workspace-stage-chip strong {
+  color: #172033;
+}
+
+.workspace-stage-body {
+  min-width: 0;
+}
+
+.main-content,
+.page-stack {
+  gap: 18px;
+}
+
+.dashboard-rebuild-hero,
+.dashboard-hero,
+.practice-hero-live,
+.admin-hero,
+.course-hero-card,
+.admin-course-hero,
+.profile-command-card-main,
+.cv-command-card-main {
+  color: var(--ink);
+  background:
+    linear-gradient(135deg, rgba(239, 246, 255, 0.96), rgba(255, 255, 255, 0.98));
+  border-color: #cfe0ff;
+}
+
+.dashboard-rebuild-hero h3,
+.dashboard-hero h3,
+.practice-hero-live h3,
+.admin-hero h3,
+.course-hero-copy h3,
+.admin-course-hero-copy h3,
+.profile-command-card-main h3,
+.cv-command-card-main h3 {
+  color: #172033;
+}
+
+.dashboard-rebuild-hero p,
+.dashboard-hero .muted-text,
+.practice-hero-live .muted-text,
+.admin-hero p,
+.course-hero-copy p:not(.eyebrow),
+.admin-course-hero-copy p:not(.eyebrow) {
+  color: var(--muted);
+}
+
+.dashboard-rebuild-hero .badge-soft,
+.practice-hero-live .badge-soft,
+.admin-hero .badge-soft,
+.dashboard-hero .badge-soft,
+.app-shell-dashboard .dashboard-rebuild-hero .badge-soft,
+.app-shell-practice .practice-hero-live .badge-soft,
+.app-shell-admin .admin-hero .badge-soft {
+  color: #344054 !important;
+  background: #ffffff !important;
+  border-color: #dbe7ff !important;
+}
+
+.dashboard-rebuild-hero-actions,
+.profile-command-actions,
+.cv-command-actions,
+.dashboard-rebuild-statline,
+.admin-course-hero-stats,
+.course-hero-stats {
+  gap: 0.85rem;
+}
+
+.dashboard-rebuild-launch,
+.profile-command-actions a,
+.cv-command-actions span,
+.dashboard-rebuild-focus,
+.admin-spotlight-card,
+.realtime-phase-card,
+.recorder-live-card,
+.recorder-preview-card,
+.source-details,
+.profile-preview-card,
+.analysis-spotlight,
+.cv-spotlight-card,
+.course-access-banner {
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: #ffffff;
+  box-shadow: none;
+}
+
+.dashboard-rebuild-launch {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 0.9rem;
+}
+
+.dashboard-rebuild-launch:hover {
+  border-color: #b8ccff;
+  background: #f8fbff;
+}
+
+.dashboard-rebuild-launch-icon,
+.stat-card-icon,
+.recorder-preview-icon,
+.course-category-icon,
+.landing-home-feature-icon,
+.landing-home-quick-icon {
+  border-radius: 8px;
+  color: #2454d6;
+  background: #eef4ff;
+}
+
+.dashboard-rebuild-main,
+.practice-workbench-grid,
+.practice-live-grid,
+.admin-command-stage,
+.admin-live-grid,
+.course-shell-grid,
+.course-admin-grid,
+.cv-command-grid,
+.profile-command-grid {
+  gap: 18px;
+}
+
+.dashboard-rebuild-missions,
+.dashboard-rebuild-sideboard,
+.dashboard-rebuild-analytics,
+.dashboard-rebuild-history,
+.studio-config-card,
+.studio-recorder-card,
+.studio-ai-card,
+.live-support-card,
+.profile-editor-card,
+.profile-context-card,
+.cv-form-card,
+.cv-result-shell,
+.admin-command-card,
+.course-catalog-card,
+.course-detail-card,
+.course-admin-builder-card,
+.course-admin-review-card {
+  background: #ffffff;
+}
+
+.section-heading.compact-heading,
+.dashboard-rebuild-analytics-head,
+.course-detail-head,
+.admin-command-head,
+.profile-command-head,
+.realtime-room-header,
+.recorder-heading,
+.course-admin-head-actions {
+  border-bottom: 1px solid #eef2f6;
+  padding-bottom: 0.85rem;
+}
+
+.section-heading h3,
+.dashboard-rebuild-analytics h3,
+.profile-context-card h3,
+.cv-result-shell h3,
+.admin-command-card h3,
+.course-detail-card h3 {
+  color: #172033;
+  line-height: 1.2;
+}
+
+.dashboard-rebuild-goal-row,
+.dashboard-rebuild-history-item,
+.leaderboard-row-enhanced,
+.admin-session-row,
+.admin-user-card-control,
+.course-list-item,
+.course-lesson-item,
+.course-request-card,
+.course-admin-published-card,
+.course-admin-lesson-card,
+.cv-question-card,
+.profile-insight-item {
+  border-radius: 8px !important;
+  border: 1px solid var(--line);
+  background: #ffffff;
+  box-shadow: none;
+}
+
+.dashboard-rebuild-goal-row:hover,
+.dashboard-rebuild-history-item:hover,
+.admin-user-card-control:hover,
+.course-list-item:hover,
+.course-lesson-item:hover,
+.course-list-item.active,
+.course-lesson-item.active {
+  transform: none;
+  border-color: #b8ccff;
+  box-shadow: 0 10px 24px rgba(36, 84, 214, 0.08);
+}
+
+.goal-progress-track,
+.priority-progress,
+.heatmap-meter,
+.recorder-live-meter {
+  border-radius: 999px;
+  background: #eef2f6;
+}
+
+.goal-progress-track span,
+.priority-progress span,
+.recorder-live-meter span {
+  background: linear-gradient(90deg, #2454d6, #0f9f8f);
+}
+
+.heatmap-meter span {
+  background: linear-gradient(90deg, #d95f3f, #d99a22, #0f9f8f);
+}
+
+.stat-card-pro {
+  min-height: 150px;
+  display: grid;
+  gap: 0.85rem;
+  background: #ffffff !important;
+}
+
+.stat-card-head,
+.stat-card-footer {
+  align-items: center;
+}
+
+.stat-card h3 {
+  color: #111827;
+  font-size: clamp(1.7rem, 3vw, 2.25rem);
+}
+
+.stat-card-accent {
+  width: 36px;
+  height: 4px;
+  border-radius: 999px;
+  background: #2454d6;
+}
+
+.stat-card.amber .stat-card-accent {
+  background: #d99a22;
+}
+
+.stat-card.coral .stat-card-accent {
+  background: #d95f3f;
+}
+
+.stat-card.cyan .stat-card-accent {
+  background: #0f9f8f;
+}
+
+.chart-wrap,
+.compact-chart {
+  border-radius: 8px;
+  background: #ffffff;
+}
+
+.simple-table-enhanced .table-row,
+.table-grid .table-row,
+.table-head {
+  border-radius: 0 !important;
+  box-shadow: none;
+}
+
+.simple-table,
+.table-grid {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #ffffff;
+}
+
+.table-head {
+  color: #344054;
+  background: #f8fafc;
+}
+
+.realtime-room-card {
+  overflow: hidden;
+}
+
+.realtime-room-stage,
+.realtime-room-console,
+.realtime-log-shell,
+.recorder-status-grid,
+.recorder-toolbar,
+.studio-actions,
+.course-learning-grid {
+  gap: 1rem;
+}
+
+.realtime-orb {
+  border-radius: 50%;
+  background: #eef4ff;
+  border: 1px solid #c7d7fe;
+  box-shadow: none;
+}
+
+.realtime-orb-ring {
+  border-color: rgba(36, 84, 214, 0.28);
+}
+
+.realtime-orb-center {
+  color: #ffffff;
+  background: #2454d6;
+}
+
+.realtime-signal-bars span,
+.recorder-wave-bars span {
+  border-radius: 999px;
+  background: #2454d6;
+}
+
+.realtime-message {
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: #ffffff;
+}
+
+.realtime-message.assistant {
+  border-color: #c7d7fe;
+  background: #f5f8ff;
+}
+
+.realtime-message.user {
+  border-color: #a7f3d0;
+  background: #f0fdf4;
+}
+
+.recorder-card,
+.recorder-card-premium,
+.recorder-card-studio {
+  background: #ffffff;
+  border-color: var(--line);
+}
+
+.audio-player {
+  max-width: 100%;
+}
+
+.studio-outcome-card {
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: #f8fafc;
+}
+
+.segment-control {
+  padding: 4px;
+  border-radius: 8px;
+  background: #f2f4f7;
+  border: 1px solid #e4e7ec;
+}
+
+.segment-button {
+  border: 1px solid transparent;
+  background: transparent;
+  color: #475467;
+}
+
+.segment-button.active {
+  color: #172033;
+  background: #ffffff;
+  border-color: #d0d5dd;
+  box-shadow: 0 2px 6px rgba(16, 24, 40, 0.06);
+}
+
+.topic-chip-button,
+.studio-rule-pill {
+  border: 1px solid var(--line);
+  background: #ffffff;
+  color: #344054;
+}
+
+.topic-chip-button.active {
+  color: #ffffff;
+  border-color: #2454d6;
+  background: #2454d6;
+}
+
+.analysis-summary-banner,
+.analysis-summary-banner-pro {
+  border-radius: 8px;
+  border: 1px solid #cfe0ff;
+  background: #f5f8ff;
+  box-shadow: none;
+}
+
+.analysis-summary-chip {
+  border-radius: 8px;
+  background: #ffffff;
+  border: 1px solid #dbe7ff;
+}
+
+.analysis-summary-chip span {
+  color: var(--muted);
+}
+
+.analysis-summary-chip strong {
+  color: #172033;
+}
+
+.auth-page {
+  background:
+    linear-gradient(90deg, rgba(36, 84, 214, 0.08), transparent 44%),
+    var(--page);
+}
+
+.auth-layout,
+.auth-layout-refined,
+.auth-layout-clean {
+  gap: clamp(1rem, 2vw, 1.6rem);
+}
+
+.auth-showcase {
+  border-radius: 8px;
+  color: #ffffff;
+  background:
+    linear-gradient(0deg, rgba(15, 23, 42, 0.78), rgba(15, 23, 42, 0.56)),
+    url('https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=1200&q=80') center/cover;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  box-shadow: var(--shadow);
+}
+
+.auth-showcase h1,
+.auth-showcase h2,
+.auth-showcase h3,
+.auth-showcase strong {
+  color: #ffffff;
+}
+
+.auth-showcase .muted-text,
+.auth-showcase p {
+  color: rgba(255, 255, 255, 0.82);
+}
+
+.auth-showcase .eyebrow {
+  color: #bfdbfe;
+}
+
+.auth-metric-card,
+.auth-showcase-card,
+.auth-step-pill {
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.1);
+  box-shadow: none;
+}
+
+.auth-card-clean {
+  background: #ffffff;
+}
+
+.auth-card-header h2 {
+  color: #172033;
+}
+
+.auth-mini-note {
+  border-radius: 8px;
+  background: #f5f8ff;
+  color: #344054;
+}
+
+.landing-page {
+  padding: 0;
+  background: #ffffff;
+}
+
+.landing-home-hero {
+  min-height: min(760px, 92vh);
+  padding: clamp(1rem, 3vw, 2rem);
+  color: #ffffff;
+  background:
+    linear-gradient(90deg, rgba(15, 23, 42, 0.86), rgba(15, 23, 42, 0.48) 55%, rgba(15, 23, 42, 0.24)),
+    url('https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=1800&q=82') center/cover;
+}
+
+.landing-home-overlay {
+  display: none;
+}
+
+.landing-home-topbar {
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(12, 18, 32, 0.52);
+  backdrop-filter: blur(16px);
+}
+
+.landing-home-brand-mark {
+  border-radius: 8px;
+  background: #ffffff;
+  color: #172033;
+}
+
+.landing-home-brand p,
+.landing-home-brand strong,
+.landing-home-nav a,
+.landing-home-copy h1,
+.landing-home-copy p,
+.landing-home-sidepanel strong,
+.landing-home-sidepanel span {
+  color: #ffffff;
+}
+
+.landing-home-copy .eyebrow {
+  color: #bfdbfe;
+}
+
+.landing-home-copy h1 {
+  max-width: 12ch;
+  font-size: clamp(2.7rem, 7vw, 5.8rem);
+  line-height: 0.98;
+}
+
+.landing-home-lead {
+  max-width: 58ch;
+  color: rgba(255, 255, 255, 0.88) !important;
+}
+
+.landing-home-sidepanel,
+.landing-home-mini-card,
+.landing-home-quick-card {
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.11);
+  box-shadow: none;
+  backdrop-filter: blur(16px);
+}
+
+.landing-home-quick-grid {
+  gap: 0.85rem;
+}
+
+.landing-home-intro,
+.landing-home-feature-section,
+.landing-home-audience-section,
+.landing-home-cta {
+  padding: clamp(3rem, 6vw, 5.5rem) clamp(1rem, 5vw, 4rem);
+}
+
+.landing-home-intro-media,
+.landing-home-feature-card,
+.landing-home-audience-card,
+.landing-home-cta {
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: #ffffff;
+  box-shadow: var(--shadow-soft);
+}
+
+.landing-home-intro-media img,
+.landing-home-audience-card img {
+  border-radius: 8px 8px 0 0;
+}
+
+.landing-home-section-head h2,
+.landing-home-intro-copy h2,
+.landing-home-cta h2 {
+  color: #172033;
+}
+
+.landing-home-feature-card p,
+.landing-home-audience-copy p,
+.landing-home-intro-item p,
+.landing-home-cta p {
+  color: var(--muted);
+}
+
+.course-category-strip {
+  gap: 14px;
+}
+
+.course-category-card {
+  border-color: var(--line);
+  background: #ffffff;
+  box-shadow: var(--shadow-soft);
+}
+
+.course-category-card:hover,
+.course-category-card.active {
+  transform: none;
+  border-color: #b8ccff;
+  box-shadow: 0 10px 24px rgba(36, 84, 214, 0.08);
+}
+
+.course-category-card strong,
+.course-list-body strong,
+.course-request-body strong,
+.course-admin-published-card strong,
+.course-player-empty h3 {
+  color: #172033;
+}
+
+.course-category-card p,
+.course-list-body p,
+.course-request-body p,
+.course-detail-summary,
+.course-detail-description p,
+.course-player-empty p,
+.course-access-banner p {
+  color: var(--muted);
+}
+
+.course-category-card > span:last-child {
+  border-radius: 6px;
+  color: #344054;
+  background: #f2f4f7;
+}
+
+.course-list-thumb {
+  border-radius: 8px;
+  background: #eef4ff;
+}
+
+.course-video-frame {
+  border-radius: 8px;
+  background: #111827;
+  box-shadow: 0 16px 28px rgba(17, 24, 39, 0.18);
+}
+
+.course-player-empty {
+  border-radius: 8px;
+  border-color: #cbd5e1;
+  background: #f8fafc;
+}
+
+.profile-avatar-ring,
+.profile-avatar-ring-large {
+  border-radius: 8px;
+  background: #eef4ff;
+  color: #2454d6;
+}
+
+.profile-avatar-image {
+  border-radius: 8px;
+}
+
+.profile-context-row,
+.admin-spotlight-row {
+  border-bottom: 1px solid #eef2f6;
+}
+
+.profile-context-row:last-child,
+.admin-spotlight-row:last-child {
+  border-bottom: 0;
+}
+
+.cv-upload-zone {
+  border-radius: 8px;
+  border-color: #cbd5e1;
+  background: #f8fafc;
+}
+
+.cv-upload-zone:hover {
+  border-color: #b8ccff;
+  background: #f5f8ff;
+}
+
+.admin-command-stage,
+.admin-live-grid {
+  align-items: stretch;
+}
+
+.admin-side-status-card,
+.admin-command-card-side,
+.ops-card {
+  background: #ffffff;
+}
+
+.admin-user-summary .tag-chip {
+  background: #f8fafc;
+}
+
+.hero-scoreboard-admin,
+.admin-scoreboard-extended,
+.course-hero-stats,
+.admin-course-hero-stats {
+  align-items: stretch;
+}
+
+.scoreboard-card,
+.course-hero-stat,
+.admin-course-stat {
+  justify-content: space-between;
+}
+
+.scoreboard-card strong,
+.course-hero-stat strong,
+.admin-course-stat strong,
+.admin-health-card strong,
+.profile-command-metric strong,
+.cv-command-metric strong {
+  color: #172033;
+}
+
+@media (max-width: 1240px) {
+  .app-shell.workspace-overhaul {
+    grid-template-columns: 1fr;
+  }
+
+  .workspace-rail.sidebar-card {
+    height: auto;
+    max-height: none;
+  }
+
+  .workspace-stage-header.topbar-card,
+  .workspace-stage-tools {
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 900px) {
+  .landing-home-topbar,
+  .workspace-stage-header.topbar-card,
+  .dashboard-rebuild-hero,
+  .dashboard-hero,
+  .course-hero-card,
+  .admin-course-hero,
+  .profile-command-grid,
+  .cv-command-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .workspace-stage-header.topbar-card,
+  .course-detail-head,
+  .course-access-banner,
+  .dashboard-rebuild-analytics-head,
+  .admin-command-head,
+  .profile-command-head,
+  .realtime-room-header {
+    flex-direction: column;
+  }
+
+  .workspace-stage-tools {
+    width: 100%;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .landing-home-nav {
+    display: none;
+  }
+}
+
+@media (max-width: 720px) {
+  .app-shell.workspace-overhaul {
+    padding: 10px;
+    gap: 10px;
+  }
+
+  .panel-card,
+  .topbar-card,
+  .auth-card,
+  .sidebar-card,
+  .stat-card {
+    padding: 1rem;
+  }
+
+  .landing-home-hero {
+    min-height: auto;
+    padding: 0.8rem;
+  }
+
+  .landing-home-copy h1 {
+    max-width: none;
+    font-size: clamp(2.2rem, 13vw, 3.6rem);
+  }
+
+  .landing-home-actions,
+  .landing-home-cta-actions,
+  .dashboard-rebuild-hero-actions,
+  .profile-command-actions,
+  .studio-actions,
+  .realtime-toolbar,
+  .recorder-toolbar {
+    width: 100%;
+  }
+
+  .landing-home-actions a,
+  .landing-home-cta-actions a,
+  .dashboard-rebuild-hero-actions a,
+  .profile-command-actions a,
+  .studio-actions button,
+  .realtime-toolbar button,
+  .recorder-toolbar button {
+    width: 100%;
+  }
+
+  .dashboard-rebuild-launch {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+
+  .dashboard-rebuild-launch > svg:last-child {
+    display: none;
+  }
+}
+/* === professional-ui-refresh:end === */
+
+/* === readability-polish:start === */
+.topbar-command-pill,
+.topbar-command-pill *,
+.app-shell .topbar-command-pill,
+.app-shell .topbar-command-pill span,
+.app-shell .topbar-command-pill svg {
+  color: #ffffff !important;
+}
+
+.dashboard-rebuild-hero,
+.practice-hero-live,
+.admin-hero {
+  overflow: hidden;
+}
+
+.dashboard-rebuild-hero h3,
+.dashboard-rebuild-hero h4,
+.dashboard-rebuild-hero strong,
+.dashboard-rebuild-hero p,
+.dashboard-rebuild-hero span,
+.dashboard-rebuild-hero .eyebrow,
+.dashboard-rebuild-hero .muted-text {
+  color: #f8fbff !important;
+}
+
+.dashboard-rebuild-hero .badge-soft,
+.dashboard-rebuild-hero .status-badge,
+.dashboard-rebuild-hero .tag-chip,
+.dashboard-rebuild-hero .dashboard-rebuild-focus-top .badge-soft {
+  color: #172033 !important;
+  background: #ffffff !important;
+  border-color: rgba(255, 255, 255, 0.58) !important;
+}
+
+.dashboard-rebuild-hero .dashboard-rebuild-focus,
+.dashboard-rebuild-hero .dashboard-rebuild-launch,
+.dashboard-rebuild-hero .dashboard-rebuild-stat {
+  border-color: rgba(255, 255, 255, 0.2) !important;
+  background: rgba(255, 255, 255, 0.12) !important;
+  box-shadow: none !important;
+}
+
+.dashboard-rebuild-hero .dashboard-rebuild-launch-icon {
+  color: #ffffff !important;
+  background: rgba(255, 255, 255, 0.14) !important;
+}
+
+.dashboard-rebuild-hero .dashboard-rebuild-focus-meta span,
+.dashboard-rebuild-hero .dashboard-rebuild-focus-meta strong,
+.dashboard-rebuild-hero .dashboard-rebuild-stat strong,
+.dashboard-rebuild-hero .dashboard-rebuild-stat span {
+  color: #f8fbff !important;
+}
+
+.dashboard-rebuild-analytics-note strong,
+.dashboard-rebuild-analytics-note span {
+  color: #344054 !important;
+}
+
+.cv-command-card-main,
+.profile-command-card-main {
+  color: #172033 !important;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.98), rgba(246, 251, 255, 0.96)) !important;
+}
+
+.cv-command-card-main h3,
+.cv-command-card-main p,
+.cv-command-card-main strong,
+.profile-command-card-main h3,
+.profile-command-card-main p,
+.profile-command-card-main strong {
+  color: #172033 !important;
+}
+
+.cv-command-card-main .muted-text,
+.profile-command-card-main .muted-text,
+.profile-command-card-main .profile-banner-main p {
+  color: #667085 !important;
+}
+
+.cv-command-metric,
+.profile-command-metric,
+.studio-summary-chip,
+.dashboard-rebuild-snapshot-card,
+.dashboard-rebuild-stat,
+.admin-health-card,
+.scoreboard-card,
+.course-hero-stat,
+.admin-course-stat {
+  color: #172033 !important;
+  background: #ffffff !important;
+  border-color: #d9e2ec !important;
+}
+
+.cv-command-metric span,
+.profile-command-metric span,
+.studio-summary-chip span,
+.dashboard-rebuild-snapshot-card span,
+.dashboard-rebuild-stat span,
+.admin-health-card span,
+.scoreboard-card span,
+.course-hero-stat span,
+.admin-course-stat span {
+  color: #667085 !important;
+}
+
+.cv-command-metric strong,
+.profile-command-metric strong,
+.studio-summary-chip strong,
+.dashboard-rebuild-snapshot-card strong,
+.dashboard-rebuild-stat strong,
+.admin-health-card strong,
+.scoreboard-card strong,
+.course-hero-stat strong,
+.admin-course-stat strong {
+  color: #172033 !important;
+}
+
+.practice-hero-live .studio-summary-chip {
+  color: #ffffff !important;
+  background: rgba(255, 255, 255, 0.14) !important;
+  border-color: rgba(255, 255, 255, 0.22) !important;
+}
+
+.practice-hero-live .studio-summary-chip span,
+.practice-hero-live .studio-summary-chip strong {
+  color: #f8fbff !important;
+}
+
+.course-catalog-card .course-list-item {
+  display: grid !important;
+  grid-template-columns: 76px minmax(0, 1fr) !important;
+  align-items: start !important;
+  gap: 12px !important;
+}
+
+.course-catalog-card .course-list-thumb {
+  width: 76px !important;
+  height: 76px !important;
+}
+
+.course-catalog-card .course-list-body {
+  min-width: 0 !important;
+}
+
+.course-catalog-card .course-list-body strong,
+.course-catalog-card .course-list-body p,
+.course-catalog-card .course-list-meta span {
+  overflow-wrap: anywhere;
+  word-break: normal;
+}
+
+.course-catalog-card .course-list-item > .status-badge {
+  grid-column: 2 !important;
+  justify-self: start !important;
+  margin-top: 0.15rem;
+}
+
+.course-detail-card .course-detail-head {
+  gap: 18px;
+}
+
+.course-detail-card .course-detail-badges {
+  max-width: 240px;
+}
+
+.course-player-card h3,
+.course-lesson-item strong,
+.course-list-body strong {
+  overflow-wrap: anywhere;
+}
+
+.course-category-card p,
+.course-category-card strong {
+  overflow-wrap: anywhere;
+}
+
+.course-form-category-grid .course-category-card {
+  align-items: flex-start;
+  min-height: 0;
+}
+
+.landing-home-feature-section,
+.landing-home-audience-section,
+.landing-home-cta,
+.landing-home-intro {
+  box-shadow: none;
+}
+
+.landing-home-audience-card {
+  overflow: hidden;
+}
+
+.landing-home-audience-card img {
+  display: block;
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  background: #eef4ff;
+}
+
+.landing-home-feature-card,
+.landing-home-audience-card {
+  min-height: auto;
+}
+
+.landing-home-feature-card p,
+.landing-home-audience-copy p,
+.landing-home-intro-copy p,
+.landing-home-cta p {
+  max-width: 68ch;
+}
+
+.realtime-orb-center {
+  color: #ffffff !important;
+}
+
+.source-details summary,
+.source-details pre {
+  color: #344054;
+}
+
+.profile-command-head .badge-soft,
+.cv-command-card-main .badge-soft,
+.section-heading .badge-soft {
+  color: #52657d;
+}
+
+.workspace-stage-chip,
+.workspace-stage-chip * {
+  color: #172033 !important;
+}
+
+@media (max-width: 900px) {
+  .course-catalog-card .course-list-item {
+    grid-template-columns: 64px minmax(0, 1fr) !important;
+  }
+
+  .course-catalog-card .course-list-thumb {
+    width: 64px !important;
+    height: 64px !important;
+  }
+}
+
+@media (max-width: 720px) {
+  .dashboard-rebuild-hero h3,
+  .practice-hero-live h3 {
+    font-size: clamp(2.05rem, 11vw, 3.2rem);
+    line-height: 1.03;
+  }
+
+  .dashboard-rebuild-hero .dashboard-rebuild-statline {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard-rebuild-analytics-note strong {
+    color: #667085 !important;
+  }
+
+  .course-catalog-card .course-list-item {
+    grid-template-columns: 1fr !important;
+  }
+
+  .course-catalog-card .course-list-thumb {
+    width: 100% !important;
+    height: 140px !important;
+  }
+
+  .course-catalog-card .course-list-item > .status-badge {
+    grid-column: 1 !important;
+  }
+}
+/* === readability-polish:end === */
+
+/* === final-readability-fixes:start === */
+.app-shell-cv .cv-command-card-main .cv-command-metric,
+.app-shell-profile .profile-command-card-main .profile-command-metric {
+  background: #ffffff !important;
+  border: 1px solid #d9e2ec !important;
+  box-shadow: none !important;
+}
+
+.app-shell-cv .cv-command-card-main .cv-command-metric span,
+.app-shell-profile .profile-command-card-main .profile-command-metric span {
+  color: #667085 !important;
+  opacity: 1 !important;
+}
+
+.app-shell-cv .cv-command-card-main .cv-command-metric strong,
+.app-shell-profile .profile-command-card-main .profile-command-metric strong {
+  color: #172033 !important;
+  opacity: 1 !important;
+}
+
+.app-shell-profile .profile-command-card-main .profile-banner-main p,
+.app-shell-profile .profile-command-card-main .muted-text,
+.app-shell-cv .cv-command-card-main .muted-text {
+  color: #667085 !important;
+  opacity: 1 !important;
+}
+
+.app-shell-cv .cv-command-card-main .badge-soft,
+.app-shell-profile .profile-command-card-main .badge-soft {
+  color: #52657d !important;
+  background: #f8fafc !important;
+  border-color: #d9e2ec !important;
+}
+
+.course-detail-card .course-learning-grid {
+  grid-template-columns: 1fr !important;
+}
+
+.course-detail-card .course-player-card {
+  max-width: 100%;
+}
+
+.course-detail-card .course-player-card .section-heading {
+  align-items: flex-start;
+}
+
+.course-detail-card .course-player-card h3 {
+  max-width: 24ch;
+  line-height: 1.12;
+}
+
+.course-detail-card .course-video-frame {
+  max-width: 760px;
+}
+
+@media (max-width: 720px) {
+  .course-detail-card .course-player-card h3 {
+    max-width: none;
+  }
+}
+/* === final-readability-fixes:end === */
+
+/* === final-visual-polish:start === */
+.landing-home-rebuild *,
+.app-shell * {
+  letter-spacing: 0 !important;
+}
+
+.landing-home-topbar {
+  grid-template-columns: minmax(0, 1fr) auto auto !important;
+  gap: 16px !important;
+}
+
+.landing-home-brand {
+  min-width: 0;
+}
+
+.landing-home-brand strong {
+  max-width: 440px;
+}
+
+.landing-home-nav {
+  display: flex !important;
+  flex-wrap: nowrap !important;
+  align-items: center;
+  gap: 24px !important;
+  min-width: max-content;
+}
+
+.landing-home-nav a {
+  white-space: nowrap !important;
+  word-break: keep-all;
+  line-height: 1 !important;
+}
+
+.landing-home-actions {
+  flex-wrap: nowrap !important;
+  min-width: max-content;
+}
+
+.app-shell-dashboard .dashboard-rebuild-hero .dashboard-rebuild-focus h4,
+.app-shell-dashboard .dashboard-rebuild-hero .dashboard-rebuild-focus-meta span,
+.app-shell-dashboard .dashboard-rebuild-hero .dashboard-rebuild-focus-meta strong {
+  color: #ffffff !important;
+  opacity: 1 !important;
+}
+
+.app-shell-dashboard .dashboard-rebuild-hero .dashboard-rebuild-focus .badge-soft {
+  color: #172033 !important;
+  background: #f8fbff !important;
+  border-color: rgba(255, 255, 255, 0.72) !important;
+}
+
+@media (max-width: 1080px) {
+  .landing-home-nav {
+    display: none !important;
+  }
+}
+/* === final-visual-polish:end === */
+
+/* === dashboard-hero-title-polish:start === */
+.app-shell-dashboard .dashboard-rebuild-hero-copy {
+  max-width: 640px !important;
+}
+
+.app-shell-dashboard .dashboard-rebuild-hero h3 {
+  max-width: 620px !important;
+  margin: 0.35rem 0 1rem !important;
+  font-size: clamp(2.45rem, 3.45vw, 3.65rem) !important;
+  line-height: 1.08 !important;
+  font-weight: 800 !important;
+}
+
+.app-shell-dashboard .dashboard-rebuild-hero-copy > p:not(.eyebrow) {
+  max-width: 560px !important;
+  font-size: 1.04rem !important;
+  line-height: 1.65 !important;
+}
+
+@media (max-width: 720px) {
+  .app-shell-dashboard .dashboard-rebuild-hero h3 {
+    font-size: clamp(2.25rem, 11vw, 3.1rem) !important;
+    line-height: 1.06 !important;
+  }
+
+  .app-shell-dashboard .dashboard-rebuild-hero-copy > p:not(.eyebrow) {
+    font-size: 0.98rem !important;
+  }
+}
+/* === dashboard-hero-title-polish:end === */
+
+/* === course-hero-title-polish:start === */
+.app-shell-courses .course-hero-copy,
+.course-page-upgraded .course-hero-copy {
+  max-width: 660px !important;
+}
+
+.app-shell-courses .course-hero-copy h3,
+.course-page-upgraded .course-hero-copy h3 {
+  max-width: 620px !important;
+  margin: 0.35rem 0 0.85rem !important;
+  font-size: clamp(2.2rem, 3.1vw, 3.25rem) !important;
+  line-height: 1.08 !important;
+  font-weight: 800 !important;
+}
+
+.app-shell-courses .course-hero-copy p:not(.eyebrow),
+.course-page-upgraded .course-hero-copy p:not(.eyebrow) {
+  max-width: 560px !important;
+  font-size: 1.02rem !important;
+  line-height: 1.65 !important;
+}
+
+@media (max-width: 720px) {
+  .app-shell-courses .course-hero-copy h3,
+  .course-page-upgraded .course-hero-copy h3 {
+    font-size: clamp(2rem, 9vw, 2.7rem) !important;
+  }
+}
+/* === course-hero-title-polish:end === */
+
+/* === cv-hero-title-polish:start === */
+.app-shell-cv .cv-command-card-main .section-heading,
+.cv-shell-enterprise .cv-command-card-main .section-heading {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) auto !important;
+  align-items: start !important;
+  gap: 18px !important;
+}
+
+.app-shell-cv .cv-command-card-main h3,
+.cv-shell-enterprise .cv-command-card-main h3 {
+  max-width: 420px !important;
+  margin: 0.25rem 0 0.45rem !important;
+  font-size: clamp(2.35rem, 3.1vw, 3.25rem) !important;
+  line-height: 1.08 !important;
+  font-weight: 800 !important;
+}
+
+.app-shell-cv .cv-command-subtitle,
+.cv-shell-enterprise .cv-command-subtitle {
+  max-width: 470px !important;
+  margin: 0 !important;
+  color: #667085 !important;
+  font-size: 1rem !important;
+  line-height: 1.6 !important;
+  opacity: 1 !important;
+}
+
+.app-shell-cv .cv-command-card-main .badge-soft,
+.cv-shell-enterprise .cv-command-card-main .badge-soft {
+  white-space: nowrap !important;
+  align-self: start !important;
+}
+
+@media (max-width: 720px) {
+  .app-shell-cv .cv-command-card-main .section-heading,
+  .cv-shell-enterprise .cv-command-card-main .section-heading {
+    grid-template-columns: 1fr !important;
+  }
+
+  .app-shell-cv .cv-command-card-main h3,
+  .cv-shell-enterprise .cv-command-card-main h3 {
+    font-size: clamp(2rem, 9vw, 2.75rem) !important;
+  }
+
+  .app-shell-cv .cv-command-card-main .badge-soft,
+  .cv-shell-enterprise .cv-command-card-main .badge-soft {
+    width: fit-content;
+  }
+}
+/* === cv-hero-title-polish:end === */
+
+/* === admin-course-hero-title-polish:start === */
+.app-shell-admin-courses .admin-course-hero-copy,
+.admin-courses-page-upgraded .admin-course-hero-copy {
+  max-width: 660px !important;
+}
+
+.app-shell-admin-courses .admin-course-hero-copy h3,
+.admin-courses-page-upgraded .admin-course-hero-copy h3 {
+  max-width: 620px !important;
+  margin: 0.35rem 0 0.85rem !important;
+  font-size: clamp(2.35rem, 3.1vw, 3.35rem) !important;
+  line-height: 1.08 !important;
+  font-weight: 800 !important;
+}
+
+.app-shell-admin-courses .admin-course-hero-copy p:not(.eyebrow),
+.admin-courses-page-upgraded .admin-course-hero-copy p:not(.eyebrow) {
+  max-width: 560px !important;
+  font-size: 1.02rem !important;
+  line-height: 1.65 !important;
+}
+
+@media (max-width: 720px) {
+  .app-shell-admin-courses .admin-course-hero-copy h3,
+  .admin-courses-page-upgraded .admin-course-hero-copy h3 {
+    font-size: clamp(2rem, 9vw, 2.75rem) !important;
+  }
+}
+/* === admin-course-hero-title-polish:end === */
+
+/* === theme-mode:start === */
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 44px;
+  padding: 8px 14px 8px 10px;
+  border: 1px solid rgba(123, 148, 177, 0.34);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.84);
+  color: #172033;
+  box-shadow: 0 12px 28px rgba(31, 58, 95, 0.12);
+  font: inherit;
+  font-weight: 800;
+  cursor: pointer;
+  transition:
+    background 180ms ease,
+    border-color 180ms ease,
+    color 180ms ease,
+    transform 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.theme-toggle:hover {
+  transform: translateY(-1px);
+  border-color: rgba(53, 132, 236, 0.46);
+  box-shadow: 0 16px 34px rgba(31, 58, 95, 0.16);
+}
+
+.theme-toggle-track {
+  position: relative;
+  width: 44px;
+  height: 26px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #eaf3ff, #f8fbff);
+  border: 1px solid rgba(123, 148, 177, 0.32);
+  flex: 0 0 auto;
+}
+
+.theme-toggle-thumb {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #2463eb;
+  background: #ffffff;
+  box-shadow: 0 5px 12px rgba(31, 58, 95, 0.18);
+  transition:
+    transform 180ms ease,
+    color 180ms ease,
+    background 180ms ease;
+}
+
+.theme-toggle.is-dark .theme-toggle-thumb {
+  transform: translateX(18px);
+  color: #f8d56b;
+  background: #111a2f;
+}
+
+.theme-toggle-label {
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.theme-toggle-floating {
+  position: fixed;
+  top: 22px;
+  right: 22px;
+  z-index: 80;
+}
+
+html[data-theme='dark'] {
+  color-scheme: dark;
+  --background: #070d19;
+  --surface: #0d1627;
+  --surface-strong: #121d32;
+  --surface-soft: #17243a;
+  --border: rgba(148, 163, 184, 0.24);
+  --border-strong: rgba(148, 163, 184, 0.36);
+  --text-main: #eef5ff;
+  --text-muted: #aebed3;
+  --text-soft: #d8e3f4;
+  --accent: #5bc7ff;
+  --accent-strong: #7c8dff;
+  --success: #53dfaa;
+  --warning: #ffd166;
+  --danger: #ff7d8a;
+}
+
+html[data-theme='dark'] body,
+html[data-theme='dark'] #root {
+  background:
+    linear-gradient(135deg, rgba(91, 199, 255, 0.07), transparent 28%),
+    linear-gradient(225deg, rgba(124, 141, 255, 0.1), transparent 32%),
+    var(--background) !important;
+  color: var(--text-main) !important;
+}
+
+html[data-theme='dark'] .app-shell,
+html[data-theme='dark'] .landing-page,
+html[data-theme='dark'] .auth-page,
+html[data-theme='dark'] .page-stack,
+html[data-theme='dark'] .main-column,
+html[data-theme='dark'] .workspace-stage,
+html[data-theme='dark'] .workspace-stage-body,
+html[data-theme='dark'] .main-content {
+  background:
+    radial-gradient(circle at top right, rgba(91, 199, 255, 0.1), transparent 28%),
+    radial-gradient(circle at bottom left, rgba(124, 141, 255, 0.08), transparent 32%),
+    var(--background) !important;
+  color: var(--text-main) !important;
+}
+
+html[data-theme='dark'] .workspace-stage-header,
+html[data-theme='dark'] .topbar-card,
+html[data-theme='dark'] .panel-card,
+html[data-theme='dark'] .sidebar-card,
+html[data-theme='dark'] .course-category-card,
+html[data-theme='dark'] .course-catalog-card,
+html[data-theme='dark'] .course-detail-card,
+html[data-theme='dark'] .course-player-card,
+html[data-theme='dark'] .course-lesson-item,
+html[data-theme='dark'] .course-list-item,
+html[data-theme='dark'] .course-access-banner,
+html[data-theme='dark'] .course-detail-description,
+html[data-theme='dark'] .dashboard-rebuild-missions,
+html[data-theme='dark'] .dashboard-rebuild-sideboard,
+html[data-theme='dark'] .dashboard-rebuild-goal-row,
+html[data-theme='dark'] .dashboard-rebuild-snapshot-card,
+html[data-theme='dark'] .cv-command-card,
+html[data-theme='dark'] .cv-quick-card,
+html[data-theme='dark'] .profile-command-card-main,
+html[data-theme='dark'] .profile-context-card,
+html[data-theme='dark'] .profile-insight-item,
+html[data-theme='dark'] .admin-course-hero,
+html[data-theme='dark'] .course-hero-card,
+html[data-theme='dark'] .admin-course-stat,
+html[data-theme='dark'] .course-hero-stat,
+html[data-theme='dark'] .auth-card,
+html[data-theme='dark'] .auth-showcase-card,
+html[data-theme='dark'] .auth-metric-card,
+html[data-theme='dark'] .landing-home-intro,
+html[data-theme='dark'] .landing-home-feature-section,
+html[data-theme='dark'] .landing-home-audience-section,
+html[data-theme='dark'] .landing-home-cta,
+html[data-theme='dark'] .landing-home-feature-card,
+html[data-theme='dark'] .landing-home-audience-card,
+html[data-theme='dark'] .landing-home-quick-card,
+html[data-theme='dark'] .landing-home-mini-card {
+  background:
+    linear-gradient(145deg, rgba(18, 29, 50, 0.94), rgba(11, 19, 34, 0.92)) !important;
+  border-color: var(--border) !important;
+  color: var(--text-main) !important;
+  box-shadow: 0 22px 56px rgba(0, 0, 0, 0.34) !important;
+}
+
+html[data-theme='dark'] .workspace-rail {
+  background:
+    linear-gradient(180deg, rgba(12, 22, 39, 0.98), rgba(7, 13, 25, 0.98)) !important;
+  border-color: rgba(148, 163, 184, 0.22) !important;
+}
+
+html[data-theme='dark'] .dashboard-rebuild-hero,
+html[data-theme='dark'] .practice-hero-live,
+html[data-theme='dark'] .admin-hero {
+  background:
+    linear-gradient(115deg, rgba(7, 13, 25, 0.94), rgba(24, 34, 57, 0.9)),
+    linear-gradient(135deg, rgba(91, 199, 255, 0.14), rgba(124, 141, 255, 0.08)) !important;
+  border-color: rgba(148, 163, 184, 0.26) !important;
+}
+
+html[data-theme='dark'] .landing-home-hero {
+  background-color: #070d19 !important;
+}
+
+html[data-theme='dark'] .landing-home-topbar,
+html[data-theme='dark'] .landing-home-sidepanel,
+html[data-theme='dark'] .auth-card-clean,
+html[data-theme='dark'] .auth-showcase-minimal {
+  background: rgba(12, 19, 34, 0.82) !important;
+  border-color: rgba(148, 163, 184, 0.24) !important;
+  color: var(--text-main) !important;
+  box-shadow: 0 22px 58px rgba(0, 0, 0, 0.34) !important;
+}
+
+html[data-theme='dark'] h1,
+html[data-theme='dark'] h2,
+html[data-theme='dark'] h3,
+html[data-theme='dark'] h4,
+html[data-theme='dark'] strong,
+html[data-theme='dark'] .workspace-stage-title h2,
+html[data-theme='dark'] .course-hero-copy h3,
+html[data-theme='dark'] .admin-course-hero-copy h3,
+html[data-theme='dark'] .cv-command-card-main h3,
+html[data-theme='dark'] .profile-banner-main h3,
+html[data-theme='dark'] .section-heading h3 {
+  color: var(--text-main) !important;
+}
+
+html[data-theme='dark'] p,
+html[data-theme='dark'] span,
+html[data-theme='dark'] label,
+html[data-theme='dark'] .muted-text,
+html[data-theme='dark'] .workspace-stage-title p,
+html[data-theme='dark'] .course-hero-copy p:not(.eyebrow),
+html[data-theme='dark'] .admin-course-hero-copy p:not(.eyebrow),
+html[data-theme='dark'] .cv-command-subtitle,
+html[data-theme='dark'] .landing-home-feature-card p,
+html[data-theme='dark'] .landing-home-audience-copy p,
+html[data-theme='dark'] .auth-showcase-copy {
+  color: var(--text-muted) !important;
+  opacity: 1 !important;
+}
+
+html[data-theme='dark'] .eyebrow,
+html[data-theme='dark'] .side-label {
+  color: #91d8ff !important;
+  opacity: 1 !important;
+}
+
+html[data-theme='dark'] .badge-soft,
+html[data-theme='dark'] .tag-chip,
+html[data-theme='dark'] .status-badge,
+html[data-theme='dark'] .workspace-stage-chip,
+html[data-theme='dark'] .workspace-rail-signal,
+html[data-theme='dark'] .studio-rule-pill,
+html[data-theme='dark'] .course-category-badge,
+html[data-theme='dark'] .theme-toggle {
+  background: rgba(21, 34, 56, 0.94) !important;
+  border-color: rgba(148, 163, 184, 0.28) !important;
+  color: var(--text-soft) !important;
+}
+
+html[data-theme='dark'] .theme-toggle-track {
+  background: linear-gradient(135deg, #13223b, #243454) !important;
+  border-color: rgba(148, 163, 184, 0.3) !important;
+}
+
+html[data-theme='dark'] .primary-button,
+html[data-theme='dark'] .topbar-command-pill,
+html[data-theme='dark'] .sidebar-primary-action {
+  background: linear-gradient(135deg, #3387f2, #4fd0df) !important;
+  color: #ffffff !important;
+  border-color: rgba(91, 199, 255, 0.4) !important;
+  box-shadow: 0 18px 40px rgba(51, 135, 242, 0.26) !important;
+}
+
+html[data-theme='dark'] .ghost-button,
+html[data-theme='dark'] .sidebar-secondary-action,
+html[data-theme='dark'] .sidebar-logout {
+  background: rgba(18, 29, 50, 0.9) !important;
+  border-color: rgba(148, 163, 184, 0.28) !important;
+  color: var(--text-main) !important;
+}
+
+html[data-theme='dark'] .nav-pill {
+  background: rgba(15, 26, 45, 0.88) !important;
+  color: var(--text-soft) !important;
+  border-color: rgba(148, 163, 184, 0.18) !important;
+}
+
+html[data-theme='dark'] .nav-pill.active,
+html[data-theme='dark'] .nav-pill:hover,
+html[data-theme='dark'] .course-list-item.active,
+html[data-theme='dark'] .course-lesson-item.active,
+html[data-theme='dark'] .course-category-card.active {
+  background: linear-gradient(135deg, rgba(51, 135, 242, 0.9), rgba(79, 208, 223, 0.76)) !important;
+  color: #ffffff !important;
+  border-color: rgba(91, 199, 255, 0.42) !important;
+}
+
+html[data-theme='dark'] .nav-pill.active span,
+html[data-theme='dark'] .nav-pill:hover span,
+html[data-theme='dark'] .course-list-item.active *,
+html[data-theme='dark'] .course-lesson-item.active *,
+html[data-theme='dark'] .course-category-card.active * {
+  color: #ffffff !important;
+}
+
+html[data-theme='dark'] input,
+html[data-theme='dark'] textarea,
+html[data-theme='dark'] select {
+  background: rgba(9, 16, 30, 0.86) !important;
+  border-color: rgba(148, 163, 184, 0.28) !important;
+  color: var(--text-main) !important;
+  box-shadow: none !important;
+}
+
+html[data-theme='dark'] input::placeholder,
+html[data-theme='dark'] textarea::placeholder {
+  color: #7f91aa !important;
+}
+
+html[data-theme='dark'] input:focus,
+html[data-theme='dark'] textarea:focus,
+html[data-theme='dark'] select:focus {
+  border-color: rgba(91, 199, 255, 0.68) !important;
+  box-shadow: 0 0 0 4px rgba(91, 199, 255, 0.14) !important;
+}
+
+html[data-theme='dark'] button:disabled,
+html[data-theme='dark'] .primary-button:disabled,
+html[data-theme='dark'] .ghost-button:disabled {
+  background: rgba(44, 55, 72, 0.78) !important;
+  border-color: rgba(148, 163, 184, 0.18) !important;
+  color: #91a1b7 !important;
+  opacity: 0.78 !important;
+}
+
+html[data-theme='dark'] table,
+html[data-theme='dark'] th,
+html[data-theme='dark'] td,
+html[data-theme='dark'] .admin-table,
+html[data-theme='dark'] .data-table {
+  background: rgba(12, 20, 36, 0.9) !important;
+  border-color: rgba(148, 163, 184, 0.18) !important;
+  color: var(--text-soft) !important;
+}
+
+html[data-theme='dark'] .goal-progress-track,
+html[data-theme='dark'] .priority-progress {
+  background: rgba(148, 163, 184, 0.18) !important;
+}
+
+html[data-theme='dark'] .success-text {
+  color: #80f2bd !important;
+  background: rgba(28, 120, 83, 0.16) !important;
+  border-color: rgba(83, 223, 170, 0.28) !important;
+}
+
+html[data-theme='dark'] .error-text {
+  color: #ffb3bc !important;
+  background: rgba(185, 28, 44, 0.16) !important;
+  border-color: rgba(255, 125, 138, 0.3) !important;
+}
+
+html[data-theme='dark'] .recharts-cartesian-grid line {
+  stroke: rgba(148, 163, 184, 0.16) !important;
+}
+
+html[data-theme='dark'] .recharts-text {
+  fill: #aebed3 !important;
+}
+
+html[data-theme='dark'] .course-video-frame,
+html[data-theme='dark'] iframe {
+  background: #050915 !important;
+  border-color: rgba(148, 163, 184, 0.24) !important;
+}
+
+html[data-theme='dark'] .landing-home-overlay {
+  background:
+    linear-gradient(90deg, rgba(7, 13, 25, 0.78), rgba(7, 13, 25, 0.32)),
+    linear-gradient(180deg, rgba(7, 13, 25, 0.25), rgba(7, 13, 25, 0.72)) !important;
+}
+
+@media (max-width: 720px) {
+  .theme-toggle-floating {
+    top: 14px;
+    right: 14px;
+  }
+
+  .theme-toggle-inline .theme-toggle-label {
+    display: none;
+  }
+
+  .theme-toggle {
+    padding-right: 10px;
+  }
+}
+/* === theme-mode:end === */
+
+/* === dark-theme-readability-fixes:start === */
+html[data-theme='dark'] .workspace-rail-navigation .nav-pill:not(.active),
+html[data-theme='dark'] .workspace-rail-navigation .nav-pill:not(.active) span,
+html[data-theme='dark'] .workspace-rail-navigation .nav-pill:not(.active) svg,
+html[data-theme='dark'] .workspace-rail-actions .ghost-button,
+html[data-theme='dark'] .workspace-rail-actions .ghost-button span,
+html[data-theme='dark'] .workspace-rail-actions .ghost-button svg {
+  color: #d8e3f4 !important;
+  opacity: 1 !important;
+}
+
+html[data-theme='dark'] .workspace-rail-navigation .nav-pill:not(.active) {
+  background: rgba(10, 18, 32, 0.88) !important;
+  border-color: rgba(148, 163, 184, 0.2) !important;
+}
+
+html[data-theme='dark'] .workspace-stage-chip,
+html[data-theme='dark'] .workspace-stage-chip span,
+html[data-theme='dark'] .workspace-stage-chip strong,
+html[data-theme='dark'] .workspace-stage-chip svg {
+  color: #eef5ff !important;
+  opacity: 1 !important;
+}
+
+html[data-theme='dark'] .workspace-stage-chip {
+  background: rgba(13, 24, 43, 0.94) !important;
+  border-color: rgba(148, 163, 184, 0.32) !important;
+}
+
+html[data-theme='dark'] .course-hero-stat,
+html[data-theme='dark'] .admin-course-stat,
+html[data-theme='dark'] .course-hero-stat span,
+html[data-theme='dark'] .course-hero-stat strong,
+html[data-theme='dark'] .admin-course-stat span,
+html[data-theme='dark'] .admin-course-stat strong {
+  color: #eef5ff !important;
+  opacity: 1 !important;
+}
+
+html[data-theme='dark'] .course-hero-stat strong,
+html[data-theme='dark'] .admin-course-stat strong {
+  color: #78d7ff !important;
+}
+
+html[data-theme='dark'] .course-detail-card,
+html[data-theme='dark'] .course-detail-card h3,
+html[data-theme='dark'] .course-detail-card h4,
+html[data-theme='dark'] .course-detail-card p,
+html[data-theme='dark'] .course-detail-card strong,
+html[data-theme='dark'] .course-detail-card span,
+html[data-theme='dark'] .course-catalog-card,
+html[data-theme='dark'] .course-catalog-card h3,
+html[data-theme='dark'] .course-catalog-card p,
+html[data-theme='dark'] .course-catalog-card strong,
+html[data-theme='dark'] .course-catalog-card span {
+  color: #eef5ff !important;
+  opacity: 1 !important;
+}
+
+html[data-theme='dark'] .course-detail-card p,
+html[data-theme='dark'] .course-catalog-card p,
+html[data-theme='dark'] .course-detail-card .muted-text,
+html[data-theme='dark'] .course-catalog-card .muted-text {
+  color: #b9c8db !important;
+}
+
+html[data-theme='dark'] .app-shell-cv .cv-command-card-main .cv-command-metric,
+html[data-theme='dark'] .app-shell-profile .profile-command-card-main .profile-command-metric {
+  background: rgba(12, 22, 39, 0.92) !important;
+  border-color: rgba(148, 163, 184, 0.3) !important;
+}
+
+html[data-theme='dark'] .app-shell-cv .cv-command-card-main .cv-command-metric span,
+html[data-theme='dark'] .app-shell-profile .profile-command-card-main .profile-command-metric span {
+  color: #aebed3 !important;
+}
+
+html[data-theme='dark'] .app-shell-cv .cv-command-card-main .cv-command-metric strong,
+html[data-theme='dark'] .app-shell-profile .profile-command-card-main .profile-command-metric strong {
+  color: #eef5ff !important;
+}
+
+html[data-theme='dark'] .app-shell .input-group input,
+html[data-theme='dark'] .app-shell .input-group textarea,
+html[data-theme='dark'] .auth-page-enterprise .input-group input,
+html[data-theme='dark'] .auth-page-enterprise .input-group textarea,
+html[data-theme='dark'] .app-shell-cv .cv-upload-zone,
+html[data-theme='dark'] .app-shell-cv .cv-result-shell .course-player-empty,
+html[data-theme='dark'] .app-shell-cv .cv-result-shell .cv-player-empty,
+html[data-theme='dark'] .app-shell-cv .cv-result-shell .empty-state,
+html[data-theme='dark'] .app-shell-cv .cv-results-stack .panel-card,
+html[data-theme='dark'] .course-request-card,
+html[data-theme='dark'] .course-admin-lesson-card {
+  background: rgba(9, 17, 31, 0.94) !important;
+  border-color: rgba(148, 163, 184, 0.28) !important;
+  color: #eef5ff !important;
+}
+
+html[data-theme='dark'] .app-shell-cv .cv-upload-zone *,
+html[data-theme='dark'] .course-request-card *,
+html[data-theme='dark'] .course-admin-lesson-card * {
+  color: #eef5ff !important;
+  opacity: 1 !important;
+}
+
+html[data-theme='dark'] .app-shell-cv .cv-upload-content span,
+html[data-theme='dark'] .course-request-card .muted-text,
+html[data-theme='dark'] .course-request-body p,
+html[data-theme='dark'] .course-admin-lesson-card p {
+  color: #b9c8db !important;
+}
+
+html[data-theme='dark'] .landing-home-mini-card,
+html[data-theme='dark'] .landing-home-mini-card span,
+html[data-theme='dark'] .landing-home-mini-card strong,
+html[data-theme='dark'] .landing-home-quick-card,
+html[data-theme='dark'] .landing-home-quick-card span,
+html[data-theme='dark'] .landing-home-quick-card strong {
+  color: #eef5ff !important;
+  opacity: 1 !important;
+}
+
+html[data-theme='dark'] .landing-home-mini-card p,
+html[data-theme='dark'] .landing-home-quick-card p {
+  color: #b9c8db !important;
+}
+
+html[data-theme='dark'] .badge-soft,
+html[data-theme='dark'] .badge-soft span,
+html[data-theme='dark'] .badge-soft strong,
+html[data-theme='dark'] .badge-soft svg,
+html[data-theme='dark'] .status-badge,
+html[data-theme='dark'] .status-badge span {
+  color: #eef5ff !important;
+  opacity: 1 !important;
+}
+
+html[data-theme='dark'] .course-category-card.active .badge-soft,
+html[data-theme='dark'] .course-category-card.active > span,
+html[data-theme='dark'] .course-list-item.active .badge-soft,
+html[data-theme='dark'] .course-list-item.active > span {
+  background: rgba(255, 255, 255, 0.16) !important;
+  color: #ffffff !important;
+  border-color: rgba(255, 255, 255, 0.24) !important;
+}
+/* === dark-theme-readability-fixes:end === */
+
+/* === dark-theme-cv-upload-fix:start === */
+html[data-theme='dark'] .app-shell-cv .cv-upload-zone > input[type='file'] {
+  position: absolute !important;
+  inset: 0 !important;
+  opacity: 0 !important;
+  color: transparent !important;
+  background: transparent !important;
+  cursor: pointer !important;
+}
+
+html[data-theme='dark'] .app-shell-cv .cv-upload-content,
+html[data-theme='dark'] .app-shell-cv .cv-upload-content strong,
+html[data-theme='dark'] .app-shell-cv .cv-upload-content svg {
+  color: #eef5ff !important;
+  opacity: 1 !important;
+}
+
+html[data-theme='dark'] .app-shell-cv .cv-empty-state {
+  background: rgba(9, 17, 31, 0.94) !important;
+  border-color: rgba(148, 163, 184, 0.28) !important;
+  color: #eef5ff !important;
+}
+
+html[data-theme='dark'] .app-shell-cv .cv-empty-state p,
+html[data-theme='dark'] .app-shell-cv .cv-empty-state svg {
+  color: #b9c8db !important;
+  opacity: 1 !important;
+}
+/* === dark-theme-cv-upload-fix:end === */
+
+/* === dark-theme-final-contrast:start === */
+html[data-theme='dark'] .app-shell,
+html[data-theme='dark'] .landing-page,
+html[data-theme='dark'] .auth-page {
+  --dark-text: #f3f8ff;
+  --dark-muted: #c2d0e3;
+  --dark-soft: #dce8f7;
+  --dark-faint: #9fb2ca;
+  --dark-accent: #7bddff;
+}
+
+html[data-theme='dark'] .app-shell svg,
+html[data-theme='dark'] .landing-page svg,
+html[data-theme='dark'] .auth-page svg {
+  color: currentColor !important;
+  stroke: currentColor !important;
+  opacity: 1 !important;
+}
+
+html[data-theme='dark'] .app-shell h1,
+html[data-theme='dark'] .app-shell h2,
+html[data-theme='dark'] .app-shell h3,
+html[data-theme='dark'] .app-shell h4,
+html[data-theme='dark'] .app-shell h5,
+html[data-theme='dark'] .app-shell h6,
+html[data-theme='dark'] .app-shell strong,
+html[data-theme='dark'] .landing-page h1,
+html[data-theme='dark'] .landing-page h2,
+html[data-theme='dark'] .landing-page h3,
+html[data-theme='dark'] .landing-page h4,
+html[data-theme='dark'] .landing-page strong,
+html[data-theme='dark'] .auth-page h1,
+html[data-theme='dark'] .auth-page h2,
+html[data-theme='dark'] .auth-page h3,
+html[data-theme='dark'] .auth-page strong {
+  color: var(--dark-text) !important;
+  opacity: 1 !important;
+}
+
+html[data-theme='dark'] .app-shell p,
+html[data-theme='dark'] .app-shell li,
+html[data-theme='dark'] .app-shell label,
+html[data-theme='dark'] .app-shell span,
+html[data-theme='dark'] .landing-page p,
+html[data-theme='dark'] .landing-page li,
+html[data-theme='dark'] .landing-page span,
+html[data-theme='dark'] .auth-page p,
+html[data-theme='dark'] .auth-page li,
+html[data-theme='dark'] .auth-page label,
+html[data-theme='dark'] .auth-page span {
+  color: var(--dark-muted) !important;
+  opacity: 1 !important;
+}
+
+html[data-theme='dark'] .app-shell .eyebrow,
+html[data-theme='dark'] .landing-page .eyebrow,
+html[data-theme='dark'] .auth-page .eyebrow,
+html[data-theme='dark'] .app-shell .side-label,
+html[data-theme='dark'] .workspace-stage-title .eyebrow,
+html[data-theme='dark'] .section-heading .eyebrow,
+html[data-theme='dark'] .course-detail-topline .eyebrow,
+html[data-theme='dark'] .course-list-header .eyebrow,
+html[data-theme='dark'] .course-request-header .eyebrow {
+  color: var(--dark-accent) !important;
+  opacity: 1 !important;
+}
+
+html[data-theme='dark'] .workspace-stage-title h2,
+html[data-theme='dark'] .workspace-stage-title p,
+html[data-theme='dark'] .workspace-stage-tools,
+html[data-theme='dark'] .workspace-stage-tools * {
+  color: var(--dark-text) !important;
+  opacity: 1 !important;
+}
+
+html[data-theme='dark'] .workspace-stage-title > p:not(.eyebrow),
+html[data-theme='dark'] .topbar-card .workspace-stage-title > p:not(.eyebrow) {
+  color: var(--dark-muted) !important;
+}
+
+html[data-theme='dark'] .theme-toggle,
+html[data-theme='dark'] .theme-toggle *,
+html[data-theme='dark'] .workspace-stage-chip,
+html[data-theme='dark'] .workspace-stage-chip *,
+html[data-theme='dark'] .topbar-command-pill,
+html[data-theme='dark'] .topbar-command-pill * {
+  color: var(--dark-text) !important;
+  opacity: 1 !important;
+}
+
+html[data-theme='dark'] .theme-toggle {
+  background: rgba(16, 28, 48, 0.96) !important;
+  border-color: rgba(148, 163, 184, 0.34) !important;
+}
+
+html[data-theme='dark'] .theme-toggle-thumb {
+  background: #0a1221 !important;
+  color: #ffd166 !important;
+}
+
+html[data-theme='dark'] .badge-soft,
+html[data-theme='dark'] .badge-soft *,
+html[data-theme='dark'] .tag-chip,
+html[data-theme='dark'] .tag-chip *,
+html[data-theme='dark'] .status-badge,
+html[data-theme='dark'] .status-badge *,
+html[data-theme='dark'] .studio-rule-pill,
+html[data-theme='dark'] .studio-rule-pill *,
+html[data-theme='dark'] .course-category-badge,
+html[data-theme='dark'] .course-category-badge * {
+  color: var(--dark-text) !important;
+  opacity: 1 !important;
+}
+
+html[data-theme='dark'] .badge-soft,
+html[data-theme='dark'] .tag-chip,
+html[data-theme='dark'] .studio-rule-pill,
+html[data-theme='dark'] .course-category-badge {
+  background: rgba(20, 34, 56, 0.96) !important;
+  border-color: rgba(148, 163, 184, 0.32) !important;
+}
+
+html[data-theme='dark'] .primary-button,
+html[data-theme='dark'] .primary-button *,
+html[data-theme='dark'] .ghost-button,
+html[data-theme='dark'] .ghost-button *,
+html[data-theme='dark'] button,
+html[data-theme='dark'] button * {
+  color: var(--dark-text) !important;
+  opacity: 1 !important;
+}
+
+html[data-theme='dark'] .primary-button:disabled,
+html[data-theme='dark'] .ghost-button:disabled,
+html[data-theme='dark'] button:disabled,
+html[data-theme='dark'] .primary-button:disabled *,
+html[data-theme='dark'] .ghost-button:disabled *,
+html[data-theme='dark'] button:disabled * {
+  color: #c4d0df !important;
+  opacity: 0.88 !important;
+}
+
+html[data-theme='dark'] .nav-pill,
+html[data-theme='dark'] .nav-pill *,
+html[data-theme='dark'] .workspace-rail-account,
+html[data-theme='dark'] .workspace-rail-account *,
+html[data-theme='dark'] .workspace-rail-footer,
+html[data-theme='dark'] .workspace-rail-footer * {
+  color: var(--dark-soft) !important;
+  opacity: 1 !important;
+}
+
+html[data-theme='dark'] .nav-pill.active,
+html[data-theme='dark'] .nav-pill.active *,
+html[data-theme='dark'] .nav-pill:hover,
+html[data-theme='dark'] .nav-pill:hover *,
+html[data-theme='dark'] .primary-button,
+html[data-theme='dark'] .primary-button *,
+html[data-theme='dark'] .topbar-command-pill,
+html[data-theme='dark'] .topbar-command-pill * {
+  color: #ffffff !important;
+}
+
+html[data-theme='dark'] .panel-card,
+html[data-theme='dark'] .panel-card *,
+html[data-theme='dark'] .course-category-card,
+html[data-theme='dark'] .course-category-card *,
+html[data-theme='dark'] .course-list-item,
+html[data-theme='dark'] .course-list-item *,
+html[data-theme='dark'] .course-lesson-item,
+html[data-theme='dark'] .course-lesson-item *,
+html[data-theme='dark'] .course-request-card,
+html[data-theme='dark'] .course-request-card *,
+html[data-theme='dark'] .profile-insight-item,
+html[data-theme='dark'] .profile-insight-item *,
+html[data-theme='dark'] .profile-context-row,
+html[data-theme='dark'] .profile-context-row * {
+  color: var(--dark-soft) !important;
+  opacity: 1 !important;
+}
+
+html[data-theme='dark'] .panel-card h1,
+html[data-theme='dark'] .panel-card h2,
+html[data-theme='dark'] .panel-card h3,
+html[data-theme='dark'] .panel-card h4,
+html[data-theme='dark'] .panel-card strong,
+html[data-theme='dark'] .course-category-card strong,
+html[data-theme='dark'] .course-list-item strong,
+html[data-theme='dark'] .course-lesson-item strong,
+html[data-theme='dark'] .course-request-card strong {
+  color: var(--dark-text) !important;
+}
+
+html[data-theme='dark'] .muted-text,
+html[data-theme='dark'] .panel-card p,
+html[data-theme='dark'] .course-category-card p,
+html[data-theme='dark'] .course-list-item p,
+html[data-theme='dark'] .course-lesson-item p,
+html[data-theme='dark'] .course-request-card p,
+html[data-theme='dark'] .profile-insight-item p,
+html[data-theme='dark'] .profile-context-row span {
+  color: var(--dark-muted) !important;
+}
+
+html[data-theme='dark'] .course-category-card.active,
+html[data-theme='dark'] .course-category-card.active *,
+html[data-theme='dark'] .course-list-item.active,
+html[data-theme='dark'] .course-list-item.active *,
+html[data-theme='dark'] .course-lesson-item.active,
+html[data-theme='dark'] .course-lesson-item.active * {
+  color: #ffffff !important;
+}
+
+html[data-theme='dark'] input,
+html[data-theme='dark'] textarea,
+html[data-theme='dark'] select,
+html[data-theme='dark'] input *,
+html[data-theme='dark'] textarea *,
+html[data-theme='dark'] select * {
+  color: var(--dark-text) !important;
+  opacity: 1 !important;
+}
+
+html[data-theme='dark'] input::placeholder,
+html[data-theme='dark'] textarea::placeholder {
+  color: #9fb2ca !important;
+  opacity: 1 !important;
+}
+
+html[data-theme='dark'] .cv-upload-zone,
+html[data-theme='dark'] .cv-upload-zone *,
+html[data-theme='dark'] .empty-state-compact,
+html[data-theme='dark'] .empty-state-compact *,
+html[data-theme='dark'] .auth-mini-note,
+html[data-theme='dark'] .auth-mini-note * {
+  color: var(--dark-soft) !important;
+  opacity: 1 !important;
+}
+
+html[data-theme='dark'] .cv-upload-zone > input[type='file'] {
+  opacity: 0 !important;
+  color: transparent !important;
+}
+
+html[data-theme='dark'] .landing-home-sidepanel,
+html[data-theme='dark'] .landing-home-sidepanel *,
+html[data-theme='dark'] .landing-home-quick-grid,
+html[data-theme='dark'] .landing-home-quick-grid *,
+html[data-theme='dark'] .landing-home-feature-card,
+html[data-theme='dark'] .landing-home-feature-card *,
+html[data-theme='dark'] .landing-home-audience-card,
+html[data-theme='dark'] .landing-home-audience-card *,
+html[data-theme='dark'] .auth-showcase,
+html[data-theme='dark'] .auth-showcase *,
+html[data-theme='dark'] .auth-card,
+html[data-theme='dark'] .auth-card * {
+  color: var(--dark-soft) !important;
+  opacity: 1 !important;
+}
+
+html[data-theme='dark'] .landing-home-sidepanel strong,
+html[data-theme='dark'] .landing-home-quick-card strong,
+html[data-theme='dark'] .landing-home-feature-card strong,
+html[data-theme='dark'] .landing-home-audience-card strong,
+html[data-theme='dark'] .auth-showcase strong,
+html[data-theme='dark'] .auth-card strong {
+  color: var(--dark-text) !important;
+}
+/* === dark-theme-final-contrast:end === */
+
+/* === dark-theme-component-contrast:start === */
+html[data-theme='dark'] .course-category-card > span,
+html[data-theme='dark'] .course-list-item > span,
+html[data-theme='dark'] .course-lesson-item > span,
+html[data-theme='dark'] .admin-course-categories .course-category-card > span {
+  background: rgba(20, 34, 56, 0.96) !important;
+  border: 1px solid rgba(148, 163, 184, 0.28) !important;
+  color: #f3f8ff !important;
+  opacity: 1 !important;
+}
+
+html[data-theme='dark'] .course-category-card.active > span,
+html[data-theme='dark'] .course-list-item.active > span,
+html[data-theme='dark'] .course-lesson-item.active > span,
+html[data-theme='dark'] .admin-course-categories .course-category-card.active > span {
+  background: rgba(255, 255, 255, 0.22) !important;
+  border-color: rgba(255, 255, 255, 0.28) !important;
+  color: #ffffff !important;
+}
+
+html[data-theme='dark'] .course-category-icon,
+html[data-theme='dark'] .course-list-thumb,
+html[data-theme='dark'] .dashboard-rebuild-launch-icon,
+html[data-theme='dark'] .auth-step-icon,
+html[data-theme='dark'] .landing-home-quick-icon,
+html[data-theme='dark'] .landing-home-feature-icon {
+  background: rgba(91, 199, 255, 0.16) !important;
+  border: 1px solid rgba(91, 199, 255, 0.18) !important;
+  color: #dce8f7 !important;
+}
+
+html[data-theme='dark'] .course-category-card.active .course-category-icon,
+html[data-theme='dark'] .course-list-item.active .course-list-thumb,
+html[data-theme='dark'] .course-lesson-item.active .course-list-thumb {
+  background: rgba(255, 255, 255, 0.18) !important;
+  border-color: rgba(255, 255, 255, 0.28) !important;
+  color: #ffffff !important;
+}
+
+html[data-theme='dark'] .course-category-icon svg,
+html[data-theme='dark'] .course-list-thumb svg,
+html[data-theme='dark'] .dashboard-rebuild-launch-icon svg,
+html[data-theme='dark'] .auth-step-icon svg,
+html[data-theme='dark'] .landing-home-quick-icon svg,
+html[data-theme='dark'] .landing-home-feature-icon svg {
+  color: currentColor !important;
+  stroke: currentColor !important;
+  opacity: 1 !important;
+}
+
+html[data-theme='dark'] .status-badge.success,
+html[data-theme='dark'] .status-badge.success *,
+html[data-theme='dark'] .success-text {
+  background: rgba(14, 96, 67, 0.28) !important;
+  border-color: rgba(83, 223, 170, 0.38) !important;
+  color: #91f7c7 !important;
+}
+
+html[data-theme='dark'] .status-badge.danger,
+html[data-theme='dark'] .status-badge.danger *,
+html[data-theme='dark'] .status-badge.error,
+html[data-theme='dark'] .status-badge.error *,
+html[data-theme='dark'] .error-text {
+  background: rgba(168, 36, 52, 0.28) !important;
+  border-color: rgba(255, 125, 138, 0.4) !important;
+  color: #ffc2c9 !important;
+}
+
+html[data-theme='dark'] .status-badge.dark,
+html[data-theme='dark'] .status-badge.dark * {
+  background: rgba(36, 52, 76, 0.96) !important;
+  border-color: rgba(148, 163, 184, 0.34) !important;
+  color: #f3f8ff !important;
+}
+
+html[data-theme='dark'] .danger-button,
+html[data-theme='dark'] .danger-button *,
+html[data-theme='dark'] button.danger-button,
+html[data-theme='dark'] button.danger-button * {
+  background: #b42335 !important;
+  border-color: rgba(255, 125, 138, 0.42) !important;
+  color: #ffffff !important;
+}
+
+html[data-theme='dark'] .danger-button:hover,
+html[data-theme='dark'] button.danger-button:hover {
+  background: #d92d4b !important;
+  color: #ffffff !important;
+}
+
+html[data-theme='dark'] .recharts-text,
+html[data-theme='dark'] .recharts-cartesian-axis-tick-value,
+html[data-theme='dark'] .recharts-label,
+html[data-theme='dark'] .recharts-legend-item-text {
+  fill: #dce8f7 !important;
+  color: #dce8f7 !important;
+  opacity: 1 !important;
+}
+/* === dark-theme-component-contrast:end === */
+
+/* === dark-practice-realtime-surfaces:start === */
+html[data-theme='dark'] .app-shell-practice .realtime-room-card,
+html[data-theme='dark'] .app-shell-practice .realtime-room-stage,
+html[data-theme='dark'] .app-shell-practice .realtime-room-core,
+html[data-theme='dark'] .app-shell-practice .realtime-room-console,
+html[data-theme='dark'] .app-shell-practice .realtime-phase-card,
+html[data-theme='dark'] .app-shell-practice .realtime-status-card,
+html[data-theme='dark'] .app-shell-practice .realtime-log-shell,
+html[data-theme='dark'] .app-shell-practice .realtime-message-log,
+html[data-theme='dark'] .app-shell-practice .realtime-empty-state,
+html[data-theme='dark'] .app-shell-practice .live-support-card,
+html[data-theme='dark'] .app-shell-practice .practice-live-mini-card,
+html[data-theme='dark'] .app-shell-practice .practice-live-tip,
+html[data-theme='dark'] .app-shell-practice .practice-flow-item,
+html[data-theme='dark'] .app-shell-practice .practice-section-intro,
+html[data-theme='dark'] .app-shell-practice .studio-config-card,
+html[data-theme='dark'] .app-shell-practice .studio-recorder-card,
+html[data-theme='dark'] .app-shell-practice .studio-ai-card,
+html[data-theme='dark'] .app-shell-practice .recorder-card-studio,
+html[data-theme='dark'] .app-shell-practice .studio-outcome-card,
+html[data-theme='dark'] .app-shell-practice .analysis-surface,
+html[data-theme='dark'] .app-shell-practice .analysis-summary-banner,
+html[data-theme='dark'] .app-shell-practice .analysis-summary-chip,
+html[data-theme='dark'] .app-shell-practice .sub-card,
+html[data-theme='dark'] .app-shell-practice .source-details,
+html[data-theme='dark'] .app-shell-practice pre {
+  background:
+    linear-gradient(145deg, rgba(15, 26, 45, 0.96), rgba(8, 15, 29, 0.96)) !important;
+  border-color: rgba(148, 163, 184, 0.28) !important;
+  color: #f3f8ff !important;
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.3) !important;
+}
+
+html[data-theme='dark'] .app-shell-practice .realtime-room-card *,
+html[data-theme='dark'] .app-shell-practice .realtime-room-stage *,
+html[data-theme='dark'] .app-shell-practice .realtime-log-shell *,
+html[data-theme='dark'] .app-shell-practice .live-support-card *,
+html[data-theme='dark'] .app-shell-practice .practice-section-intro *,
+html[data-theme='dark'] .app-shell-practice .studio-config-card *,
+html[data-theme='dark'] .app-shell-practice .studio-recorder-card *,
+html[data-theme='dark'] .app-shell-practice .studio-ai-card *,
+html[data-theme='dark'] .app-shell-practice .analysis-surface *,
+html[data-theme='dark'] .app-shell-practice .sub-card * {
+  color: #dce8f7 !important;
+  opacity: 1 !important;
+}
+
+html[data-theme='dark'] .app-shell-practice .realtime-room-card h3,
+html[data-theme='dark'] .app-shell-practice .realtime-room-card h4,
+html[data-theme='dark'] .app-shell-practice .realtime-room-card strong,
+html[data-theme='dark'] .app-shell-practice .live-support-card h3,
+html[data-theme='dark'] .app-shell-practice .live-support-card h4,
+html[data-theme='dark'] .app-shell-practice .live-support-card strong,
+html[data-theme='dark'] .app-shell-practice .studio-config-card h3,
+html[data-theme='dark'] .app-shell-practice .studio-recorder-card h3,
+html[data-theme='dark'] .app-shell-practice .studio-ai-card h3,
+html[data-theme='dark'] .app-shell-practice .analysis-surface h3,
+html[data-theme='dark'] .app-shell-practice .analysis-surface h4,
+html[data-theme='dark'] .app-shell-practice .sub-card strong {
+  color: #f3f8ff !important;
+}
+
+html[data-theme='dark'] .app-shell-practice .realtime-room-card p,
+html[data-theme='dark'] .app-shell-practice .realtime-room-card span:not(.badge-soft):not(.realtime-orb-center):not(.realtime-signal-bars span),
+html[data-theme='dark'] .app-shell-practice .live-support-card p,
+html[data-theme='dark'] .app-shell-practice .studio-config-card p,
+html[data-theme='dark'] .app-shell-practice .studio-recorder-card p,
+html[data-theme='dark'] .app-shell-practice .studio-ai-card p,
+html[data-theme='dark'] .app-shell-practice .analysis-surface p {
+  color: #c2d0e3 !important;
+}
+
+html[data-theme='dark'] .app-shell-practice .realtime-orb {
+  background:
+    radial-gradient(circle, rgba(91, 199, 255, 0.18), rgba(18, 29, 50, 0.98)) !important;
+  border-color: rgba(91, 199, 255, 0.24) !important;
+}
+
+html[data-theme='dark'] .app-shell-practice .realtime-orb-ring {
+  border-color: rgba(123, 221, 255, 0.42) !important;
+}
+
+html[data-theme='dark'] .app-shell-practice .realtime-orb-center {
+  background: linear-gradient(135deg, #3387f2, #4fd0df) !important;
+  color: #ffffff !important;
+}
+
+html[data-theme='dark'] .app-shell-practice .realtime-signal-bars span {
+  background: rgba(123, 221, 255, 0.28) !important;
+}
+
+html[data-theme='dark'] .app-shell-practice .realtime-message {
+  background: rgba(13, 24, 43, 0.96) !important;
+  border-color: rgba(148, 163, 184, 0.28) !important;
+}
+
+html[data-theme='dark'] .app-shell-practice .realtime-message.assistant {
+  background: rgba(41, 59, 92, 0.72) !important;
+}
+
+html[data-theme='dark'] .app-shell-practice .realtime-message.user {
+  background: rgba(15, 95, 73, 0.28) !important;
+}
+
+html[data-theme='dark'] .app-shell-practice .segment-button,
+html[data-theme='dark'] .app-shell-practice .topic-chip-button {
+  background: rgba(10, 18, 32, 0.92) !important;
+  border-color: rgba(148, 163, 184, 0.26) !important;
+  color: #dce8f7 !important;
+}
+
+html[data-theme='dark'] .app-shell-practice .segment-button.active,
+html[data-theme='dark'] .app-shell-practice .topic-chip-button.active {
+  background: linear-gradient(135deg, rgba(51, 135, 242, 0.88), rgba(79, 208, 223, 0.78)) !important;
+  border-color: rgba(123, 221, 255, 0.38) !important;
+  color: #ffffff !important;
+}
+
+html[data-theme='dark'] .app-shell-practice .realtime-toolbar .ghost-button,
+html[data-theme='dark'] .app-shell-practice .studio-actions .ghost-button {
+  background: rgba(31, 44, 65, 0.96) !important;
+  border-color: rgba(148, 163, 184, 0.3) !important;
+  color: #f3f8ff !important;
+}
+
+html[data-theme='dark'] .app-shell-practice .realtime-toolbar .ghost-button:disabled,
+html[data-theme='dark'] .app-shell-practice .studio-actions .ghost-button:disabled {
+  background: rgba(45, 57, 75, 0.72) !important;
+  color: #b8c5d6 !important;
+}
+
+html[data-theme='dark'] .app-shell-practice .realtime-capability-row .badge-soft,
+html[data-theme='dark'] .app-shell-practice .realtime-state-pill,
+html[data-theme='dark'] .app-shell-practice .studio-rule-pill {
+  background: rgba(20, 34, 56, 0.96) !important;
+  border-color: rgba(148, 163, 184, 0.3) !important;
+  color: #f3f8ff !important;
+}
+/* === dark-practice-realtime-surfaces:end === */
+
+/* === dark-dashboard-surface-completion:start === */
+html[data-theme='dark'] .app-shell-dashboard .dashboard-rebuild-missions,
+html[data-theme='dark'] .app-shell-dashboard .dashboard-rebuild-sideboard,
+html[data-theme='dark'] .app-shell-dashboard .dashboard-rebuild-analytics,
+html[data-theme='dark'] .app-shell-dashboard .dashboard-rebuild-history,
+html[data-theme='dark'] .app-shell-dashboard .dashboard-rebuild-goal-row,
+html[data-theme='dark'] .app-shell-dashboard .dashboard-rebuild-snapshot-card,
+html[data-theme='dark'] .app-shell-dashboard .dashboard-rebuild-analytics-note,
+html[data-theme='dark'] .app-shell-dashboard .dashboard-rebuild-chart-card,
+html[data-theme='dark'] .app-shell-dashboard .dashboard-rebuild-history-item,
+html[data-theme='dark'] .app-shell-dashboard .dashboard-rebuild-leaderboard .leaderboard-row,
+html[data-theme='dark'] .app-shell-dashboard .leaderboard-list,
+html[data-theme='dark'] .app-shell-dashboard .chart-wrap,
+html[data-theme='dark'] .app-shell-dashboard .compact-chart {
+  background:
+    radial-gradient(circle at top right, rgba(91, 199, 255, 0.08), transparent 30%),
+    linear-gradient(145deg, rgba(15, 26, 45, 0.97), rgba(8, 15, 29, 0.97)) !important;
+  border-color: rgba(148, 163, 184, 0.28) !important;
+  color: #f3f8ff !important;
+  box-shadow:
+    0 18px 44px rgba(0, 0, 0, 0.26),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05) !important;
+}
+
+html[data-theme='dark'] .app-shell-dashboard .dashboard-rebuild-chart-card .chart-wrap {
+  background:
+    linear-gradient(180deg, rgba(9, 16, 30, 0.78), rgba(12, 22, 39, 0.86)) !important;
+  border-color: rgba(148, 163, 184, 0.22) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04) !important;
+}
+
+html[data-theme='dark'] .app-shell-dashboard .dashboard-rebuild-chart-card::after,
+html[data-theme='dark'] .app-shell-dashboard .dashboard-rebuild-goal-row::after,
+html[data-theme='dark'] .app-shell-dashboard .dashboard-rebuild-history-item::after {
+  background: radial-gradient(circle, rgba(91, 199, 255, 0.12), transparent 62%) !important;
+}
+
+html[data-theme='dark'] .app-shell-dashboard .section-heading h3,
+html[data-theme='dark'] .app-shell-dashboard .dashboard-rebuild-goal-copy h4,
+html[data-theme='dark'] .app-shell-dashboard .dashboard-rebuild-snapshot-card strong,
+html[data-theme='dark'] .app-shell-dashboard .dashboard-rebuild-analytics-note strong,
+html[data-theme='dark'] .app-shell-dashboard .dashboard-rebuild-chart-card h3,
+html[data-theme='dark'] .app-shell-dashboard .dashboard-rebuild-chart-card strong,
+html[data-theme='dark'] .app-shell-dashboard .dashboard-rebuild-history-main h4,
+html[data-theme='dark'] .app-shell-dashboard .dashboard-rebuild-history-side strong,
+html[data-theme='dark'] .app-shell-dashboard .leaderboard-row p,
+html[data-theme='dark'] .app-shell-dashboard .leaderboard-row strong {
+  color: #f3f8ff !important;
+  opacity: 1 !important;
+}
+
+html[data-theme='dark'] .app-shell-dashboard .section-heading .eyebrow,
+html[data-theme='dark'] .app-shell-dashboard .dashboard-rebuild-goal-copy p,
+html[data-theme='dark'] .app-shell-dashboard .dashboard-rebuild-snapshot-card span,
+html[data-theme='dark'] .app-shell-dashboard .dashboard-rebuild-analytics-note span,
+html[data-theme='dark'] .app-shell-dashboard .dashboard-rebuild-chart-card p,
+html[data-theme='dark'] .app-shell-dashboard .dashboard-rebuild-history-main p,
+html[data-theme='dark'] .app-shell-dashboard .dashboard-rebuild-history-side span,
+html[data-theme='dark'] .app-shell-dashboard .leaderboard-row span,
+html[data-theme='dark'] .app-shell-dashboard .muted-text {
+  color: #c2d0e3 !important;
+  opacity: 1 !important;
+}
+
+html[data-theme='dark'] .app-shell-dashboard .badge-soft,
+html[data-theme='dark'] .app-shell-dashboard .tag-chip,
+html[data-theme='dark'] .app-shell-dashboard .status-badge.pending,
+html[data-theme='dark'] .app-shell-dashboard .leaderboard-meta span {
+  background: rgba(20, 34, 56, 0.96) !important;
+  border-color: rgba(148, 163, 184, 0.32) !important;
+  color: #f3f8ff !important;
+  opacity: 1 !important;
+}
+
+html[data-theme='dark'] .app-shell-dashboard .status-badge.success {
+  background: rgba(14, 96, 67, 0.3) !important;
+  border-color: rgba(83, 223, 170, 0.42) !important;
+  color: #91f7c7 !important;
+}
+
+html[data-theme='dark'] .app-shell-dashboard .status-badge.dark {
+  background: rgba(36, 52, 76, 0.96) !important;
+  border-color: rgba(148, 163, 184, 0.34) !important;
+  color: #f3f8ff !important;
+}
+
+html[data-theme='dark'] .app-shell-dashboard .goal-progress-track,
+html[data-theme='dark'] .app-shell-dashboard .priority-progress {
+  background: rgba(148, 163, 184, 0.18) !important;
+}
+
+html[data-theme='dark'] .app-shell-dashboard .recharts-cartesian-grid line {
+  stroke: rgba(148, 163, 184, 0.16) !important;
+}
+
+html[data-theme='dark'] .app-shell-dashboard .recharts-cartesian-axis-line,
+html[data-theme='dark'] .app-shell-dashboard .recharts-cartesian-axis-tick-line {
+  stroke: rgba(194, 208, 227, 0.58) !important;
+}
+
+html[data-theme='dark'] .app-shell-dashboard .recharts-text,
+html[data-theme='dark'] .app-shell-dashboard .recharts-cartesian-axis-tick-value,
+html[data-theme='dark'] .app-shell-dashboard .recharts-label,
+html[data-theme='dark'] .app-shell-dashboard .recharts-legend-item-text {
+  fill: #dce8f7 !important;
+  color: #dce8f7 !important;
+  opacity: 1 !important;
+}
+
+html[data-theme='dark'] .app-shell-dashboard .recharts-default-tooltip,
+html[data-theme='dark'] .app-shell-dashboard .recharts-tooltip-wrapper .recharts-default-tooltip {
+  background: rgba(12, 22, 39, 0.96) !important;
+  border: 1px solid rgba(148, 163, 184, 0.32) !important;
+  border-radius: 8px !important;
+  color: #f3f8ff !important;
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.32) !important;
+}
+
+html[data-theme='dark'] .app-shell-dashboard .recharts-tooltip-label,
+html[data-theme='dark'] .app-shell-dashboard .recharts-tooltip-item,
+html[data-theme='dark'] .app-shell-dashboard .recharts-tooltip-item-name,
+html[data-theme='dark'] .app-shell-dashboard .recharts-tooltip-item-value {
+  color: #f3f8ff !important;
+}
+/* === dark-dashboard-surface-completion:end === */
+
+/* === dark-cross-page-surface-completion:start === */
+html[data-theme='dark'] .app-shell .panel-card .badge-soft,
+html[data-theme='dark'] .app-shell .section-heading .badge-soft,
+html[data-theme='dark'] .app-shell-practice .practice-hero-live .badge-soft,
+html[data-theme='dark'] .app-shell-cv .cv-command-card-main .badge-soft,
+html[data-theme='dark'] .app-shell-profile .profile-command-card-main .badge-soft,
+html[data-theme='dark'] .app-shell-admin .admin-hero .badge-soft,
+html[data-theme='dark'] .app-shell-admin .admin-command-card .badge-soft,
+html[data-theme='dark'] .app-shell-admin .admin-side-status-card .badge-soft {
+  background: rgba(20, 34, 56, 0.96) !important;
+  border-color: rgba(148, 163, 184, 0.32) !important;
+  color: #f3f8ff !important;
+  opacity: 1 !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05) !important;
+}
+
+html[data-theme='dark'] .app-shell .panel-card .badge-soft *,
+html[data-theme='dark'] .app-shell .section-heading .badge-soft *,
+html[data-theme='dark'] .app-shell-practice .practice-hero-live .badge-soft *,
+html[data-theme='dark'] .app-shell-cv .cv-command-card-main .badge-soft *,
+html[data-theme='dark'] .app-shell-profile .profile-command-card-main .badge-soft *,
+html[data-theme='dark'] .app-shell-admin .admin-hero .badge-soft * {
+  color: #f3f8ff !important;
+  stroke: currentColor !important;
+  opacity: 1 !important;
+}
+
+html[data-theme='dark'] .app-shell-profile .profile-command-card-main,
+html[data-theme='dark'] .app-shell-profile .profile-context-card,
+html[data-theme='dark'] .app-shell-profile .profile-editor-card,
+html[data-theme='dark'] .app-shell-profile .profile-side-card,
+html[data-theme='dark'] .app-shell-profile .profile-context-row,
+html[data-theme='dark'] .app-shell-profile .profile-preview-card,
+html[data-theme='dark'] .app-shell-profile .profile-command-metric,
+html[data-theme='dark'] .app-shell-profile .profile-info-grid > div,
+html[data-theme='dark'] .app-shell-profile .profile-insight-item,
+html[data-theme='dark'] .app-shell-profile .profile-segment-control {
+  background:
+    radial-gradient(circle at top right, rgba(91, 199, 255, 0.08), transparent 30%),
+    linear-gradient(145deg, rgba(15, 26, 45, 0.97), rgba(8, 15, 29, 0.97)) !important;
+  border-color: rgba(148, 163, 184, 0.28) !important;
+  color: #f3f8ff !important;
+  box-shadow:
+    0 18px 44px rgba(0, 0, 0, 0.24),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05) !important;
+}
+
+html[data-theme='dark'] .app-shell-profile .profile-command-card-main h3,
+html[data-theme='dark'] .app-shell-profile .profile-context-card h3,
+html[data-theme='dark'] .app-shell-profile .profile-editor-card h3,
+html[data-theme='dark'] .app-shell-profile .profile-side-card h3,
+html[data-theme='dark'] .app-shell-profile .profile-context-row strong,
+html[data-theme='dark'] .app-shell-profile .profile-preview-card strong,
+html[data-theme='dark'] .app-shell-profile .profile-command-metric strong,
+html[data-theme='dark'] .app-shell-profile .profile-info-grid > div strong {
+  color: #f3f8ff !important;
+  opacity: 1 !important;
+}
+
+html[data-theme='dark'] .app-shell-profile .profile-command-card-main p,
+html[data-theme='dark'] .app-shell-profile .profile-context-card p,
+html[data-theme='dark'] .app-shell-profile .profile-editor-card p,
+html[data-theme='dark'] .app-shell-profile .profile-side-card p,
+html[data-theme='dark'] .app-shell-profile .profile-context-row span,
+html[data-theme='dark'] .app-shell-profile .profile-preview-card p,
+html[data-theme='dark'] .app-shell-profile .profile-command-metric span,
+html[data-theme='dark'] .app-shell-profile .profile-info-grid > div span {
+  color: #c2d0e3 !important;
+  opacity: 1 !important;
+}
+
+html[data-theme='dark'] .app-shell-profile .profile-segment-control .segment-button {
+  background: transparent !important;
+  color: #dce8f7 !important;
+}
+
+html[data-theme='dark'] .app-shell-profile .profile-segment-control .segment-button.active {
+  background: linear-gradient(135deg, rgba(51, 135, 242, 0.88), rgba(79, 208, 223, 0.78)) !important;
+  color: #ffffff !important;
+}
+
+html[data-theme='dark'] .app-shell-admin .admin-side-status-card,
+html[data-theme='dark'] .app-shell-admin .admin-command-card,
+html[data-theme='dark'] .app-shell-admin .detail-stack.elevated-surface,
+html[data-theme='dark'] .app-shell-admin .stat-card-pro,
+html[data-theme='dark'] .app-shell-admin .admin-spotlight-card,
+html[data-theme='dark'] .app-shell-admin .admin-spotlight-row,
+html[data-theme='dark'] .app-shell-admin .admin-health-card,
+html[data-theme='dark'] .app-shell-admin .admin-signal-row,
+html[data-theme='dark'] .app-shell-admin .leaderboard-row,
+html[data-theme='dark'] .app-shell-admin .admin-session-row,
+html[data-theme='dark'] .app-shell-admin .simple-table,
+html[data-theme='dark'] .app-shell-admin .table-grid,
+html[data-theme='dark'] .app-shell-admin .table-row,
+html[data-theme='dark'] .app-shell-admin .profile-insight-item,
+html[data-theme='dark'] .app-shell-admin .admin-user-card-control {
+  background:
+    radial-gradient(circle at top right, rgba(91, 199, 255, 0.08), transparent 30%),
+    linear-gradient(145deg, rgba(15, 26, 45, 0.97), rgba(8, 15, 29, 0.97)) !important;
+  border-color: rgba(148, 163, 184, 0.28) !important;
+  color: #f3f8ff !important;
+  box-shadow:
+    0 18px 44px rgba(0, 0, 0, 0.24),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05) !important;
+}
+
+html[data-theme='dark'] .app-shell-admin .stat-card-pro h3,
+html[data-theme='dark'] .app-shell-admin .stat-card-pro strong,
+html[data-theme='dark'] .app-shell-admin .admin-side-status-card h3,
+html[data-theme='dark'] .app-shell-admin .admin-command-card h3,
+html[data-theme='dark'] .app-shell-admin .detail-stack.elevated-surface h3,
+html[data-theme='dark'] .app-shell-admin .admin-spotlight-row strong,
+html[data-theme='dark'] .app-shell-admin .admin-health-card strong,
+html[data-theme='dark'] .app-shell-admin .leaderboard-row strong,
+html[data-theme='dark'] .app-shell-admin .leaderboard-row p,
+html[data-theme='dark'] .app-shell-admin .admin-session-row strong,
+html[data-theme='dark'] .app-shell-admin .table-row strong,
+html[data-theme='dark'] .app-shell-admin .admin-user-card-control strong {
+  color: #f3f8ff !important;
+  opacity: 1 !important;
+}
+
+html[data-theme='dark'] .app-shell-admin .stat-card-pro p,
+html[data-theme='dark'] .app-shell-admin .stat-card-pro span,
+html[data-theme='dark'] .app-shell-admin .admin-side-status-card p,
+html[data-theme='dark'] .app-shell-admin .admin-command-card p,
+html[data-theme='dark'] .app-shell-admin .detail-stack.elevated-surface p,
+html[data-theme='dark'] .app-shell-admin .admin-spotlight-row span,
+html[data-theme='dark'] .app-shell-admin .admin-health-card span,
+html[data-theme='dark'] .app-shell-admin .admin-signal-row span,
+html[data-theme='dark'] .app-shell-admin .leaderboard-row span,
+html[data-theme='dark'] .app-shell-admin .admin-session-row p,
+html[data-theme='dark'] .app-shell-admin .admin-session-row span,
+html[data-theme='dark'] .app-shell-admin .table-row p,
+html[data-theme='dark'] .app-shell-admin .table-row span,
+html[data-theme='dark'] .app-shell-admin .admin-user-card-control p {
+  color: #c2d0e3 !important;
+  opacity: 1 !important;
+}
+
+html[data-theme='dark'] .app-shell-admin .leaderboard-meta span:not(.status-badge),
+html[data-theme='dark'] .app-shell-admin .admin-user-summary .tag-chip {
+  background: rgba(20, 34, 56, 0.96) !important;
+  border-color: rgba(148, 163, 184, 0.32) !important;
+  color: #f3f8ff !important;
+}
+/* === dark-cross-page-surface-completion:end === */
+
+/* === dark-practice-recorder-completion:start === */
+html[data-theme='dark'] .app-shell-practice .recorder-status-card,
+html[data-theme='dark'] .app-shell-practice .recorder-live-card,
+html[data-theme='dark'] .app-shell-practice .recorder-preview-card,
+html[data-theme='dark'] .app-shell-practice .recorder-preview-card-elevated,
+html[data-theme='dark'] .app-shell-practice .recorder-preview-icon,
+html[data-theme='dark'] .app-shell-practice .recorder-meta-cluster .status-pill,
+html[data-theme='dark'] .app-shell-practice .recorder-duration-pill,
+html[data-theme='dark'] .app-shell-practice .wave-placeholder,
+html[data-theme='dark'] .app-shell-practice .audio-player {
+  background:
+    radial-gradient(circle at top right, rgba(91, 199, 255, 0.08), transparent 30%),
+    linear-gradient(145deg, rgba(15, 26, 45, 0.97), rgba(8, 15, 29, 0.97)) !important;
+  border-color: rgba(148, 163, 184, 0.28) !important;
+  color: #f3f8ff !important;
+  box-shadow:
+    0 16px 38px rgba(0, 0, 0, 0.24),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05) !important;
+}
+
+html[data-theme='dark'] .app-shell-practice .recorder-status-card *,
+html[data-theme='dark'] .app-shell-practice .recorder-live-card *,
+html[data-theme='dark'] .app-shell-practice .recorder-preview-card *,
+html[data-theme='dark'] .app-shell-practice .recorder-meta-cluster .status-pill *,
+html[data-theme='dark'] .app-shell-practice .recorder-duration-pill * {
+  color: #dce8f7 !important;
+  opacity: 1 !important;
+}
+
+html[data-theme='dark'] .app-shell-practice .recorder-status-card strong,
+html[data-theme='dark'] .app-shell-practice .recorder-live-card strong,
+html[data-theme='dark'] .app-shell-practice .recorder-preview-card strong {
+  color: #f3f8ff !important;
+}
+
+html[data-theme='dark'] .app-shell-practice .recorder-status-card span,
+html[data-theme='dark'] .app-shell-practice .recorder-live-card p,
+html[data-theme='dark'] .app-shell-practice .recorder-preview-card p {
+  color: #c2d0e3 !important;
+}
+
+html[data-theme='dark'] .app-shell-practice .recorder-live-meter {
+  background: rgba(148, 163, 184, 0.18) !important;
+}
+
+html[data-theme='dark'] .app-shell-practice .recorder-live-meter span,
+html[data-theme='dark'] .app-shell-practice .recorder-wave-bars span {
+  background: linear-gradient(180deg, #4fd0df, #3387f2) !important;
+}
+
+html[data-theme='dark'] .app-shell-practice .wave-placeholder {
+  opacity: 1 !important;
+}
+/* === dark-practice-recorder-completion:end === */
+
+/* === dark-final-route-surfaces:start === */
+html[data-theme='dark'] .app-shell-practice .segment-control {
+  background: rgba(10, 18, 32, 0.92) !important;
+  border-color: rgba(148, 163, 184, 0.28) !important;
+  color: #dce8f7 !important;
+}
+
+html[data-theme='dark'] .app-shell-practice .segment-control .segment-button {
+  background: transparent !important;
+  color: #dce8f7 !important;
+}
+
+html[data-theme='dark'] .app-shell-practice .segment-control .segment-button.active {
+  background: linear-gradient(135deg, rgba(51, 135, 242, 0.88), rgba(79, 208, 223, 0.78)) !important;
+  color: #ffffff !important;
+}
+
+html[data-theme='dark'] .app-shell-admin-courses .course-admin-builder-card,
+html[data-theme='dark'] .app-shell-admin-courses .course-admin-review-card,
+html[data-theme='dark'] .app-shell-admin-courses .course-admin-lesson-card,
+html[data-theme='dark'] .app-shell-admin-courses .course-request-card,
+html[data-theme='dark'] .app-shell-admin-courses .course-admin-published-card,
+html[data-theme='dark'] .app-shell-admin-courses .course-admin-published-card.theme-presentation,
+html[data-theme='dark'] .app-shell-admin-courses .course-admin-published-card.theme-interview {
+  background:
+    radial-gradient(circle at top right, rgba(91, 199, 255, 0.08), transparent 30%),
+    linear-gradient(145deg, rgba(15, 26, 45, 0.97), rgba(8, 15, 29, 0.97)) !important;
+  border-color: rgba(148, 163, 184, 0.28) !important;
+  color: #f3f8ff !important;
+  box-shadow:
+    0 18px 44px rgba(0, 0, 0, 0.24),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05) !important;
+}
+
+html[data-theme='dark'] .app-shell-admin-courses .course-admin-builder-card *,
+html[data-theme='dark'] .app-shell-admin-courses .course-admin-review-card *,
+html[data-theme='dark'] .app-shell-admin-courses .course-admin-lesson-card *,
+html[data-theme='dark'] .app-shell-admin-courses .course-request-card *,
+html[data-theme='dark'] .app-shell-admin-courses .course-admin-published-card * {
+  color: #dce8f7 !important;
+  opacity: 1 !important;
+}
+
+html[data-theme='dark'] .app-shell-admin-courses .course-admin-builder-card h3,
+html[data-theme='dark'] .app-shell-admin-courses .course-admin-review-card h3,
+html[data-theme='dark'] .app-shell-admin-courses .course-admin-lesson-card strong,
+html[data-theme='dark'] .app-shell-admin-courses .course-request-card strong,
+html[data-theme='dark'] .app-shell-admin-courses .course-admin-published-card h4,
+html[data-theme='dark'] .app-shell-admin-courses .course-admin-published-card strong {
+  color: #f3f8ff !important;
+}
+
+html[data-theme='dark'] .app-shell-admin-courses .course-admin-published-card p,
+html[data-theme='dark'] .app-shell-admin-courses .course-admin-published-card span:not(.badge-soft):not(.tag-chip) {
+  color: #c2d0e3 !important;
+}
+/* === dark-final-route-surfaces:end === */
+
+/* === realtime-voice-panel-polish:start === */
+.app-shell-practice .realtime-room-core {
+  position: relative;
+  overflow: hidden;
+  min-height: 520px;
+  align-content: space-between;
+  grid-template-rows: auto minmax(0, 1fr) auto auto;
+  padding: 1rem !important;
+  background:
+    linear-gradient(180deg, rgba(248, 251, 255, 0.86), rgba(239, 246, 255, 0.72)),
+    repeating-linear-gradient(90deg, rgba(36, 84, 214, 0.05) 0 1px, transparent 1px 52px) !important;
+  border-color: rgba(148, 163, 184, 0.24) !important;
+}
+
+.app-shell-practice .realtime-core-topline {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.75rem;
+  padding: 0.55rem 0.65rem;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.56);
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  color: #345072;
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.app-shell-practice .realtime-core-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: #94a3b8;
+  box-shadow: 0 0 0 5px rgba(148, 163, 184, 0.16);
+}
+
+.app-shell-practice .realtime-core-dot.ready {
+  background: #34d6b7;
+  box-shadow: 0 0 0 5px rgba(52, 214, 183, 0.16);
+}
+
+.app-shell-practice .realtime-core-dot.connecting {
+  background: #f6b85c;
+  box-shadow: 0 0 0 5px rgba(246, 184, 92, 0.16);
+}
+
+.app-shell-practice .realtime-core-dot.error {
+  background: #ff7d8a;
+  box-shadow: 0 0 0 5px rgba(255, 125, 138, 0.18);
+}
+
+.app-shell-practice .realtime-voice-card {
+  width: 100%;
+  min-height: 285px;
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  gap: 1rem;
+  padding: 1.2rem 0.85rem;
+  border-radius: 8px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.72), rgba(248, 251, 255, 0.5)) !important;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+}
+
+.app-shell-practice .realtime-voice-card .realtime-orb {
+  width: 136px;
+  height: 136px;
+  background:
+    linear-gradient(145deg, rgba(31, 58, 96, 0.96), rgba(55, 91, 132, 0.9)) !important;
+  border: 1px solid rgba(91, 199, 255, 0.42);
+  box-shadow:
+    0 0 0 10px rgba(91, 199, 255, 0.08),
+    0 0 0 22px rgba(36, 84, 214, 0.05),
+    0 22px 44px rgba(15, 35, 68, 0.18) !important;
+}
+
+.app-shell-practice .realtime-voice-card .realtime-orb-ring {
+  inset: -10px;
+  border-color: rgba(91, 199, 255, 0.42) !important;
+}
+
+.app-shell-practice .realtime-voice-card .realtime-orb-center {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #3387f2, #4fd0df) !important;
+  color: #ffffff !important;
+  font-size: 1.25rem;
+  line-height: 1;
+  box-shadow: 0 12px 28px rgba(51, 135, 242, 0.28);
+}
+
+.app-shell-practice .realtime-voice-copy {
+  display: grid;
+  gap: 0.35rem;
+  width: 100%;
+  text-align: center;
+}
+
+.app-shell-practice .realtime-voice-copy span {
+  color: #5b708b !important;
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.app-shell-practice .realtime-voice-copy strong {
+  color: #173251 !important;
+  font-size: 1.05rem;
+  line-height: 1.25;
+}
+
+.app-shell-practice .realtime-voice-copy p {
+  max-width: 24ch;
+  margin: 0 auto;
+  color: #60758f !important;
+  font-size: 0.86rem;
+  line-height: 1.6;
+}
+
+.app-shell-practice .realtime-core-metrics {
+  width: 100%;
+  display: grid;
+  gap: 0.55rem;
+}
+
+.app-shell-practice .realtime-core-metrics span {
+  min-height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  padding: 0.65rem 0.75rem;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.58);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  color: #345072 !important;
+  font-weight: 800;
+}
+
+.app-shell-practice .realtime-room-core .realtime-signal-bars {
+  width: 100%;
+  min-height: 82px;
+  padding: 0.85rem;
+  border-radius: 8px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.56), rgba(248, 251, 255, 0.34));
+  border: 1px solid rgba(148, 163, 184, 0.18);
+}
+
+.app-shell-practice .realtime-room-core .realtime-signal-bars span {
+  width: 5px;
+  min-height: 16px;
+}
+
+html[data-theme='dark'] .app-shell-practice .realtime-room-core {
+  background:
+    linear-gradient(180deg, rgba(17, 30, 51, 0.98), rgba(8, 15, 29, 0.98)),
+    repeating-linear-gradient(90deg, rgba(91, 199, 255, 0.07) 0 1px, transparent 1px 52px) !important;
+  border-color: rgba(148, 163, 184, 0.28) !important;
+}
+
+html[data-theme='dark'] .app-shell-practice .realtime-core-topline,
+html[data-theme='dark'] .app-shell-practice .realtime-voice-card,
+html[data-theme='dark'] .app-shell-practice .realtime-core-metrics span,
+html[data-theme='dark'] .app-shell-practice .realtime-room-core .realtime-signal-bars {
+  background:
+    linear-gradient(180deg, rgba(20, 34, 56, 0.88), rgba(10, 18, 32, 0.82)) !important;
+  border-color: rgba(148, 163, 184, 0.24) !important;
+  color: #dce8f7 !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04) !important;
+}
+
+html[data-theme='dark'] .app-shell-practice .realtime-voice-copy span {
+  color: #91d8ff !important;
+}
+
+html[data-theme='dark'] .app-shell-practice .realtime-voice-copy strong {
+  color: #f3f8ff !important;
+}
+
+html[data-theme='dark'] .app-shell-practice .realtime-voice-copy p {
+  color: #c2d0e3 !important;
+}
+
+html[data-theme='dark'] .app-shell-practice .realtime-core-metrics span,
+html[data-theme='dark'] .app-shell-practice .realtime-core-metrics svg {
+  color: #dce8f7 !important;
+  stroke: currentColor !important;
+}
+
+@media (max-width: 960px) {
+  .app-shell-practice .realtime-room-core {
+    min-height: auto;
+  }
+
+  .app-shell-practice .realtime-voice-card {
+    min-height: 240px;
+  }
+}
+/* === realtime-voice-panel-polish:end === */
+
+/* === realtime-voice-panel-overlap-fix:start === */
+.app-shell-practice .realtime-room-stage {
+  grid-template-columns: minmax(260px, 0.36fr) minmax(0, 1fr) !important;
+  align-items: stretch;
+}
+
+.app-shell-practice .realtime-room-core {
+  display: flex !important;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: stretch;
+  gap: 14px !important;
+  min-height: 0;
+  height: 100%;
+  padding: 16px !important;
+  border-radius: 24px;
+}
+
+.app-shell-practice .realtime-core-topline {
+  width: fit-content;
+  max-width: 100%;
+  min-height: 34px;
+  padding: 0.55rem 0.75rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.1) !important;
+}
+
+.app-shell-practice .realtime-voice-card {
+  flex: 1 1 auto;
+  min-height: 250px;
+  padding: 1.15rem 1rem;
+  border-radius: 18px;
+  gap: 0.9rem;
+  background:
+    radial-gradient(circle at 50% 38%, rgba(91, 199, 255, 0.14), transparent 42%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.045)) !important;
+}
+
+.app-shell-practice .realtime-voice-card .realtime-orb {
+  width: 126px;
+  height: 126px;
+}
+
+.app-shell-practice .realtime-voice-card .realtime-orb-center {
+  width: 40px;
+  height: 40px;
+}
+
+.app-shell-practice .realtime-voice-copy {
+  gap: 0.28rem;
+}
+
+.app-shell-practice .realtime-voice-copy p {
+  max-width: 22ch;
+  font-size: 0.82rem;
+}
+
+.app-shell-practice .realtime-core-metrics {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.app-shell-practice .realtime-core-metrics span {
+  min-height: 46px;
+  padding: 0.65rem 0.5rem;
+  border-radius: 14px;
+  text-align: center;
+  white-space: normal;
+}
+
+.app-shell-practice .realtime-room-core .realtime-signal-bars {
+  flex: 0 0 auto;
+  min-height: 74px;
+  padding: 0.75rem;
+  border-radius: 16px;
+}
+
+html[data-theme='dark'] .app-shell-practice .realtime-core-topline {
+  background: rgba(20, 34, 56, 0.74) !important;
+}
+
+html[data-theme='dark'] .app-shell-practice .realtime-voice-card {
+  background:
+    radial-gradient(circle at 50% 36%, rgba(91, 199, 255, 0.16), transparent 42%),
+    linear-gradient(180deg, rgba(20, 34, 56, 0.86), rgba(10, 18, 32, 0.72)) !important;
+}
+
+@media (max-width: 1180px) {
+  .app-shell-practice .realtime-room-stage {
+    grid-template-columns: minmax(230px, 0.4fr) minmax(0, 1fr) !important;
+  }
+}
+
+@media (max-width: 960px) {
+  .app-shell-practice .realtime-room-stage {
+    grid-template-columns: 1fr !important;
+  }
+
+  .app-shell-practice .realtime-voice-card {
+    min-height: 220px;
+  }
+}
+/* === realtime-voice-panel-overlap-fix:end === */
+
+/* === professional-enterprise-polish:start === */
+.app-shell.workspace-overhaul {
+  gap: 20px !important;
+  padding: 20px !important;
+}
+
+.app-shell .workspace-rail,
+.app-shell .workspace-stage-header,
+.app-shell .panel-card,
+.app-shell .stat-card-pro,
+.app-shell .elevated-surface,
+.app-shell .detail-stack,
+.app-shell .sub-card,
+.app-shell .leaderboard-row,
+.app-shell .table-row,
+.app-shell .admin-user-card,
+.app-shell .course-category-card,
+.app-shell .course-list-item,
+.app-shell .course-lesson-item,
+.app-shell .course-request-card,
+.app-shell .course-admin-published-card,
+.app-shell .dashboard-rebuild-goal-row,
+.app-shell .dashboard-rebuild-history-item,
+.app-shell .dashboard-rebuild-chart-card,
+.app-shell .dashboard-rebuild-snapshot-card,
+.app-shell .dashboard-rebuild-analytics-note,
+.app-shell .profile-command-metric,
+.app-shell .profile-context-row,
+.app-shell .cv-command-metric,
+.app-shell .admin-health-card,
+.app-shell .admin-signal-row,
+.app-shell .admin-spotlight-row,
+.app-shell .recorder-status-card,
+.app-shell .recorder-live-card,
+.app-shell .recorder-preview-card,
+.app-shell .realtime-status-card,
+.app-shell .realtime-phase-card,
+.app-shell .realtime-log-shell {
+  border-radius: 8px !important;
+}
+
+.app-shell .workspace-rail,
+.app-shell .workspace-stage-header,
+.app-shell .panel-card {
+  border-color: rgba(148, 163, 184, 0.28) !important;
+  box-shadow:
+    0 18px 42px rgba(15, 23, 42, 0.11),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+}
+
+.app-shell .workspace-rail {
+  padding: 18px !important;
+  min-height: calc(100vh - 40px);
+}
+
+.app-shell .workspace-rail-section {
+  border-radius: 8px !important;
+}
+
+.app-shell .workspace-rail-brand {
+  padding: 0.85rem 0.75rem !important;
+}
+
+.app-shell .workspace-rail-brand h1 {
+  font-size: 1.65rem !important;
+  line-height: 1.05 !important;
+}
+
+.app-shell .workspace-rail-account {
+  padding: 1rem !important;
+}
+
+.app-shell .workspace-rail-navigation {
+  padding: 0.85rem !important;
+}
+
+.app-shell .workspace-stage-header {
+  min-height: 112px !important;
+  padding: 18px 22px !important;
+  align-items: center !important;
+}
+
+.app-shell .workspace-stage-title h2 {
+  font-size: clamp(2rem, 3vw, 3.05rem) !important;
+  line-height: 0.98 !important;
+  letter-spacing: 0 !important;
+  max-width: 18ch;
+}
+
+.app-shell .workspace-stage-title p:not(.eyebrow) {
+  margin-top: 0.35rem;
+  max-width: 48ch;
+  line-height: 1.55;
+}
+
+.app-shell .workspace-stage-tools {
+  gap: 10px !important;
+}
+
+.app-shell .theme-toggle,
+.app-shell .workspace-stage-chip,
+.app-shell .topbar-command-pill,
+.app-shell .badge-soft,
+.app-shell .tag-chip,
+.app-shell .status-badge,
+.app-shell .studio-rule-pill,
+.app-shell .realtime-state-pill {
+  border-radius: 8px !important;
+}
+
+.app-shell .nav-pill,
+.app-shell .primary-button,
+.app-shell .ghost-button,
+.app-shell .danger-button,
+.app-shell button,
+.app-shell .topic-chip-button,
+.app-shell .segment-button,
+.auth-page .primary-button,
+.auth-page .ghost-button,
+.landing-page .primary-button,
+.landing-page .ghost-button {
+  border-radius: 8px !important;
+}
+
+.app-shell .primary-button,
+.app-shell .ghost-button,
+.app-shell .danger-button,
+.auth-page .primary-button,
+.auth-page .ghost-button,
+.landing-page .primary-button,
+.landing-page .ghost-button {
+  min-height: 44px;
+  padding: 0.75rem 1rem;
+  font-weight: 850;
+  letter-spacing: 0;
+}
+
+.app-shell .primary-button:hover,
+.app-shell .ghost-button:hover,
+.app-shell .danger-button:hover,
+.auth-page .primary-button:hover,
+.auth-page .ghost-button:hover,
+.landing-page .primary-button:hover,
+.landing-page .ghost-button:hover {
+  transform: translateY(-1px);
+}
+
+.app-shell .nav-pill {
+  min-height: 44px;
+  padding: 0.7rem 0.85rem !important;
+}
+
+.app-shell .nav-pill:hover {
+  transform: none !important;
+}
+
+.app-shell .section-heading.compact-heading,
+.app-shell .dashboard-rebuild-analytics-head,
+.app-shell .admin-command-head,
+.app-shell .course-detail-head,
+.app-shell .profile-command-head,
+.app-shell .recorder-heading,
+.app-shell .realtime-room-header {
+  padding-bottom: 0.75rem !important;
+  margin-bottom: 0.75rem !important;
+  border-bottom-color: rgba(148, 163, 184, 0.28) !important;
+}
+
+.app-shell .section-heading h3,
+.app-shell .dashboard-rebuild-analytics h3,
+.app-shell .profile-context-card h3,
+.app-shell .cv-result-shell h3,
+.app-shell .admin-command-card h3,
+.app-shell .course-detail-card h3,
+.app-shell .realtime-room-header h3,
+.app-shell .recorder-heading h3 {
+  font-size: clamp(1.35rem, 2vw, 2rem) !important;
+  line-height: 1.12 !important;
+  letter-spacing: 0 !important;
+}
+
+.app-shell .dashboard-rebuild-hero,
+.app-shell .practice-hero-live,
+.app-shell .admin-hero,
+.app-shell .course-hero-card,
+.app-shell .admin-course-hero,
+.app-shell .profile-command-card-main,
+.app-shell .cv-command-card-main {
+  min-height: auto !important;
+  padding: clamp(1.2rem, 2vw, 1.65rem) !important;
+  border-radius: 8px !important;
+}
+
+.app-shell .dashboard-rebuild-hero h3,
+.app-shell .practice-hero-live h3,
+.app-shell .admin-hero h3,
+.app-shell .course-hero-copy h3,
+.app-shell .admin-course-hero-copy h3,
+.app-shell .profile-command-card-main h3,
+.app-shell .cv-command-card-main h3 {
+  font-size: clamp(2rem, 3.6vw, 3.5rem) !important;
+  line-height: 0.98 !important;
+  letter-spacing: 0 !important;
+  max-width: 14ch !important;
+}
+
+.app-shell .dashboard-rebuild-hero-copy > p:not(.eyebrow),
+.app-shell .practice-hero-live .muted-text,
+.app-shell .admin-hero p,
+.app-shell .course-hero-copy p:not(.eyebrow),
+.app-shell .admin-course-hero-copy p:not(.eyebrow),
+.app-shell .profile-command-card-main .muted-text,
+.app-shell .cv-command-card-main .muted-text {
+  max-width: 52ch !important;
+  line-height: 1.62 !important;
+}
+
+.app-shell .dashboard-rebuild-launch,
+.app-shell .dashboard-rebuild-focus,
+.app-shell .dashboard-rebuild-stat,
+.app-shell .scoreboard-card,
+.app-shell .studio-summary-chip,
+.app-shell .course-hero-stat,
+.app-shell .admin-course-stat,
+.app-shell .profile-command-metric,
+.app-shell .cv-command-metric,
+.app-shell .admin-health-card,
+.app-shell .practice-live-mini-card,
+.app-shell .practice-live-tip,
+.app-shell .practice-flow-item {
+  border-radius: 8px !important;
+  box-shadow: none !important;
+}
+
+.app-shell .dashboard-rebuild-main,
+.app-shell .practice-live-grid,
+.app-shell .practice-workbench-grid,
+.app-shell .course-shell-grid,
+.app-shell .course-admin-grid,
+.app-shell .cv-command-grid,
+.app-shell .profile-command-grid,
+.app-shell .admin-command-stage,
+.app-shell .admin-command-grid,
+.app-shell .admin-live-grid {
+  gap: 16px !important;
+}
+
+.app-shell .dashboard-rebuild-missions,
+.app-shell .dashboard-rebuild-sideboard,
+.app-shell .dashboard-rebuild-analytics,
+.app-shell .dashboard-rebuild-history,
+.app-shell .studio-config-card,
+.app-shell .studio-recorder-card,
+.app-shell .studio-ai-card,
+.app-shell .live-support-card,
+.app-shell .profile-editor-card,
+.app-shell .profile-context-card,
+.app-shell .profile-side-card,
+.app-shell .cv-form-card,
+.app-shell .cv-result-shell,
+.app-shell .admin-command-card,
+.app-shell .admin-side-status-card,
+.app-shell .course-catalog-card,
+.app-shell .course-detail-card,
+.app-shell .course-admin-builder-card,
+.app-shell .course-admin-review-card {
+  padding: clamp(1rem, 1.6vw, 1.35rem) !important;
+}
+
+.app-shell .input-group {
+  gap: 0.45rem !important;
+}
+
+.app-shell .input-group span,
+.auth-page .input-group span {
+  color: #475569;
+  font-size: 0.78rem !important;
+  font-weight: 850 !important;
+  letter-spacing: 0.06em !important;
+  text-transform: uppercase;
+}
+
+.app-shell input,
+.app-shell textarea,
+.app-shell select,
+.auth-page input,
+.auth-page textarea,
+.auth-page select {
+  min-height: 48px;
+  border-radius: 8px !important;
+  border-width: 1px !important;
+  font-size: 0.96rem;
+}
+
+.app-shell textarea,
+.auth-page textarea {
+  min-height: 132px;
+}
+
+.app-shell input:focus,
+.app-shell textarea:focus,
+.app-shell select:focus,
+.auth-page input:focus,
+.auth-page textarea:focus,
+.auth-page select:focus {
+  outline: none !important;
+  border-color: rgba(51, 135, 242, 0.72) !important;
+  box-shadow: 0 0 0 3px rgba(51, 135, 242, 0.14) !important;
+}
+
+.app-shell .simple-table,
+.app-shell .table-grid {
+  border-radius: 8px !important;
+  overflow: hidden;
+}
+
+.app-shell .table-row,
+.app-shell .admin-user-card-control,
+.app-shell .leaderboard-row,
+.app-shell .admin-session-row,
+.app-shell .dashboard-rebuild-history-item,
+.app-shell .dashboard-rebuild-goal-row,
+.app-shell .course-request-card,
+.app-shell .course-admin-published-card {
+  transition:
+    border-color 160ms ease,
+    background 160ms ease,
+    transform 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.app-shell .table-row:hover,
+.app-shell .admin-user-card-control:hover,
+.app-shell .leaderboard-row:hover,
+.app-shell .admin-session-row:hover,
+.app-shell .dashboard-rebuild-history-item:hover,
+.app-shell .dashboard-rebuild-goal-row:hover,
+.app-shell .course-request-card:hover,
+.app-shell .course-admin-published-card:hover {
+  transform: none !important;
+  border-color: rgba(51, 135, 242, 0.42) !important;
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08) !important;
+}
+
+.app-shell .chart-wrap,
+.app-shell .compact-chart {
+  border-radius: 8px !important;
+  overflow: hidden;
+}
+
+.app-shell .realtime-room-card,
+.app-shell .realtime-room-stage,
+.app-shell .realtime-room-console,
+.app-shell .realtime-room-core,
+.app-shell .realtime-log-shell,
+.app-shell .recorder-card-studio,
+.app-shell .recorder-live-card,
+.app-shell .recorder-preview-card,
+.app-shell .analysis-surface {
+  border-radius: 8px !important;
+}
+
+.app-shell .realtime-toolbar,
+.app-shell .studio-actions,
+.app-shell .recorder-toolbar,
+.app-shell .course-admin-card-actions,
+.app-shell .admin-user-actions {
+  gap: 10px !important;
+}
+
+.app-shell .realtime-toolbar button,
+.app-shell .studio-actions button,
+.app-shell .recorder-toolbar button,
+.app-shell .course-admin-card-actions button,
+.app-shell .admin-user-actions button {
+  min-width: 0;
+}
+
+.app-shell .badge-soft,
+.app-shell .tag-chip,
+.app-shell .status-badge {
+  min-height: 32px;
+  padding: 0.42rem 0.68rem !important;
+  line-height: 1.15;
+}
+
+.app-shell .eyebrow,
+.app-shell .side-label,
+.landing-page .eyebrow,
+.auth-page .eyebrow {
+  letter-spacing: 0.08em !important;
+}
+
+.app-shell * {
+  letter-spacing: 0;
+}
+
+html[data-theme='dark'] .app-shell .workspace-rail,
+html[data-theme='dark'] .app-shell .workspace-stage-header,
+html[data-theme='dark'] .app-shell .panel-card {
+  border-color: rgba(148, 163, 184, 0.24) !important;
+  box-shadow:
+    0 20px 48px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05) !important;
+}
+
+html[data-theme='dark'] .app-shell .workspace-stage-header,
+html[data-theme='dark'] .app-shell .panel-card,
+html[data-theme='dark'] .app-shell .elevated-surface {
+  background:
+    linear-gradient(145deg, rgba(15, 26, 45, 0.96), rgba(8, 15, 29, 0.96)) !important;
+}
+
+html[data-theme='dark'] .app-shell .section-heading.compact-heading,
+html[data-theme='dark'] .app-shell .dashboard-rebuild-analytics-head,
+html[data-theme='dark'] .app-shell .admin-command-head,
+html[data-theme='dark'] .app-shell .course-detail-head,
+html[data-theme='dark'] .app-shell .profile-command-head,
+html[data-theme='dark'] .app-shell .recorder-heading,
+html[data-theme='dark'] .app-shell .realtime-room-header {
+  border-bottom-color: rgba(148, 163, 184, 0.24) !important;
+}
+
+html[data-theme='dark'] .app-shell .input-group span,
+html[data-theme='dark'] .auth-page .input-group span {
+  color: #c2d0e3 !important;
+}
+
+html[data-theme='dark'] .app-shell .table-row:hover,
+html[data-theme='dark'] .app-shell .admin-user-card-control:hover,
+html[data-theme='dark'] .app-shell .leaderboard-row:hover,
+html[data-theme='dark'] .app-shell .admin-session-row:hover,
+html[data-theme='dark'] .app-shell .dashboard-rebuild-history-item:hover,
+html[data-theme='dark'] .app-shell .dashboard-rebuild-goal-row:hover,
+html[data-theme='dark'] .app-shell .course-request-card:hover,
+html[data-theme='dark'] .app-shell .course-admin-published-card:hover {
+  border-color: rgba(91, 199, 255, 0.44) !important;
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.22) !important;
+}
+
+@media (max-width: 1120px) {
+  .app-shell.workspace-overhaul {
+    padding: 14px !important;
+  }
+
+  .app-shell .workspace-rail {
+    min-height: auto;
+  }
+
+  .app-shell .workspace-stage-header {
+    align-items: flex-start !important;
+  }
+}
+
+@media (max-width: 720px) {
+  .app-shell .workspace-stage-header,
+  .app-shell .panel-card {
+    padding: 16px !important;
+  }
+
+  .app-shell .workspace-stage-title h2,
+  .app-shell .dashboard-rebuild-hero h3,
+  .app-shell .practice-hero-live h3,
+  .app-shell .admin-hero h3,
+  .app-shell .course-hero-copy h3,
+  .app-shell .admin-course-hero-copy h3,
+  .app-shell .profile-command-card-main h3,
+  .app-shell .cv-command-card-main h3 {
+    font-size: clamp(1.85rem, 10vw, 2.55rem) !important;
+  }
+
+  .app-shell .workspace-stage-tools,
+  .app-shell .realtime-toolbar,
+  .app-shell .studio-actions,
+  .app-shell .recorder-toolbar {
+    align-items: stretch;
+  }
+
+  .app-shell .workspace-stage-tools > *,
+  .app-shell .realtime-toolbar button,
+  .app-shell .studio-actions button,
+  .app-shell .recorder-toolbar button {
+    width: 100%;
+    justify-content: center;
+  }
+}
+/* === professional-enterprise-polish:end === */
+
+/* === professional-enterprise-tuning:start === */
+.app-shell .workspace-rail {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(148, 163, 184, 0.36) transparent;
+}
+
+.app-shell .workspace-rail::-webkit-scrollbar {
+  width: 6px;
+}
+
+.app-shell .workspace-rail::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.app-shell .workspace-rail::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.34);
+  border-radius: 999px;
+}
+
+.app-shell .workspace-rail::-webkit-scrollbar-thumb:hover {
+  background: rgba(148, 163, 184, 0.48);
+}
+
+.app-shell .dashboard-rebuild-hero h3,
+.app-shell .practice-hero-live h3,
+.app-shell .admin-hero h3,
+.app-shell .course-hero-copy h3,
+.app-shell .admin-course-hero-copy h3,
+.app-shell .profile-command-card-main h3,
+.app-shell .cv-command-card-main h3 {
+  font-size: clamp(2rem, 3.1vw, 3rem) !important;
+  line-height: 1.02 !important;
+  max-width: 17ch !important;
+}
+
+.app-shell .dashboard-rebuild-hero,
+.app-shell .practice-hero-live,
+.app-shell .admin-hero,
+.app-shell .course-hero-card,
+.app-shell .admin-course-hero,
+.app-shell .profile-command-card-main,
+.app-shell .cv-command-card-main {
+  gap: 18px !important;
+}
+
+.app-shell .dashboard-rebuild-launch,
+.app-shell .dashboard-rebuild-goal-row,
+.app-shell .dashboard-rebuild-history-item,
+.app-shell .admin-signal-row,
+.app-shell .profile-insight-item,
+.app-shell .practice-flow-item,
+.app-shell .practice-live-tip {
+  overflow: hidden;
+}
+
+.app-shell .dashboard-rebuild-launch p,
+.app-shell .dashboard-rebuild-goal-copy p,
+.app-shell .dashboard-rebuild-history-main p,
+.app-shell .admin-signal-row span,
+.app-shell .profile-insight-item p,
+.app-shell .practice-flow-item p,
+.app-shell .practice-live-tip p {
+  overflow-wrap: anywhere;
+}
+
+html[data-theme='dark'] .app-shell .workspace-rail {
+  scrollbar-color: rgba(91, 199, 255, 0.34) transparent;
+}
+
+html[data-theme='dark'] .app-shell .workspace-rail::-webkit-scrollbar-thumb {
+  background: rgba(91, 199, 255, 0.28);
+}
+
+html[data-theme='dark'] .app-shell .workspace-rail::-webkit-scrollbar-thumb:hover {
+  background: rgba(91, 199, 255, 0.42);
+}
+/* === professional-enterprise-tuning:end === */
+
+/* === executive-interface-pass:start === */
+.app-shell.workspace-overhaul {
+  background:
+    linear-gradient(180deg, rgba(241, 247, 253, 0.9), rgba(232, 240, 250, 0.92)) !important;
+}
+
+.app-shell .workspace-stage-header,
+.app-shell .panel-card,
+.app-shell .elevated-surface,
+.app-shell .detail-stack {
+  backdrop-filter: none !important;
+}
+
+.app-shell .workspace-stage-header,
+.app-shell .dashboard-rebuild-hero,
+.app-shell .practice-hero-live,
+.app-shell .course-hero-card,
+.app-shell .admin-course-hero,
+.app-shell .profile-command-card-main,
+.app-shell .cv-command-card-main,
+.app-shell .admin-hero-control,
+.app-shell .dashboard-rebuild-missions,
+.app-shell .dashboard-rebuild-sideboard,
+.app-shell .dashboard-rebuild-analytics,
+.app-shell .dashboard-rebuild-history,
+.app-shell .course-catalog-card,
+.app-shell .course-detail-card,
+.app-shell .course-admin-builder-card,
+.app-shell .course-admin-review-card,
+.app-shell .profile-editor-card,
+.app-shell .profile-context-card,
+.app-shell .profile-side-card,
+.app-shell .cv-form-card,
+.app-shell .cv-result-shell,
+.app-shell .admin-command-card,
+.app-shell .admin-side-status-card,
+.app-shell .live-support-card,
+.app-shell .studio-config-card,
+.app-shell .studio-recorder-card,
+.app-shell .studio-ai-card {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.97), rgba(248, 251, 255, 0.97)) !important;
+  border: 1px solid rgba(119, 134, 156, 0.22) !important;
+  box-shadow: 0 18px 38px rgba(32, 50, 78, 0.08) !important;
+  color: #13243a !important;
+}
+
+.app-shell .dashboard-rebuild-hero::before,
+.app-shell .dashboard-rebuild-hero::after,
+.app-shell .practice-hero-live::before,
+.app-shell .practice-hero-live::after,
+.app-shell .course-hero-card::before,
+.app-shell .course-hero-card::after,
+.app-shell .admin-course-hero::before,
+.app-shell .admin-course-hero::after,
+.app-shell .profile-command-card-main::before,
+.app-shell .profile-command-card-main::after,
+.app-shell .cv-command-card-main::before,
+.app-shell .cv-command-card-main::after,
+.app-shell .admin-hero-control::before,
+.app-shell .admin-hero-control::after {
+  display: none !important;
+  content: none !important;
+}
+
+.app-shell .dashboard-rebuild-hero,
+.app-shell .practice-hero-live,
+.app-shell .course-hero-card,
+.app-shell .admin-course-hero,
+.app-shell .profile-command-card-main,
+.app-shell .cv-command-card-main,
+.app-shell .admin-hero-control {
+  overflow: hidden;
+  align-items: center !important;
+  min-height: auto !important;
+}
+
+.app-shell .dashboard-rebuild-hero h3,
+.app-shell .practice-hero-live h3,
+.app-shell .admin-hero-control h3,
+.app-shell .course-hero-copy h3,
+.app-shell .admin-course-hero-copy h3,
+.app-shell .profile-command-card-main h3,
+.app-shell .cv-command-card-main h3 {
+  max-width: 24ch !important;
+  font-size: clamp(1.95rem, 2.55vw, 2.75rem) !important;
+  line-height: 1.08 !important;
+  color: #14263f !important;
+  text-wrap: balance;
+}
+
+.app-shell .dashboard-rebuild-hero .eyebrow,
+.app-shell .practice-hero-live .eyebrow,
+.app-shell .admin-hero-control .eyebrow,
+.app-shell .course-hero-copy .eyebrow,
+.app-shell .admin-course-hero-copy .eyebrow,
+.app-shell .profile-command-card-main .eyebrow,
+.app-shell .cv-command-card-main .eyebrow {
+  color: #117386 !important;
+}
+
+.app-shell .dashboard-rebuild-hero p,
+.app-shell .dashboard-rebuild-hero span,
+.app-shell .dashboard-rebuild-hero strong,
+.app-shell .practice-hero-live p,
+.app-shell .practice-hero-live span,
+.app-shell .practice-hero-live strong,
+.app-shell .admin-hero-control p,
+.app-shell .admin-hero-control span,
+.app-shell .admin-hero-control strong,
+.app-shell .course-hero-card p,
+.app-shell .course-hero-card span,
+.app-shell .course-hero-card strong,
+.app-shell .admin-course-hero p,
+.app-shell .admin-course-hero span,
+.app-shell .admin-course-hero strong,
+.app-shell .profile-command-card-main p,
+.app-shell .profile-command-card-main span,
+.app-shell .profile-command-card-main strong,
+.app-shell .profile-command-card-main a,
+.app-shell .cv-command-card-main p,
+.app-shell .cv-command-card-main span,
+.app-shell .cv-command-card-main strong {
+  color: #526477 !important;
+}
+
+.app-shell .dashboard-rebuild-hero h3,
+.app-shell .dashboard-rebuild-hero h4,
+.app-shell .dashboard-rebuild-hero strong,
+.app-shell .practice-hero-live h3,
+.app-shell .practice-hero-live strong,
+.app-shell .admin-hero-control h3,
+.app-shell .admin-hero-control strong,
+.app-shell .course-hero-card h3,
+.app-shell .course-hero-card strong,
+.app-shell .admin-course-hero h3,
+.app-shell .admin-course-hero strong,
+.app-shell .profile-command-card-main h3,
+.app-shell .profile-command-card-main strong,
+.app-shell .cv-command-card-main h3,
+.app-shell .cv-command-card-main strong {
+  color: #14263f !important;
+}
+
+.app-shell .hero-chip-row.compact,
+.app-shell .dashboard-rebuild-hero-actions,
+.app-shell .profile-command-actions,
+.app-shell .cv-command-actions {
+  gap: 10px !important;
+}
+
+.app-shell .hero-chip-row.compact .badge-soft,
+.app-shell .dashboard-rebuild-hero .badge-soft,
+.app-shell .practice-hero-live .badge-soft,
+.app-shell .admin-hero-control .badge-soft,
+.app-shell .profile-command-card-main .badge-soft,
+.app-shell .cv-command-card-main .badge-soft {
+  background: #edf5ff !important;
+  border-color: rgba(63, 123, 191, 0.18) !important;
+  color: #254767 !important;
+}
+
+.app-shell .studio-summary-grid,
+.app-shell .course-hero-stats,
+.app-shell .admin-course-hero-stats,
+.app-shell .hero-scoreboard,
+.app-shell .admin-scoreboard-extended,
+.app-shell .profile-command-metrics,
+.app-shell .cv-command-metrics {
+  align-self: center !important;
+  align-items: stretch !important;
+  grid-auto-rows: auto !important;
+}
+
+.app-shell .studio-summary-grid,
+.app-shell .course-hero-stats,
+.app-shell .admin-course-hero-stats,
+.app-shell .hero-scoreboard,
+.app-shell .admin-scoreboard-extended {
+  width: min(430px, 100%) !important;
+}
+
+.app-shell .studio-summary-chip,
+.app-shell .course-hero-stat,
+.app-shell .admin-course-stat,
+.app-shell .hero-scoreboard > div,
+.app-shell .admin-scoreboard-extended > div,
+.app-shell .profile-command-metric,
+.app-shell .cv-command-metric,
+.app-shell .dashboard-rebuild-stat,
+.app-shell .dashboard-rebuild-focus,
+.app-shell .admin-spotlight-row,
+.app-shell .admin-health-card,
+.app-shell .practice-live-mini-card,
+.app-shell .practice-live-tip,
+.app-shell .practice-flow-item {
+  min-height: auto !important;
+  padding: 0.9rem 1rem !important;
+  background: #f4f8fc !important;
+  border: 1px solid rgba(119, 134, 156, 0.2) !important;
+  box-shadow: none !important;
+}
+
+.app-shell .studio-summary-chip,
+.app-shell .course-hero-stat,
+.app-shell .admin-course-stat,
+.app-shell .hero-scoreboard > div,
+.app-shell .admin-scoreboard-extended > div,
+.app-shell .profile-command-metric,
+.app-shell .cv-command-metric {
+  align-content: center !important;
+  gap: 0.4rem !important;
+}
+
+.app-shell .studio-summary-chip span,
+.app-shell .course-hero-stat span,
+.app-shell .admin-course-stat span,
+.app-shell .hero-scoreboard span,
+.app-shell .admin-scoreboard-extended span,
+.app-shell .profile-command-metric span,
+.app-shell .cv-command-metric span,
+.app-shell .dashboard-rebuild-stat span,
+.app-shell .practice-live-mini-card span {
+  color: #66778c !important;
+  font-size: 0.74rem !important;
+  letter-spacing: 0.06em !important;
+}
+
+.app-shell .studio-summary-chip strong,
+.app-shell .course-hero-stat strong,
+.app-shell .admin-course-stat strong,
+.app-shell .hero-scoreboard strong,
+.app-shell .admin-scoreboard-extended strong,
+.app-shell .profile-command-metric strong,
+.app-shell .cv-command-metric strong,
+.app-shell .dashboard-rebuild-stat strong,
+.app-shell .practice-live-mini-card strong {
+  color: #14263f !important;
+  font-size: clamp(1rem, 1.3vw, 1.35rem) !important;
+  letter-spacing: 0 !important;
+}
+
+.app-shell .dashboard-rebuild-launch,
+.app-shell .dashboard-rebuild-goal-row,
+.app-shell .dashboard-rebuild-history-item,
+.app-shell .course-category-card,
+.app-shell .course-list-item,
+.app-shell .course-lesson-item,
+.app-shell .course-request-card,
+.app-shell .course-admin-published-card,
+.app-shell .table-row,
+.app-shell .leaderboard-row,
+.app-shell .admin-session-row,
+.app-shell .admin-user-card-control {
+  background: #f8fbff !important;
+  border: 1px solid rgba(119, 134, 156, 0.2) !important;
+}
+
+.app-shell .dashboard-rebuild-launch {
+  padding: 0.85rem 1rem !important;
+}
+
+.app-shell .dashboard-rebuild-launch::before,
+.app-shell .dashboard-rebuild-launch::after,
+.app-shell .dashboard-rebuild-goal-row::before,
+.app-shell .dashboard-rebuild-goal-row::after,
+.app-shell .dashboard-rebuild-history-item::before,
+.app-shell .dashboard-rebuild-history-item::after,
+.app-shell .stat-card-pro::before,
+.app-shell .stat-card-pro::after {
+  opacity: 0 !important;
+}
+
+.app-shell .stat-card-pro {
+  min-height: 148px !important;
+  background: #f8fbff !important;
+  border: 1px solid rgba(119, 134, 156, 0.2) !important;
+  box-shadow: 0 14px 30px rgba(32, 50, 78, 0.07) !important;
+}
+
+.app-shell .workspace-stage-title h2 {
+  font-size: clamp(2rem, 2.65vw, 2.9rem) !important;
+  line-height: 1.02 !important;
+  max-width: none !important;
+}
+
+.app-shell .workspace-stage-title p:not(.eyebrow) {
+  color: #63748a !important;
+}
+
+.app-shell .workspace-rail {
+  background:
+    linear-gradient(180deg, rgba(27, 55, 92, 0.98), rgba(14, 34, 58, 0.98)) !important;
+  box-shadow: 0 18px 42px rgba(15, 34, 57, 0.22) !important;
+}
+
+.app-shell .workspace-rail-section {
+  background: rgba(255, 255, 255, 0.055) !important;
+  border-color: rgba(216, 231, 248, 0.14) !important;
+}
+
+.app-shell .workspace-rail-navigation .nav-pill:not(.active) {
+  background: rgba(8, 21, 38, 0.72) !important;
+  border-color: rgba(216, 231, 248, 0.1) !important;
+  color: #dce8f7 !important;
+}
+
+.app-shell .workspace-rail-navigation .nav-pill.active {
+  color: #ffffff !important;
+}
+
+.app-shell .workspace-rail-navigation .nav-pill svg,
+.app-shell .workspace-rail-navigation .nav-pill span {
+  color: currentColor !important;
+}
+
+.app-shell .realtime-room-card {
+  background:
+    linear-gradient(180deg, rgba(16, 33, 57, 0.98), rgba(9, 19, 35, 0.98)) !important;
+  border-color: rgba(148, 163, 184, 0.24) !important;
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.2) !important;
+}
+
+.app-shell .realtime-room-stage {
+  gap: 14px !important;
+}
+
+.app-shell .realtime-room-header {
+  margin-bottom: 0.9rem !important;
+  padding-bottom: 0.75rem !important;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.22);
+}
+
+.app-shell .realtime-room-header h3 {
+  font-size: clamp(1.35rem, 1.7vw, 1.8rem) !important;
+  line-height: 1.12 !important;
+}
+
+.app-shell .realtime-room-core,
+.app-shell .realtime-phase-card,
+.app-shell .realtime-status-card,
+.app-shell .realtime-log-shell {
+  background: rgba(10, 21, 39, 0.72) !important;
+  border-color: rgba(148, 163, 184, 0.22) !important;
+}
+
+html[data-theme='dark'] .app-shell.workspace-overhaul {
+  background:
+    linear-gradient(180deg, rgba(5, 12, 24, 0.98), rgba(7, 16, 30, 0.98)) !important;
+}
+
+html[data-theme='dark'] .app-shell .workspace-stage-header,
+html[data-theme='dark'] .app-shell .dashboard-rebuild-hero,
+html[data-theme='dark'] .app-shell .practice-hero-live,
+html[data-theme='dark'] .app-shell .course-hero-card,
+html[data-theme='dark'] .app-shell .admin-course-hero,
+html[data-theme='dark'] .app-shell .profile-command-card-main,
+html[data-theme='dark'] .app-shell .cv-command-card-main,
+html[data-theme='dark'] .app-shell .admin-hero-control,
+html[data-theme='dark'] .app-shell .dashboard-rebuild-missions,
+html[data-theme='dark'] .app-shell .dashboard-rebuild-sideboard,
+html[data-theme='dark'] .app-shell .dashboard-rebuild-analytics,
+html[data-theme='dark'] .app-shell .dashboard-rebuild-history,
+html[data-theme='dark'] .app-shell .course-catalog-card,
+html[data-theme='dark'] .app-shell .course-detail-card,
+html[data-theme='dark'] .app-shell .course-admin-builder-card,
+html[data-theme='dark'] .app-shell .course-admin-review-card,
+html[data-theme='dark'] .app-shell .profile-editor-card,
+html[data-theme='dark'] .app-shell .profile-context-card,
+html[data-theme='dark'] .app-shell .profile-side-card,
+html[data-theme='dark'] .app-shell .cv-form-card,
+html[data-theme='dark'] .app-shell .cv-result-shell,
+html[data-theme='dark'] .app-shell .admin-command-card,
+html[data-theme='dark'] .app-shell .admin-side-status-card,
+html[data-theme='dark'] .app-shell .live-support-card,
+html[data-theme='dark'] .app-shell .studio-config-card,
+html[data-theme='dark'] .app-shell .studio-recorder-card,
+html[data-theme='dark'] .app-shell .studio-ai-card {
+  background:
+    linear-gradient(180deg, rgba(15, 26, 45, 0.98), rgba(9, 18, 33, 0.98)) !important;
+  border-color: rgba(148, 163, 184, 0.24) !important;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.28) !important;
+  color: #f4f8ff !important;
+}
+
+html[data-theme='dark'] .app-shell .dashboard-rebuild-hero h3,
+html[data-theme='dark'] .app-shell .dashboard-rebuild-hero h4,
+html[data-theme='dark'] .app-shell .dashboard-rebuild-hero strong,
+html[data-theme='dark'] .app-shell .practice-hero-live h3,
+html[data-theme='dark'] .app-shell .practice-hero-live strong,
+html[data-theme='dark'] .app-shell .admin-hero-control h3,
+html[data-theme='dark'] .app-shell .admin-hero-control strong,
+html[data-theme='dark'] .app-shell .course-hero-card h3,
+html[data-theme='dark'] .app-shell .course-hero-card strong,
+html[data-theme='dark'] .app-shell .admin-course-hero h3,
+html[data-theme='dark'] .app-shell .admin-course-hero strong,
+html[data-theme='dark'] .app-shell .profile-command-card-main h3,
+html[data-theme='dark'] .app-shell .profile-command-card-main strong,
+html[data-theme='dark'] .app-shell .cv-command-card-main h3,
+html[data-theme='dark'] .app-shell .cv-command-card-main strong {
+  color: #f4f8ff !important;
+}
+
+html[data-theme='dark'] .app-shell .dashboard-rebuild-hero p,
+html[data-theme='dark'] .app-shell .dashboard-rebuild-hero span,
+html[data-theme='dark'] .app-shell .practice-hero-live p,
+html[data-theme='dark'] .app-shell .practice-hero-live span,
+html[data-theme='dark'] .app-shell .admin-hero-control p,
+html[data-theme='dark'] .app-shell .admin-hero-control span,
+html[data-theme='dark'] .app-shell .course-hero-card p,
+html[data-theme='dark'] .app-shell .course-hero-card span,
+html[data-theme='dark'] .app-shell .admin-course-hero p,
+html[data-theme='dark'] .app-shell .admin-course-hero span,
+html[data-theme='dark'] .app-shell .profile-command-card-main p,
+html[data-theme='dark'] .app-shell .profile-command-card-main span,
+html[data-theme='dark'] .app-shell .profile-command-card-main a,
+html[data-theme='dark'] .app-shell .cv-command-card-main p,
+html[data-theme='dark'] .app-shell .cv-command-card-main span {
+  color: #c6d4e6 !important;
+}
+
+html[data-theme='dark'] .app-shell .studio-summary-chip,
+html[data-theme='dark'] .app-shell .course-hero-stat,
+html[data-theme='dark'] .app-shell .admin-course-stat,
+html[data-theme='dark'] .app-shell .hero-scoreboard > div,
+html[data-theme='dark'] .app-shell .admin-scoreboard-extended > div,
+html[data-theme='dark'] .app-shell .profile-command-metric,
+html[data-theme='dark'] .app-shell .cv-command-metric,
+html[data-theme='dark'] .app-shell .dashboard-rebuild-stat,
+html[data-theme='dark'] .app-shell .dashboard-rebuild-focus,
+html[data-theme='dark'] .app-shell .admin-spotlight-row,
+html[data-theme='dark'] .app-shell .admin-health-card,
+html[data-theme='dark'] .app-shell .practice-live-mini-card,
+html[data-theme='dark'] .app-shell .practice-live-tip,
+html[data-theme='dark'] .app-shell .practice-flow-item,
+html[data-theme='dark'] .app-shell .dashboard-rebuild-launch,
+html[data-theme='dark'] .app-shell .dashboard-rebuild-goal-row,
+html[data-theme='dark'] .app-shell .dashboard-rebuild-history-item,
+html[data-theme='dark'] .app-shell .course-category-card,
+html[data-theme='dark'] .app-shell .course-list-item,
+html[data-theme='dark'] .app-shell .course-lesson-item,
+html[data-theme='dark'] .app-shell .course-request-card,
+html[data-theme='dark'] .app-shell .course-admin-published-card,
+html[data-theme='dark'] .app-shell .table-row,
+html[data-theme='dark'] .app-shell .leaderboard-row,
+html[data-theme='dark'] .app-shell .admin-session-row,
+html[data-theme='dark'] .app-shell .admin-user-card-control,
+html[data-theme='dark'] .app-shell .stat-card-pro {
+  background: rgba(13, 24, 43, 0.96) !important;
+  border-color: rgba(148, 163, 184, 0.24) !important;
+  box-shadow: none !important;
+}
+
+html[data-theme='dark'] .app-shell .studio-summary-chip span,
+html[data-theme='dark'] .app-shell .course-hero-stat span,
+html[data-theme='dark'] .app-shell .admin-course-stat span,
+html[data-theme='dark'] .app-shell .hero-scoreboard span,
+html[data-theme='dark'] .app-shell .admin-scoreboard-extended span,
+html[data-theme='dark'] .app-shell .profile-command-metric span,
+html[data-theme='dark'] .app-shell .cv-command-metric span,
+html[data-theme='dark'] .app-shell .dashboard-rebuild-stat span,
+html[data-theme='dark'] .app-shell .practice-live-mini-card span {
+  color: #aebed1 !important;
+}
+
+html[data-theme='dark'] .app-shell .studio-summary-chip strong,
+html[data-theme='dark'] .app-shell .course-hero-stat strong,
+html[data-theme='dark'] .app-shell .admin-course-stat strong,
+html[data-theme='dark'] .app-shell .hero-scoreboard strong,
+html[data-theme='dark'] .app-shell .admin-scoreboard-extended strong,
+html[data-theme='dark'] .app-shell .profile-command-metric strong,
+html[data-theme='dark'] .app-shell .cv-command-metric strong,
+html[data-theme='dark'] .app-shell .dashboard-rebuild-stat strong,
+html[data-theme='dark'] .app-shell .practice-live-mini-card strong {
+  color: #f4f8ff !important;
+}
+
+html[data-theme='dark'] .app-shell .hero-chip-row.compact .badge-soft,
+html[data-theme='dark'] .app-shell .dashboard-rebuild-hero .badge-soft,
+html[data-theme='dark'] .app-shell .practice-hero-live .badge-soft,
+html[data-theme='dark'] .app-shell .admin-hero-control .badge-soft,
+html[data-theme='dark'] .app-shell .profile-command-card-main .badge-soft,
+html[data-theme='dark'] .app-shell .cv-command-card-main .badge-soft {
+  background: rgba(20, 34, 56, 0.96) !important;
+  border-color: rgba(148, 163, 184, 0.28) !important;
+  color: #f4f8ff !important;
+}
+
+html[data-theme='dark'] .app-shell .workspace-stage-title p:not(.eyebrow) {
+  color: #aebed1 !important;
+}
+
+@media (max-width: 1180px) {
+  .app-shell .dashboard-rebuild-hero,
+  .app-shell .practice-hero-live,
+  .app-shell .course-hero-card,
+  .app-shell .admin-course-hero,
+  .app-shell .profile-command-card-main,
+  .app-shell .cv-command-card-main,
+  .app-shell .admin-hero-control {
+    align-items: stretch !important;
+  }
+
+  .app-shell .studio-summary-grid,
+  .app-shell .course-hero-stats,
+  .app-shell .admin-course-hero-stats,
+  .app-shell .hero-scoreboard,
+  .app-shell .admin-scoreboard-extended {
+    width: 100% !important;
+  }
+}
+
+@media (max-width: 720px) {
+  .app-shell .dashboard-rebuild-hero h3,
+  .app-shell .practice-hero-live h3,
+  .app-shell .admin-hero-control h3,
+  .app-shell .course-hero-copy h3,
+  .app-shell .admin-course-hero-copy h3,
+  .app-shell .profile-command-card-main h3,
+  .app-shell .cv-command-card-main h3 {
+    font-size: clamp(1.7rem, 8vw, 2.3rem) !important;
+    max-width: 100% !important;
+  }
+
+  .app-shell .studio-summary-grid,
+  .app-shell .course-hero-stats,
+  .app-shell .admin-course-hero-stats,
+  .app-shell .hero-scoreboard,
+  .app-shell .admin-scoreboard-extended,
+  .app-shell .profile-command-metrics,
+  .app-shell .cv-command-metrics {
+    grid-template-columns: 1fr !important;
+  }
+}
+/* === executive-interface-pass:end === */
+
+/* === executive-readability-fix:start === */
+html:not([data-theme='dark']) .app-shell-dashboard .dashboard-rebuild-hero .dashboard-rebuild-hero-copy > p:not(.eyebrow),
+html:not([data-theme='dark']) .app-shell-practice .practice-hero-live .muted-text,
+html:not([data-theme='dark']) .app-shell .dashboard-rebuild-hero-copy > p:not(.eyebrow),
+html:not([data-theme='dark']) .app-shell .practice-hero-live .muted-text {
+  color: #526477 !important;
+  opacity: 1 !important;
+}
+
+html:not([data-theme='dark']) .app-shell-dashboard .dashboard-rebuild-hero .dashboard-rebuild-focus h4,
+html:not([data-theme='dark']) .app-shell-dashboard .dashboard-rebuild-hero .dashboard-rebuild-focus strong,
+html:not([data-theme='dark']) .app-shell-dashboard .dashboard-rebuild-hero .dashboard-rebuild-focus-meta strong,
+html:not([data-theme='dark']) .app-shell-dashboard .dashboard-rebuild-hero .dashboard-rebuild-stat strong {
+  color: #14263f !important;
+  opacity: 1 !important;
+}
+
+html:not([data-theme='dark']) .app-shell-dashboard .dashboard-rebuild-hero .dashboard-rebuild-focus p,
+html:not([data-theme='dark']) .app-shell-dashboard .dashboard-rebuild-hero .dashboard-rebuild-focus span,
+html:not([data-theme='dark']) .app-shell-dashboard .dashboard-rebuild-hero .dashboard-rebuild-focus-meta span,
+html:not([data-theme='dark']) .app-shell-dashboard .dashboard-rebuild-hero .dashboard-rebuild-stat span {
+  color: #607286 !important;
+  opacity: 1 !important;
+}
+
+html:not([data-theme='dark']) .app-shell-dashboard .dashboard-rebuild-hero .dashboard-rebuild-focus .badge-soft,
+html:not([data-theme='dark']) .app-shell-dashboard .dashboard-rebuild-hero .dashboard-rebuild-focus .badge-soft * {
+  background: #edf5ff !important;
+  border-color: rgba(63, 123, 191, 0.18) !important;
+  color: #254767 !important;
+  opacity: 1 !important;
+}
+
+html:not([data-theme='dark']) .app-shell-practice .realtime-room-card,
+html:not([data-theme='dark']) .app-shell-practice .realtime-room-stage,
+html:not([data-theme='dark']) .app-shell-practice .realtime-room-console,
+html:not([data-theme='dark']) .app-shell-practice .realtime-room-core,
+html:not([data-theme='dark']) .app-shell-practice .realtime-phase-card,
+html:not([data-theme='dark']) .app-shell-practice .realtime-status-card,
+html:not([data-theme='dark']) .app-shell-practice .realtime-log-shell,
+html:not([data-theme='dark']) .app-shell-practice .realtime-empty-state {
+  color: #f4f8ff !important;
+}
+
+html:not([data-theme='dark']) .app-shell-practice .realtime-room-card h3,
+html:not([data-theme='dark']) .app-shell-practice .realtime-room-card h4,
+html:not([data-theme='dark']) .app-shell-practice .realtime-room-card strong,
+html:not([data-theme='dark']) .app-shell-practice .realtime-room-core h3,
+html:not([data-theme='dark']) .app-shell-practice .realtime-room-core h4,
+html:not([data-theme='dark']) .app-shell-practice .realtime-room-core strong,
+html:not([data-theme='dark']) .app-shell-practice .realtime-phase-card strong,
+html:not([data-theme='dark']) .app-shell-practice .realtime-status-card strong,
+html:not([data-theme='dark']) .app-shell-practice .realtime-log-shell h4 {
+  color: #f4f8ff !important;
+  opacity: 1 !important;
+}
+
+html:not([data-theme='dark']) .app-shell-practice .realtime-room-card p,
+html:not([data-theme='dark']) .app-shell-practice .realtime-room-card span:not(.badge-soft):not(.realtime-orb-center):not(.realtime-signal-bars span),
+html:not([data-theme='dark']) .app-shell-practice .realtime-room-core p,
+html:not([data-theme='dark']) .app-shell-practice .realtime-room-core span:not(.realtime-orb-center):not(.realtime-signal-bars span),
+html:not([data-theme='dark']) .app-shell-practice .realtime-phase-card p,
+html:not([data-theme='dark']) .app-shell-practice .realtime-status-card span,
+html:not([data-theme='dark']) .app-shell-practice .realtime-log-shell p {
+  color: #c6d4e6 !important;
+  opacity: 1 !important;
+}
+
+html:not([data-theme='dark']) .app-shell-practice .realtime-core-topline,
+html:not([data-theme='dark']) .app-shell-practice .realtime-core-metrics span,
+html:not([data-theme='dark']) .app-shell-practice .realtime-room-core .realtime-signal-bars,
+html:not([data-theme='dark']) .app-shell-practice .realtime-voice-card {
+  background: rgba(13, 24, 43, 0.72) !important;
+  border-color: rgba(196, 213, 235, 0.16) !important;
+}
+
+html:not([data-theme='dark']) .app-shell-practice .realtime-room-card .badge-soft,
+html:not([data-theme='dark']) .app-shell-practice .realtime-room-card .realtime-state-pill,
+html:not([data-theme='dark']) .app-shell-practice .realtime-room-card .realtime-capability-row .badge-soft {
+  background: rgba(255, 255, 255, 0.09) !important;
+  border-color: rgba(255, 255, 255, 0.16) !important;
+  color: #f4f8ff !important;
+}
+
+html:not([data-theme='dark']) .app-shell-practice .realtime-room-card .ghost-button {
+  background: rgba(31, 44, 65, 0.92) !important;
+  border-color: rgba(196, 213, 235, 0.2) !important;
+  color: #f4f8ff !important;
+}
+
+html:not([data-theme='dark']) .app-shell-practice .realtime-room-card .ghost-button:disabled {
+  color: #b8c7d9 !important;
+}
+/* === executive-readability-fix:end === */
+
+/* === realtime-light-shell-fix:start === */
+html:not([data-theme='dark']) .app-shell-practice .realtime-room-card {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(247, 251, 255, 0.98)) !important;
+  border-color: rgba(119, 134, 156, 0.22) !important;
+  color: #14263f !important;
+}
+
+html:not([data-theme='dark']) .app-shell-practice .realtime-room-card .realtime-room-header h3,
+html:not([data-theme='dark']) .app-shell-practice .realtime-room-card .realtime-room-header h4,
+html:not([data-theme='dark']) .app-shell-practice .realtime-room-card .realtime-room-header strong {
+  color: #14263f !important;
+  opacity: 1 !important;
+}
+
+html:not([data-theme='dark']) .app-shell-practice .realtime-room-card .realtime-room-header .eyebrow {
+  color: #117386 !important;
+  opacity: 1 !important;
+}
+
+html:not([data-theme='dark']) .app-shell-practice .realtime-room-card .realtime-room-header p,
+html:not([data-theme='dark']) .app-shell-practice .realtime-room-card .realtime-room-header span:not(.realtime-state-pill) {
+  color: #607286 !important;
+  opacity: 1 !important;
+}
+
+html:not([data-theme='dark']) .app-shell-practice .realtime-room-card .realtime-room-header .realtime-state-pill {
+  background: #edf5ff !important;
+  border-color: rgba(63, 123, 191, 0.18) !important;
+  color: #254767 !important;
+}
+
+html:not([data-theme='dark']) .app-shell-practice .realtime-room-card .realtime-room-header .realtime-state-pill * {
+  color: currentColor !important;
+  opacity: 1 !important;
+}
+/* === realtime-light-shell-fix:end === */
+
+/* === hero-image-restoration-pass:start === */
+.app-shell-dashboard .dashboard-rebuild-hero,
+.app-shell-practice .practice-hero-live {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  border-color: rgba(255, 255, 255, 0.18) !important;
+  box-shadow:
+    0 26px 64px rgba(15, 34, 57, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12) !important;
+}
+
+.app-shell-dashboard .dashboard-rebuild-hero {
+  background:
+    linear-gradient(110deg, rgba(8, 19, 35, 0.88) 0%, rgba(10, 25, 47, 0.74) 48%, rgba(16, 44, 72, 0.56) 100%),
+    url("https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=1800&q=82")
+      center/cover no-repeat !important;
+}
+
+.app-shell-practice .practice-hero-live {
+  background:
+    linear-gradient(110deg, rgba(8, 19, 35, 0.88) 0%, rgba(10, 25, 47, 0.72) 52%, rgba(26, 75, 95, 0.52) 100%),
+    url("https://images.unsplash.com/photo-1516321165247-4aa89a48be28?auto=format&fit=crop&w=1800&q=82")
+      center/cover no-repeat !important;
+}
+
+.app-shell-dashboard .dashboard-rebuild-hero::before,
+.app-shell-practice .practice-hero-live::before {
+  content: "" !important;
+  display: block !important;
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    radial-gradient(circle at 78% 18%, rgba(91, 199, 255, 0.2), transparent 26%),
+    linear-gradient(180deg, rgba(8, 18, 33, 0.12), rgba(8, 18, 33, 0.42));
+  pointer-events: none;
+}
+
+.app-shell-dashboard .dashboard-rebuild-hero::after,
+.app-shell-practice .practice-hero-live::after {
+  content: "" !important;
+  display: block !important;
+  position: absolute;
+  inset: 1px;
+  z-index: -1;
+  border-radius: inherit;
+  background:
+    linear-gradient(90deg, rgba(255, 255, 255, 0.08), transparent 34%),
+    linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.12));
+  pointer-events: none;
+}
+
+.app-shell-dashboard .dashboard-rebuild-hero > *,
+.app-shell-practice .practice-hero-live > * {
+  position: relative;
+  z-index: 1;
+}
+
+.app-shell-dashboard .dashboard-rebuild-hero .eyebrow,
+.app-shell-practice .practice-hero-live .eyebrow {
+  color: #8be9ff !important;
+  opacity: 1 !important;
+}
+
+.app-shell-dashboard .dashboard-rebuild-hero h3,
+.app-shell-practice .practice-hero-live h3 {
+  color: #ffffff !important;
+  text-shadow: 0 10px 26px rgba(0, 0, 0, 0.22);
+}
+
+.app-shell-dashboard .dashboard-rebuild-hero h4,
+.app-shell-dashboard .dashboard-rebuild-hero strong,
+.app-shell-practice .practice-hero-live strong {
+  color: #ffffff !important;
+}
+
+.app-shell-dashboard .dashboard-rebuild-hero p,
+.app-shell-dashboard .dashboard-rebuild-hero span:not(.badge-soft):not(.tag-chip):not(.status-badge),
+.app-shell-practice .practice-hero-live p,
+.app-shell-practice .practice-hero-live span:not(.badge-soft) {
+  color: rgba(239, 247, 255, 0.86) !important;
+  opacity: 1 !important;
+}
+
+.app-shell-dashboard .dashboard-rebuild-hero-copy > p:not(.eyebrow),
+.app-shell-practice .practice-hero-live .muted-text {
+  color: rgba(239, 247, 255, 0.86) !important;
+  opacity: 1 !important;
+}
+
+.app-shell-dashboard .dashboard-rebuild-launch,
+.app-shell-dashboard .dashboard-rebuild-focus,
+.app-shell-dashboard .dashboard-rebuild-statline,
+.app-shell-dashboard .dashboard-rebuild-stat,
+.app-shell-practice .practice-hero-live .studio-summary-chip {
+  background: rgba(12, 24, 42, 0.48) !important;
+  border: 1px solid rgba(255, 255, 255, 0.18) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    0 18px 42px rgba(0, 0, 0, 0.16) !important;
+  backdrop-filter: blur(16px) saturate(130%) !important;
+}
+
+.app-shell-dashboard .dashboard-rebuild-launch:hover {
+  border-color: rgba(139, 233, 255, 0.42) !important;
+  background: rgba(20, 38, 63, 0.58) !important;
+  transform: translateY(-1px) !important;
+}
+
+.app-shell-dashboard .dashboard-rebuild-launch-icon {
+  background: rgba(139, 233, 255, 0.16) !important;
+  border: 1px solid rgba(139, 233, 255, 0.18) !important;
+  color: #ffffff !important;
+}
+
+.app-shell-dashboard .dashboard-rebuild-focus .badge-soft,
+.app-shell-dashboard .dashboard-rebuild-hero .badge-soft,
+.app-shell-practice .practice-hero-live .badge-soft {
+  background: rgba(255, 255, 255, 0.12) !important;
+  border-color: rgba(255, 255, 255, 0.18) !important;
+  color: #ffffff !important;
+}
+
+.app-shell-dashboard .dashboard-rebuild-focus .badge-soft *,
+.app-shell-dashboard .dashboard-rebuild-hero .badge-soft *,
+.app-shell-practice .practice-hero-live .badge-soft * {
+  color: currentColor !important;
+}
+
+.app-shell-dashboard .dashboard-rebuild-stat span,
+.app-shell-practice .practice-hero-live .studio-summary-chip span {
+  color: rgba(239, 247, 255, 0.74) !important;
+}
+
+.app-shell-dashboard .dashboard-rebuild-stat strong,
+.app-shell-practice .practice-hero-live .studio-summary-chip strong {
+  color: #ffffff !important;
+}
+
+.app-shell-dashboard .priority-progress,
+.app-shell-dashboard .goal-progress-track {
+  background: rgba(255, 255, 255, 0.18) !important;
+}
+
+.app-shell-dashboard .priority-progress span,
+.app-shell-dashboard .goal-progress-track span {
+  background: linear-gradient(90deg, #7ea2ff, #4fd0df) !important;
+}
+
+html[data-theme='dark'] .app-shell-dashboard .dashboard-rebuild-hero,
+html[data-theme='dark'] .app-shell-practice .practice-hero-live {
+  border-color: rgba(148, 163, 184, 0.26) !important;
+  box-shadow:
+    0 24px 58px rgba(0, 0, 0, 0.38),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+}
+
+@media (max-width: 1180px) {
+  .app-shell-dashboard .dashboard-rebuild-hero,
+  .app-shell-practice .practice-hero-live {
+    background-position: center !important;
+  }
+}
+
+@media (max-width: 720px) {
+  .app-shell-dashboard .dashboard-rebuild-hero,
+  .app-shell-practice .practice-hero-live {
+    background-position: 58% center !important;
+  }
+
+  .app-shell-dashboard .dashboard-rebuild-hero h3,
+  .app-shell-practice .practice-hero-live h3 {
+    text-shadow: 0 8px 20px rgba(0, 0, 0, 0.28);
+  }
+}
+/* === hero-image-restoration-pass:end === */
+
+/* === hero-glass-contrast-fix:start === */
+.app-shell-dashboard .dashboard-rebuild-hero .dashboard-rebuild-focus,
+.app-shell-dashboard .dashboard-rebuild-hero .dashboard-rebuild-statline,
+.app-shell-dashboard .dashboard-rebuild-hero .dashboard-rebuild-stat {
+  background: rgba(8, 18, 33, 0.56) !important;
+  border-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+.app-shell-dashboard .dashboard-rebuild-hero .dashboard-rebuild-focus h4,
+.app-shell-dashboard .dashboard-rebuild-hero .dashboard-rebuild-focus strong,
+.app-shell-dashboard .dashboard-rebuild-hero .dashboard-rebuild-focus-meta strong,
+.app-shell-dashboard .dashboard-rebuild-hero .dashboard-rebuild-stat strong {
+  color: #ffffff !important;
+  opacity: 1 !important;
+}
+
+.app-shell-dashboard .dashboard-rebuild-hero .dashboard-rebuild-focus p,
+.app-shell-dashboard .dashboard-rebuild-hero .dashboard-rebuild-focus span:not(.badge-soft),
+.app-shell-dashboard .dashboard-rebuild-hero .dashboard-rebuild-focus-meta span,
+.app-shell-dashboard .dashboard-rebuild-hero .dashboard-rebuild-stat span {
+  color: rgba(239, 247, 255, 0.84) !important;
+  opacity: 1 !important;
+}
+
+.app-shell-dashboard .dashboard-rebuild-hero .dashboard-rebuild-hero-copy > p:not(.eyebrow),
+.app-shell-practice .practice-hero-live .muted-text {
+  color: rgba(239, 247, 255, 0.9) !important;
+}
+
+.app-shell-dashboard .dashboard-rebuild-hero .dashboard-rebuild-focus .badge-soft {
+  background: rgba(255, 255, 255, 0.16) !important;
+  color: #ffffff !important;
+}
+
+html:not([data-theme='dark']) .app-shell-dashboard .dashboard-rebuild-hero .dashboard-rebuild-focus h4,
+html:not([data-theme='dark']) .app-shell-dashboard .dashboard-rebuild-hero .dashboard-rebuild-focus strong,
+html:not([data-theme='dark']) .app-shell-dashboard .dashboard-rebuild-hero .dashboard-rebuild-focus-meta strong,
+html:not([data-theme='dark']) .app-shell-dashboard .dashboard-rebuild-hero .dashboard-rebuild-stat strong {
+  color: #ffffff !important;
+  opacity: 1 !important;
+}
+
+html:not([data-theme='dark']) .app-shell-dashboard .dashboard-rebuild-hero .dashboard-rebuild-focus p,
+html:not([data-theme='dark']) .app-shell-dashboard .dashboard-rebuild-hero .dashboard-rebuild-focus span:not(.badge-soft),
+html:not([data-theme='dark']) .app-shell-dashboard .dashboard-rebuild-hero .dashboard-rebuild-focus-meta span,
+html:not([data-theme='dark']) .app-shell-dashboard .dashboard-rebuild-hero .dashboard-rebuild-stat span,
+html:not([data-theme='dark']) .app-shell-dashboard .dashboard-rebuild-hero .dashboard-rebuild-hero-copy > p:not(.eyebrow) {
+  color: rgba(239, 247, 255, 0.9) !important;
+  opacity: 1 !important;
+}
+
+html:not([data-theme='dark']) .app-shell-dashboard .dashboard-rebuild-hero .dashboard-rebuild-focus .badge-soft,
+html:not([data-theme='dark']) .app-shell-dashboard .dashboard-rebuild-hero .dashboard-rebuild-focus .badge-soft * {
+  background: rgba(255, 255, 255, 0.16) !important;
+  color: #ffffff !important;
+}
+/* === hero-glass-contrast-fix:end === */
+
+/* === product-detail-polish-pass:start === */
+.app-shell.workspace-overhaul {
+  --pro-surface: rgba(255, 255, 255, 0.96);
+  --pro-surface-soft: rgba(247, 251, 255, 0.96);
+  --pro-border: rgba(119, 134, 156, 0.22);
+  --pro-border-strong: rgba(78, 115, 154, 0.34);
+  --pro-ink: #13243a;
+  --pro-muted: #617286;
+  --pro-accent: #2f7df2;
+  --pro-accent-soft: #4fd0df;
+  background:
+    linear-gradient(180deg, #edf4fb 0%, #f6f9fd 44%, #eef4fa 100%) !important;
+}
+
+.app-shell .workspace-stage {
+  gap: 18px !important;
+}
+
+.app-shell .workspace-stage-body {
+  padding-bottom: 12px;
+}
+
+.app-shell .workspace-stage-header {
+  border-radius: 10px !important;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(247, 251, 255, 0.96)) !important;
+  border-color: var(--pro-border) !important;
+  box-shadow:
+    0 18px 36px rgba(32, 50, 78, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9) !important;
+}
+
+.app-shell .workspace-stage-title .eyebrow,
+.app-shell .section-heading .eyebrow,
+.app-shell .compact-heading .eyebrow,
+.app-shell .admin-command-head .eyebrow,
+.app-shell .course-detail-head .eyebrow,
+.app-shell .realtime-room-header .eyebrow {
+  color: #147a8b !important;
+  font-size: 0.73rem !important;
+  letter-spacing: 0.09em !important;
+}
+
+.app-shell .workspace-stage-title h2 {
+  color: var(--pro-ink) !important;
+  font-weight: 850 !important;
+}
+
+.app-shell .workspace-stage-title p:not(.eyebrow) {
+  color: var(--pro-muted) !important;
+}
+
+.app-shell .workspace-stage-tools {
+  align-items: center;
+}
+
+.app-shell .theme-toggle,
+.app-shell .workspace-stage-chip,
+.app-shell .topbar-command-pill {
+  min-height: 46px;
+  border-radius: 10px !important;
+  box-shadow: none !important;
+}
+
+.app-shell .topbar-command-pill {
+  background: linear-gradient(135deg, #2876e8, #43bfd6) !important;
+  border: 1px solid rgba(37, 113, 216, 0.36) !important;
+}
+
+.app-shell .workspace-stage-chip,
+.app-shell .theme-toggle {
+  background: rgba(255, 255, 255, 0.78) !important;
+  border: 1px solid rgba(119, 134, 156, 0.22) !important;
+}
+
+.app-shell .workspace-stage-chip span,
+.app-shell .workspace-stage-chip strong {
+  color: #173251 !important;
+}
+
+.app-shell .workspace-rail {
+  border-radius: 12px !important;
+  border: 1px solid rgba(208, 226, 247, 0.16) !important;
+}
+
+.app-shell .workspace-rail-brand {
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.045)) !important;
+}
+
+.app-shell .workspace-rail-mark {
+  box-shadow:
+    0 12px 26px rgba(47, 125, 242, 0.28),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.app-shell .workspace-rail-account,
+.app-shell .workspace-rail-navigation,
+.app-shell .workspace-rail-actions,
+.app-shell .workspace-rail-footer {
+  border-radius: 10px !important;
+}
+
+.app-shell .workspace-rail-account-head h2,
+.app-shell .workspace-rail-subtitle,
+.app-shell .workspace-rail-footer h3 {
+  color: rgba(244, 248, 255, 0.94) !important;
+}
+
+.app-shell .workspace-summary-level,
+.app-shell .workspace-rail-signal {
+  border-radius: 8px !important;
+  background: rgba(8, 21, 38, 0.44) !important;
+  border-color: rgba(216, 231, 248, 0.14) !important;
+}
+
+.app-shell .workspace-rail-navigation .nav-pill {
+  position: relative;
+  overflow: hidden;
+  border-radius: 10px !important;
+  border: 1px solid rgba(216, 231, 248, 0.1) !important;
+}
+
+.app-shell .workspace-rail-navigation .nav-pill::before {
+  content: "";
+  position: absolute;
+  inset: 9px auto 9px 8px;
+  width: 3px;
+  border-radius: 999px;
+  background: transparent;
+}
+
+.app-shell .workspace-rail-navigation .nav-pill.active::before {
+  background: rgba(255, 255, 255, 0.85);
+}
+
+.app-shell .workspace-rail-navigation .nav-pill:not(.active):hover {
+  background: rgba(255, 255, 255, 0.075) !important;
+  border-color: rgba(216, 231, 248, 0.18) !important;
+}
+
+.app-shell .panel-card:not(.dashboard-rebuild-hero):not(.practice-hero-live):not(.realtime-room-card),
+.app-shell .elevated-surface,
+.app-shell .detail-stack,
+.app-shell .sub-card,
+.app-shell .stat-card-pro {
+  border-radius: 10px !important;
+  background:
+    linear-gradient(180deg, var(--pro-surface), var(--pro-surface-soft)) !important;
+  border-color: var(--pro-border) !important;
+  box-shadow:
+    0 16px 34px rgba(32, 50, 78, 0.07),
+    inset 0 1px 0 rgba(255, 255, 255, 0.72) !important;
+}
+
+.app-shell .section-heading.compact-heading,
+.app-shell .dashboard-rebuild-analytics-head,
+.app-shell .admin-command-head,
+.app-shell .course-detail-head,
+.app-shell .profile-command-head,
+.app-shell .recorder-heading,
+.app-shell .realtime-room-header {
+  border-bottom: 1px solid rgba(119, 134, 156, 0.18) !important;
+}
+
+.app-shell .section-heading h3,
+.app-shell .dashboard-rebuild-analytics h3,
+.app-shell .profile-context-card h3,
+.app-shell .cv-result-shell h3,
+.app-shell .admin-command-card h3,
+.app-shell .course-detail-card h3,
+.app-shell .realtime-room-header h3,
+.app-shell .recorder-heading h3 {
+  color: var(--pro-ink) !important;
+  font-weight: 850 !important;
+}
+
+.app-shell .dashboard-rebuild-missions,
+.app-shell .dashboard-rebuild-sideboard,
+.app-shell .dashboard-rebuild-analytics,
+.app-shell .dashboard-rebuild-history,
+.app-shell .course-catalog-card,
+.app-shell .course-detail-card,
+.app-shell .admin-command-card,
+.app-shell .admin-side-status-card,
+.app-shell .profile-context-card,
+.app-shell .profile-editor-card,
+.app-shell .profile-side-card,
+.app-shell .cv-form-card,
+.app-shell .cv-result-shell,
+.app-shell .studio-config-card,
+.app-shell .studio-recorder-card,
+.app-shell .studio-ai-card,
+.app-shell .live-support-card {
+  padding: clamp(1.05rem, 1.7vw, 1.45rem) !important;
+}
+
+.app-shell .dashboard-rebuild-goal-row,
+.app-shell .dashboard-rebuild-history-item,
+.app-shell .dashboard-rebuild-chart-card,
+.app-shell .dashboard-rebuild-snapshot-card,
+.app-shell .course-category-card,
+.app-shell .course-list-item,
+.app-shell .course-lesson-item,
+.app-shell .course-request-card,
+.app-shell .course-admin-published-card,
+.app-shell .leaderboard-row,
+.app-shell .admin-session-row,
+.app-shell .table-row,
+.app-shell .admin-user-card-control,
+.app-shell .practice-flow-item,
+.app-shell .practice-live-tip,
+.app-shell .practice-live-mini-card,
+.app-shell .profile-context-row,
+.app-shell .profile-insight-item,
+.app-shell .cv-command-metric,
+.app-shell .profile-command-metric {
+  border-radius: 10px !important;
+  background: rgba(248, 251, 255, 0.92) !important;
+  border-color: rgba(119, 134, 156, 0.18) !important;
+  box-shadow: none !important;
+}
+
+.app-shell .dashboard-rebuild-goal-row:hover,
+.app-shell .dashboard-rebuild-history-item:hover,
+.app-shell .course-category-card:hover,
+.app-shell .course-list-item:hover,
+.app-shell .course-lesson-item:hover,
+.app-shell .course-request-card:hover,
+.app-shell .course-admin-published-card:hover,
+.app-shell .leaderboard-row:hover,
+.app-shell .admin-session-row:hover,
+.app-shell .table-row:hover,
+.app-shell .admin-user-card-control:hover {
+  border-color: rgba(47, 125, 242, 0.36) !important;
+  background: #ffffff !important;
+  box-shadow: 0 14px 28px rgba(32, 50, 78, 0.08) !important;
+}
+
+.app-shell .primary-button,
+.app-shell .ghost-button,
+.app-shell .danger-button,
+.app-shell .topic-chip-button,
+.app-shell .segment-button,
+.auth-page .primary-button,
+.auth-page .ghost-button,
+.landing-page .primary-button,
+.landing-page .ghost-button {
+  border-radius: 10px !important;
+}
+
+.app-shell .primary-button {
+  background: linear-gradient(135deg, #2f7df2, #3fc2d6) !important;
+  border: 1px solid rgba(47, 125, 242, 0.36) !important;
+  box-shadow: 0 14px 26px rgba(47, 125, 242, 0.18) !important;
+}
+
+.app-shell .ghost-button {
+  background: #ffffff !important;
+  border-color: rgba(119, 134, 156, 0.22) !important;
+  color: #173251 !important;
+}
+
+.app-shell .primary-button:focus-visible,
+.app-shell .ghost-button:focus-visible,
+.app-shell .danger-button:focus-visible,
+.app-shell .nav-pill:focus-visible,
+.app-shell input:focus-visible,
+.app-shell textarea:focus-visible,
+.app-shell select:focus-visible {
+  outline: none !important;
+  box-shadow:
+    0 0 0 3px rgba(47, 125, 242, 0.18),
+    0 0 0 1px rgba(47, 125, 242, 0.4) !important;
+}
+
+.app-shell .badge-soft,
+.app-shell .tag-chip,
+.app-shell .status-badge,
+.app-shell .studio-rule-pill {
+  border-radius: 8px !important;
+  background: #eef5ff !important;
+  border-color: rgba(47, 125, 242, 0.16) !important;
+  color: #254767 !important;
+}
+
+.app-shell .status-badge.success {
+  background: rgba(20, 150, 109, 0.12) !important;
+  border-color: rgba(20, 150, 109, 0.22) !important;
+  color: #0f7a5a !important;
+}
+
+.app-shell .status-badge.danger,
+.app-shell .status-badge.error {
+  background: rgba(207, 75, 75, 0.12) !important;
+  border-color: rgba(207, 75, 75, 0.22) !important;
+  color: #b42335 !important;
+}
+
+.app-shell input,
+.app-shell textarea,
+.app-shell select {
+  border-radius: 10px !important;
+  background: #ffffff !important;
+  border-color: rgba(119, 134, 156, 0.24) !important;
+  color: #13243a !important;
+}
+
+.app-shell input::placeholder,
+.app-shell textarea::placeholder {
+  color: #8a9aad !important;
+}
+
+.app-shell .chart-wrap,
+.app-shell .compact-chart {
+  border-radius: 10px !important;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.88), rgba(246, 250, 255, 0.9)) !important;
+  border: 1px solid rgba(119, 134, 156, 0.16) !important;
+}
+
+.app-shell .recharts-cartesian-grid line {
+  stroke: rgba(119, 134, 156, 0.16) !important;
+}
+
+.app-shell .recharts-cartesian-axis-line,
+.app-shell .recharts-cartesian-axis-tick-line {
+  stroke: rgba(119, 134, 156, 0.34) !important;
+}
+
+.app-shell .recharts-text,
+.app-shell .recharts-cartesian-axis-tick-value {
+  fill: #617286 !important;
+}
+
+.app-shell .recharts-default-tooltip,
+.app-shell .recharts-tooltip-wrapper .recharts-default-tooltip {
+  border-radius: 10px !important;
+  border: 1px solid rgba(119, 134, 156, 0.2) !important;
+  box-shadow: 0 18px 36px rgba(32, 50, 78, 0.14) !important;
+}
+
+.app-shell .simple-table,
+.app-shell .table-grid {
+  border-radius: 10px !important;
+  border: 1px solid rgba(119, 134, 156, 0.18) !important;
+}
+
+.app-shell .table-head {
+  background: #edf5ff !important;
+  color: #254767 !important;
+  font-size: 0.82rem;
+}
+
+.app-shell .realtime-room-card {
+  border-radius: 12px !important;
+}
+
+.app-shell-practice .realtime-room-core,
+.app-shell-practice .realtime-room-console,
+.app-shell-practice .realtime-phase-card,
+.app-shell-practice .realtime-status-card,
+.app-shell-practice .realtime-log-shell {
+  border-radius: 10px !important;
+}
+
+html[data-theme='dark'] .app-shell.workspace-overhaul {
+  --pro-surface: rgba(15, 26, 45, 0.98);
+  --pro-surface-soft: rgba(9, 18, 33, 0.98);
+  --pro-border: rgba(148, 163, 184, 0.24);
+  --pro-border-strong: rgba(160, 183, 209, 0.36);
+  --pro-ink: #f4f8ff;
+  --pro-muted: #b9c8dc;
+  background:
+    linear-gradient(180deg, #071121 0%, #0a1629 48%, #071121 100%) !important;
+}
+
+html[data-theme='dark'] .app-shell .workspace-stage-header,
+html[data-theme='dark'] .app-shell .panel-card:not(.dashboard-rebuild-hero):not(.practice-hero-live):not(.realtime-room-card),
+html[data-theme='dark'] .app-shell .elevated-surface,
+html[data-theme='dark'] .app-shell .detail-stack,
+html[data-theme='dark'] .app-shell .sub-card,
+html[data-theme='dark'] .app-shell .stat-card-pro {
+  background:
+    linear-gradient(180deg, var(--pro-surface), var(--pro-surface-soft)) !important;
+  border-color: var(--pro-border) !important;
+  color: #f4f8ff !important;
+  box-shadow:
+    0 18px 40px rgba(0, 0, 0, 0.28),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05) !important;
+}
+
+html[data-theme='dark'] .app-shell .workspace-stage-title h2,
+html[data-theme='dark'] .app-shell .section-heading h3,
+html[data-theme='dark'] .app-shell .dashboard-rebuild-analytics h3,
+html[data-theme='dark'] .app-shell .profile-context-card h3,
+html[data-theme='dark'] .app-shell .cv-result-shell h3,
+html[data-theme='dark'] .app-shell .admin-command-card h3,
+html[data-theme='dark'] .app-shell .course-detail-card h3,
+html[data-theme='dark'] .app-shell .realtime-room-header h3,
+html[data-theme='dark'] .app-shell .recorder-heading h3 {
+  color: #f4f8ff !important;
+}
+
+html[data-theme='dark'] .app-shell .workspace-stage-title p:not(.eyebrow),
+html[data-theme='dark'] .app-shell .muted-text,
+html[data-theme='dark'] .app-shell .section-heading p,
+html[data-theme='dark'] .app-shell .panel-card p,
+html[data-theme='dark'] .app-shell .panel-card span:not(.badge-soft):not(.tag-chip):not(.status-badge):not(.realtime-orb-center) {
+  color: #b9c8dc !important;
+}
+
+html[data-theme='dark'] .app-shell .dashboard-rebuild-goal-row,
+html[data-theme='dark'] .app-shell .dashboard-rebuild-history-item,
+html[data-theme='dark'] .app-shell .dashboard-rebuild-chart-card,
+html[data-theme='dark'] .app-shell .dashboard-rebuild-snapshot-card,
+html[data-theme='dark'] .app-shell .course-category-card,
+html[data-theme='dark'] .app-shell .course-list-item,
+html[data-theme='dark'] .app-shell .course-lesson-item,
+html[data-theme='dark'] .app-shell .course-request-card,
+html[data-theme='dark'] .app-shell .course-admin-published-card,
+html[data-theme='dark'] .app-shell .leaderboard-row,
+html[data-theme='dark'] .app-shell .admin-session-row,
+html[data-theme='dark'] .app-shell .table-row,
+html[data-theme='dark'] .app-shell .admin-user-card-control,
+html[data-theme='dark'] .app-shell .practice-flow-item,
+html[data-theme='dark'] .app-shell .practice-live-tip,
+html[data-theme='dark'] .app-shell .practice-live-mini-card,
+html[data-theme='dark'] .app-shell .profile-context-row,
+html[data-theme='dark'] .app-shell .profile-insight-item,
+html[data-theme='dark'] .app-shell .cv-command-metric,
+html[data-theme='dark'] .app-shell .profile-command-metric {
+  background: rgba(13, 24, 43, 0.94) !important;
+  border-color: rgba(148, 163, 184, 0.22) !important;
+}
+
+html[data-theme='dark'] .app-shell .dashboard-rebuild-goal-row:hover,
+html[data-theme='dark'] .app-shell .dashboard-rebuild-history-item:hover,
+html[data-theme='dark'] .app-shell .course-category-card:hover,
+html[data-theme='dark'] .app-shell .course-list-item:hover,
+html[data-theme='dark'] .app-shell .course-lesson-item:hover,
+html[data-theme='dark'] .app-shell .course-request-card:hover,
+html[data-theme='dark'] .app-shell .course-admin-published-card:hover,
+html[data-theme='dark'] .app-shell .leaderboard-row:hover,
+html[data-theme='dark'] .app-shell .admin-session-row:hover,
+html[data-theme='dark'] .app-shell .table-row:hover,
+html[data-theme='dark'] .app-shell .admin-user-card-control:hover {
+  background: rgba(18, 32, 54, 0.98) !important;
+  border-color: rgba(91, 199, 255, 0.34) !important;
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.22) !important;
+}
+
+html[data-theme='dark'] .app-shell .ghost-button,
+html[data-theme='dark'] .app-shell .workspace-stage-chip,
+html[data-theme='dark'] .app-shell .theme-toggle {
+  background: rgba(13, 24, 43, 0.94) !important;
+  border-color: rgba(148, 163, 184, 0.26) !important;
+  color: #f4f8ff !important;
+}
+
+html[data-theme='dark'] .app-shell .workspace-stage-chip span,
+html[data-theme='dark'] .app-shell .workspace-stage-chip strong {
+  color: #f4f8ff !important;
+}
+
+html[data-theme='dark'] .app-shell .badge-soft,
+html[data-theme='dark'] .app-shell .tag-chip,
+html[data-theme='dark'] .app-shell .status-badge,
+html[data-theme='dark'] .app-shell .studio-rule-pill {
+  background: rgba(20, 34, 56, 0.96) !important;
+  border-color: rgba(148, 163, 184, 0.28) !important;
+  color: #e8f1ff !important;
+}
+
+html[data-theme='dark'] .app-shell input,
+html[data-theme='dark'] .app-shell textarea,
+html[data-theme='dark'] .app-shell select {
+  background: rgba(9, 18, 33, 0.96) !important;
+  border-color: rgba(148, 163, 184, 0.26) !important;
+  color: #f4f8ff !important;
+}
+
+html[data-theme='dark'] .app-shell input::placeholder,
+html[data-theme='dark'] .app-shell textarea::placeholder {
+  color: #8393a8 !important;
+}
+
+html[data-theme='dark'] .app-shell .chart-wrap,
+html[data-theme='dark'] .app-shell .compact-chart,
+html[data-theme='dark'] .app-shell .simple-table,
+html[data-theme='dark'] .app-shell .table-grid {
+  background: rgba(9, 18, 33, 0.78) !important;
+  border-color: rgba(148, 163, 184, 0.22) !important;
+}
+
+html[data-theme='dark'] .app-shell .table-head {
+  background: rgba(20, 34, 56, 0.96) !important;
+  color: #e8f1ff !important;
+}
+
+@media (max-width: 1120px) {
+  .app-shell .workspace-stage-header {
+    position: relative !important;
+    top: auto !important;
+  }
+}
+
+@media (max-width: 720px) {
+  .app-shell.workspace-overhaul {
+    padding: 10px !important;
+    gap: 12px !important;
+  }
+
+  .app-shell .workspace-stage-header,
+  .app-shell .panel-card,
+  .app-shell .elevated-surface,
+  .app-shell .detail-stack {
+    border-radius: 10px !important;
+  }
+
+  .app-shell .workspace-stage-tools {
+    gap: 8px !important;
+  }
+}
+/* === product-detail-polish-pass:end === */
+
+/* === admin-command-hero-fix:start === */
+.app-shell-admin .admin-hero-control {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background:
+    linear-gradient(110deg, rgba(8, 19, 35, 0.9) 0%, rgba(10, 25, 47, 0.76) 50%, rgba(50, 43, 63, 0.58) 100%),
+    url("https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1800&q=82")
+      center/cover no-repeat !important;
+  border-color: rgba(255, 255, 255, 0.18) !important;
+  box-shadow:
+    0 24px 58px rgba(15, 34, 57, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12) !important;
+}
+
+.app-shell-admin .admin-hero-control::before {
+  content: "" !important;
+  display: block !important;
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    radial-gradient(circle at 82% 18%, rgba(255, 177, 101, 0.24), transparent 25%),
+    linear-gradient(180deg, rgba(8, 18, 33, 0.08), rgba(8, 18, 33, 0.36));
+  pointer-events: none;
+}
+
+.app-shell-admin .admin-hero-control > * {
+  position: relative;
+  z-index: 1;
+}
+
+.app-shell-admin .admin-hero-control .eyebrow {
+  color: #8be9ff !important;
+}
+
+.app-shell-admin .admin-hero-control h3,
+.app-shell-admin .admin-hero-control h4,
+.app-shell-admin .admin-hero-control strong {
+  color: #ffffff !important;
+  opacity: 1 !important;
+  text-shadow: 0 10px 26px rgba(0, 0, 0, 0.22);
+}
+
+.app-shell-admin .admin-hero-control p,
+.app-shell-admin .admin-hero-control span:not(.badge-soft) {
+  color: rgba(239, 247, 255, 0.86) !important;
+  opacity: 1 !important;
+}
+
+.app-shell-admin .admin-hero-control .badge-soft,
+.app-shell-admin .admin-hero-control .scoreboard-card {
+  background: rgba(12, 24, 42, 0.52) !important;
+  border: 1px solid rgba(255, 255, 255, 0.18) !important;
+  color: #ffffff !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    0 18px 42px rgba(0, 0, 0, 0.16) !important;
+  backdrop-filter: blur(16px) saturate(130%) !important;
+}
+
+.app-shell-admin .admin-hero-control .badge-soft *,
+.app-shell-admin .admin-hero-control .scoreboard-card * {
+  color: currentColor !important;
+  opacity: 1 !important;
+}
+
+.app-shell-admin .admin-hero-control .scoreboard-card span {
+  color: rgba(239, 247, 255, 0.76) !important;
+}
+
+.app-shell-admin .admin-hero-control .scoreboard-card strong {
+  color: #ffffff !important;
+}
+/* === admin-command-hero-fix:end === */
+
+/* === admin-command-hero-final-pass:start === */
+.app-shell-admin .admin-hero-control,
+.app-shell-admin .admin-hero.admin-hero-control {
+  min-height: 360px !important;
+  padding: clamp(1.55rem, 3vw, 2.6rem) !important;
+  background-color: #071527 !important;
+  background-image:
+    linear-gradient(110deg, rgba(6, 17, 31, 0.94) 0%, rgba(8, 23, 43, 0.88) 48%, rgba(28, 38, 58, 0.76) 100%),
+    url("https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1800&q=82") !important;
+  background-position: center, center !important;
+  background-size: auto, cover !important;
+  background-repeat: no-repeat, no-repeat !important;
+}
+
+.app-shell-admin .admin-hero-control::before {
+  content: "" !important;
+  display: block !important;
+  position: absolute !important;
+  inset: 0 !important;
+  width: auto !important;
+  height: auto !important;
+  border-radius: 0 !important;
+  background:
+    linear-gradient(90deg, rgba(6, 17, 31, 0.16), rgba(6, 17, 31, 0.02) 52%, rgba(255, 173, 92, 0.18)),
+    radial-gradient(circle at 14% 20%, rgba(78, 207, 255, 0.18), transparent 26%) !important;
+  pointer-events: none !important;
+}
+
+.app-shell-admin .admin-hero-control::after {
+  content: none !important;
+  display: none !important;
+}
+
+.app-shell-admin .admin-hero-control .dashboard-hero-copy {
+  max-width: 560px !important;
+}
+
+.app-shell-admin .admin-hero-control h3 {
+  max-width: 12ch !important;
+  font-size: clamp(2.1rem, 3vw, 3.15rem) !important;
+  line-height: 1.02 !important;
+}
+
+.app-shell-admin .admin-hero-control .hero-chip-row {
+  margin-top: 1.2rem !important;
+}
+
+.app-shell-admin .admin-scoreboard-extended {
+  width: min(360px, 100%) !important;
+  gap: 0.85rem !important;
+}
+
+.app-shell-admin .admin-scoreboard-extended .scoreboard-card {
+  min-height: 104px !important;
+  border-radius: 18px !important;
+}
+
+@media (max-width: 900px) {
+  .app-shell-admin .admin-hero-control h3 {
+    max-width: 16ch !important;
+  }
+}
+/* === admin-command-hero-final-pass:end === */
+
+/* === admin-hero-specificity-guard:start === */
+html:not([data-theme='dark']) .app-shell-admin .panel-card.admin-hero.admin-hero-control,
+html[data-theme='dark'] .app-shell-admin .panel-card.admin-hero.admin-hero-control {
+  background-color: #071527 !important;
+  background-image:
+    linear-gradient(110deg, rgba(6, 17, 31, 0.94) 0%, rgba(8, 23, 43, 0.88) 48%, rgba(28, 38, 58, 0.76) 100%),
+    url("https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1800&q=82") !important;
+  background-position: center, center !important;
+  background-size: auto, cover !important;
+  background-repeat: no-repeat, no-repeat !important;
+  border-color: rgba(255, 255, 255, 0.18) !important;
+}
+
+html:not([data-theme='dark']) .app-shell-admin .panel-card.admin-hero.admin-hero-control h3,
+html:not([data-theme='dark']) .app-shell-admin .panel-card.admin-hero.admin-hero-control strong,
+html[data-theme='dark'] .app-shell-admin .panel-card.admin-hero.admin-hero-control h3,
+html[data-theme='dark'] .app-shell-admin .panel-card.admin-hero.admin-hero-control strong {
+  color: #ffffff !important;
+}
+
+html:not([data-theme='dark']) .app-shell-admin .panel-card.admin-hero.admin-hero-control p,
+html:not([data-theme='dark']) .app-shell-admin .panel-card.admin-hero.admin-hero-control span:not(.badge-soft),
+html[data-theme='dark'] .app-shell-admin .panel-card.admin-hero.admin-hero-control p,
+html[data-theme='dark'] .app-shell-admin .panel-card.admin-hero.admin-hero-control span:not(.badge-soft) {
+  color: rgba(239, 247, 255, 0.86) !important;
+}
+/* === admin-hero-specificity-guard:end === */
+
+/* === admin-hero-shell-lock:start === */
+html .app-shell.workspace-overhaul.app-shell-admin .panel-card.admin-hero.admin-hero-control {
+  background-color: #071527 !important;
+  background-image:
+    linear-gradient(110deg, rgba(6, 17, 31, 0.94) 0%, rgba(8, 23, 43, 0.88) 48%, rgba(28, 38, 58, 0.76) 100%),
+    url("https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1800&q=82") !important;
+  background-position: center, center !important;
+  background-size: auto, cover !important;
+  background-repeat: no-repeat, no-repeat !important;
+  color: #ffffff !important;
+}
+/* === admin-hero-shell-lock:end === */

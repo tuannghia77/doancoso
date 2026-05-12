@@ -196,10 +196,9 @@ export function CoursesPage() {
       <section className="panel-card course-hero-card">
         <div className="course-hero-copy">
           <p className="eyebrow">Thư viện khóa học</p>
-          <h3>Học theo danh mục, gửi yêu cầu và mở video ngay trên web</h3>
+          <h3>Lộ trình học theo chủ đề</h3>
           <p>
-            Mỗi khóa học được quản trị viên phát hành theo từng nhóm nội dung để bạn chọn đúng lộ trình cần học:
-            thuyết trình, phỏng vấn hoặc CV.
+            Chọn khóa học phù hợp, gửi yêu cầu truy cập và học video sau khi được quản trị viên duyệt.
           </p>
         </div>
 

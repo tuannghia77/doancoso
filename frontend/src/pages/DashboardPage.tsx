@@ -140,7 +140,7 @@ export function DashboardPage() {
       <section className="panel-card dashboard-rebuild-hero">
         <div className="dashboard-rebuild-hero-copy">
           <p className="eyebrow">Bảng điều khiển</p>
-          <h3>Tất cả hoạt động luyện tập trong một màn hình.</h3>
+          <h3>Trung tâm luyện tập</h3>
           <p>{commandSummary}</p>
 
           <div className="dashboard-rebuild-hero-actions">

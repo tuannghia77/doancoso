@@ -234,11 +234,12 @@ export function CvAnalyzerPage() {
           <div className="section-heading compact-heading">
             <div>
               <p className="eyebrow">Phòng CV</p>
-              <h3>Phân tích CV và tạo lộ trình luyện tập.</h3>
+              <h3>Trợ lý CV</h3>
+              <p className="cv-command-subtitle">Phân tích hồ sơ, gợi ý câu hỏi và lộ trình luyện tập.</p>
             </div>
             <span className="badge-soft">
               <Brain size={14} />
-              Phân tích hoàn toàn bằng tiếng Việt
+              Tiếng Việt
             </span>
           </div>
 
